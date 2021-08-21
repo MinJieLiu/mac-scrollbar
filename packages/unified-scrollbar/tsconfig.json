@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ES2015",
+    "moduleResolution": "Node",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "noEmitOnError": true,
+    "jsx": "react"
+  },
+}
