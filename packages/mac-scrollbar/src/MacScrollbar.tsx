@@ -1,7 +1,8 @@
 import React from 'react';
-import styles from './UnifiedScrollbar.module.less';
+import { handleExtractSize, useThrottle } from './utils';
+import styles from './MacScrollbar.module.less';
 
-interface UnifiedScrollbarProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+export interface MacScrollbarProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
@@ -23,7 +24,7 @@ const initialSize = {
   scrollTop: 0,
 };
 
-export default function UnifiedScrollbar({ className, children, ...props }: UnifiedScrollbarProps) {
+export default function MacScrollbar({ className, children, ...props }: MacScrollbarProps) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [boxSize, setBoxSize] = React.useState<ScrollSize>(initialSize);
 
@@ -31,14 +32,20 @@ export default function UnifiedScrollbar({ className, children, ...props }: Unif
     setBoxSize(handleExtractSize(ref.current!));
   }, []);
 
-  const handleScroll = useThrottle((evt: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    setBoxSize(handleExtractSize(evt.target as HTMLDivElement));
-  }, 8);
+  const handleScroll = useThrottle(
+    (evt: React.UIEvent<HTMLDivElement, UIEvent>) =>
+      setBoxSize(handleExtractSize(evt.target as HTMLDivElement)),
+    8,
+  );
+
+  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight, scrollTop } = boxSize;
 
   function handleScrollbarClick(e: React.MouseEvent<HTMLDivElement>) {
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
     const clickPosition = (e.clientY - rect.top) / rect.height;
     const scrollPosition = scrollTop / scrollHeight;
+    // eslint-disable-next-line no-console
+    console.log(offsetWidth, scrollWidth);
 
     setBoxSize((state) => {
       const nextScrollTop =
@@ -52,8 +59,6 @@ export default function UnifiedScrollbar({ className, children, ...props }: Unif
       };
     });
   }
-
-  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight, scrollTop } = boxSize;
 
   return (
     <div className={`${styles.scrollbarBox} ${className}`} {...props}>
@@ -75,30 +80,4 @@ export default function UnifiedScrollbar({ className, children, ...props }: Unif
       </div>
     </div>
   );
-}
-
-function handleExtractSize(target: HTMLDivElement) {
-  const { offsetWidth, scrollWidth, scrollLeft, offsetHeight, scrollHeight, scrollTop } = target;
-  return {
-    offsetWidth,
-    scrollWidth,
-    scrollLeft,
-    offsetHeight,
-    scrollHeight,
-    scrollTop,
-  };
-}
-
-function useThrottle<T extends any[]>(func: (...args: T) => void, delay: number) {
-  const ref = React.useRef({ last: 0, func });
-  ref.current.func = func;
-
-  return React.useCallback((...args: T) => {
-    const that = ref.current;
-    const now = Date.now();
-    if (now > that.last + delay) {
-      that.last = now;
-      that.func(...args);
-    }
-  }, []);
 }

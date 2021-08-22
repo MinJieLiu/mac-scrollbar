@@ -33,3 +33,7 @@ screenshot
 build
 *.local
 stats*
+
+**/src/**.js
+**/src/**.map
+**/src/**.d.ts

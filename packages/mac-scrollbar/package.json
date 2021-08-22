@@ -1,16 +1,17 @@
 {
-  "name": "unified-scrollbar",
+  "name": "mac-scrollbar",
   "version": "0.0.0",
-  "description": "Unified scrollbar",
+  "description": "A macos style react scroll bar component",
   "author": "MinJieLiu <liumingyi_1@163.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MinJieLiu/unified-scrollbar.git"
+    "url": "git+https://github.com/MinJieLiu/mac-scrollbar.git"
   },
   "license": "MIT",
-  "module": "src/index.ts",
+  "module": "src/index.js",
+  "typings": "src/index.d.ts",
   "files": [
-    "dist"
+    "src"
   ],
   "scripts": {
     "build": "tsc",

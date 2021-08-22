@@ -19,7 +19,7 @@
     "less": "^4.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "unified-scrollbar": "link:../unified-scrollbar",
+    "mac-scrollbar": "link:../mac-scrollbar",
     "vite": "^2.5.0"
   }
 }

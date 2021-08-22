@@ -1,5 +1,5 @@
 // CSS modules
-type CSSModuleClasses = { readonly [key: string]: string };
+type CSSModuleClasses = Readonly<Record<string, string>>;
 
 declare module '*.module.less' {
   const classes: CSSModuleClasses;
