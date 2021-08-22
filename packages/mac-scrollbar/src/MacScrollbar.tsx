@@ -9,27 +9,63 @@ export interface MacScrollbarProps extends React.HtmlHTMLAttributes<HTMLDivEleme
 interface ScrollSize {
   offsetWidth: number;
   scrollWidth: number;
-  scrollLeft: number;
   offsetHeight: number;
   scrollHeight: number;
-  scrollTop: number;
 }
 
-const initialSize = {
+interface ActionPosition {
+  isPress: boolean;
+  lastScrollTop: number;
+  lastScrollLeft: number;
+  pressStartX: number;
+  pressStartY: number;
+}
+
+const initialSize: ScrollSize = {
   offsetWidth: 0,
   scrollWidth: 0,
-  scrollLeft: 0,
   offsetHeight: 0,
   scrollHeight: 0,
-  scrollTop: 0,
 };
 
-export default function MacScrollbar({ className, children, ...props }: MacScrollbarProps) {
+const initialAction: ActionPosition = {
+  isPress: false,
+  lastScrollTop: 0,
+  lastScrollLeft: 0,
+  pressStartX: 0,
+  pressStartY: 0,
+};
+
+export default function MacScrollbar({ className = '', children, ...props }: MacScrollbarProps) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [boxSize, setBoxSize] = React.useState<ScrollSize>(initialSize);
+  const [action, setAction] = React.useState<ActionPosition>(initialAction);
+
+  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
+  const { scrollTop, scrollLeft } = ref.current || { scrollTop: 0, scrollLeft: 0 };
+  const verticalRatio = scrollHeight / offsetHeight;
+
+  const handleDrag = useThrottle((evt: MouseEvent) => {
+    if (action.isPress) {
+      ref.current!.scrollTop = Math.floor(
+        (evt.clientY - action.pressStartY) * verticalRatio + action.lastScrollTop,
+      );
+    }
+  }, 8);
 
   React.useEffect(() => {
     setBoxSize(handleExtractSize(ref.current!));
+
+    function handleUp() {
+      setAction(initialAction);
+    }
+    window.addEventListener('mousemove', handleDrag);
+    window.addEventListener('mouseup', handleUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleDrag);
+      window.removeEventListener('mouseup', handleUp);
+    };
   }, []);
 
   const handleScroll = useThrottle(
@@ -37,8 +73,6 @@ export default function MacScrollbar({ className, children, ...props }: MacScrol
       setBoxSize(handleExtractSize(evt.target as HTMLDivElement)),
     8,
   );
-
-  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight, scrollTop } = boxSize;
 
   function handleScrollbarClick(e: React.MouseEvent<HTMLDivElement>) {
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
@@ -60,24 +94,42 @@ export default function MacScrollbar({ className, children, ...props }: MacScrol
     });
   }
 
-  return (
-    <div className={`${styles.scrollbarBox} ${className}`} {...props}>
-      <div className={styles.scrollbarScroll} ref={ref} onScroll={handleScroll}>
-        {React.useMemo(() => children, [])}
+  function handleStart(e: React.MouseEvent<HTMLDivElement>) {
+    setAction({
+      isPress: true,
+      lastScrollTop: scrollTop,
+      lastScrollLeft: scrollLeft,
+      pressStartX: e.clientX,
+      pressStartY: e.clientY,
+    });
+  }
 
-        {scrollHeight - offsetHeight > 0 && (
-          <div className={styles.scrollbar} onClick={handleScrollbarClick}>
-            <div
-              className={styles.thumb}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                top: Math.min((scrollTop / scrollHeight) * offsetHeight, offsetHeight - 20),
-                height: Math.max((offsetHeight / scrollHeight) * offsetHeight, 20),
-              }}
-            />
-          </div>
-        )}
-      </div>
+  return (
+    <div
+      className={`${styles.scrollbarBox} ${className}`}
+      ref={ref}
+      onScroll={handleScroll}
+      {...props}
+    >
+      {React.useMemo(() => children, [])}
+
+      {scrollHeight - offsetHeight > 0 && (
+        <div
+          className={[styles.scrollbar, action.isPress ? styles.active : undefined].join(' ')}
+          onClick={handleScrollbarClick}
+          style={{ top: scrollTop }}
+        >
+          <div
+            className={styles.thumb}
+            onMouseDown={handleStart}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              top: Math.min((scrollTop / scrollHeight) * offsetHeight, offsetHeight - 20),
+              height: Math.max((offsetHeight / scrollHeight) * offsetHeight, 20),
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
