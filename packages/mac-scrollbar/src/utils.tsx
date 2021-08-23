@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function handleExtractSize(target: HTMLDivElement) {
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = target;
   return {
@@ -10,16 +8,10 @@ export function handleExtractSize(target: HTMLDivElement) {
   };
 }
 
-export function useThrottle<T extends any[]>(func: (...args: T) => void, delay: number) {
-  const ref = React.useRef({ last: 0, func });
-  ref.current.func = func;
-
-  return React.useCallback((...args: T) => {
-    const that = ref.current;
-    const now = Date.now();
-    if (now > that.last + delay) {
-      that.last = now;
-      that.func(...args);
-    }
-  }, []);
+export function classNames(...args: (string | Record<string, unknown>)[]) {
+  return args
+    .flatMap((item) =>
+      typeof item === 'object' ? Object.keys(item).map((n) => (item[n] ? n : undefined)) : item,
+    )
+    .join(' ');
 }

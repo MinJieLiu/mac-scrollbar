@@ -6,7 +6,11 @@ function App() {
   return (
     <MacScrollbar className="App">
       <p>Hello Vite + React!</p>
-      <p>Hello Vite + React!</p>
+      <p style={{ whiteSpace: 'nowrap' }}>
+        Hello Vite + React!Hello Vite + React!Hello Vite + React!Hello Vite + React!Hello Vite +
+        React!Hello Vite + React!Hello Vite + React!Hello Vite + React!Hello Vite + React!Hello Vite
+        + React!Hello Vite + React!
+      </p>
       <p>Hello Vite + React!</p>
       <p>Hello Vite + React!</p>
       <p>Hello Vite + React!</p>
