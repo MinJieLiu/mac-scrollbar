@@ -23,10 +23,13 @@ export function useEventListener<K extends keyof WindowEventMap>(
   funcRef.current = fn;
 
   React.useEffect(() => {
-    window.addEventListener(type, funcRef.current, options);
+    function wrapper(evt: WindowEventMap[K]) {
+      funcRef.current(evt);
+    }
+    window.addEventListener(type, wrapper, options);
 
     return () => {
-      window.removeEventListener(type, funcRef.current, options);
+      window.removeEventListener(type, wrapper, options);
     };
   }, []);
 }

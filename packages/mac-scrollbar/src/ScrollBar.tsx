@@ -1,5 +1,6 @@
 import React from 'react';
 import { classNames } from './utils';
+import type { ActionPosition } from './types';
 import styles from './Scrollbar.module.less';
 
 export interface ScrollBarProps {
@@ -19,8 +20,8 @@ export interface ScrollBarProps {
   offsetWidth: number;
   offsetHeight: number;
 
-  onSlotClick: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onThumbMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
+  updateAction: React.Dispatch<React.SetStateAction<ActionPosition>>;
+  updatePosition: (position: number, horizontal?: boolean) => void;
 }
 
 const minThumbSize = 20;
@@ -35,29 +36,54 @@ export default function ScrollBar({
   offsetWidth,
   offsetHeight,
 
-  onSlotClick,
-  onThumbMouseDown,
+  updateAction,
+  updatePosition,
 }: ScrollBarProps) {
-  const positionKey = horizontal ? 'left' : 'top';
-  const sizeKey = horizontal ? 'width' : 'height';
-  const scrollPosition = horizontal ? scrollLeft : scrollTop;
-  const offsetSize = horizontal ? offsetWidth : offsetHeight;
+  const [positionKey, sizeKey, scrollPosition, offsetSize] = horizontal
+    ? ['left', 'width', scrollLeft, offsetWidth]
+    : ['top', 'height', scrollTop, offsetHeight];
+
+  function handleScrollbarClick(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = (e.target as HTMLDivElement).getBoundingClientRect();
+    const clickPosition = horizontal
+      ? (e.clientX - rect.left) / rect.width
+      : (e.clientY - rect.top) / rect.height;
+    const scrollRatio = scrollPosition / scrollSize;
+
+    const position =
+      clickPosition > scrollRatio
+        ? Math.min(scrollSize, scrollPosition + offsetSize)
+        : Math.max(0, scrollPosition - offsetSize);
+
+    updatePosition(position, horizontal);
+  }
+
+  function handleStart(e: React.MouseEvent<HTMLDivElement>) {
+    updateAction({
+      isPressX: Boolean(horizontal),
+      isPressY: !horizontal,
+      lastScrollTop: scrollTop,
+      lastScrollLeft: scrollLeft,
+      pressStartX: e.clientX,
+      pressStartY: e.clientY,
+    });
+  }
 
   return (
     <div
       className={classNames(styles.scrollbar, horizontal ? styles.horizontal : styles.vertical, {
         [styles.active]: isPress,
       })}
-      onClick={onSlotClick}
+      onClick={handleScrollbarClick}
       style={
         horizontal
-          ? { top: scrollTop + offsetHeight - 16, left: scrollLeft }
-          : { top: scrollTop, left: scrollLeft + offsetWidth - 16 }
+          ? { bottom: -scrollTop, left: scrollLeft }
+          : { top: scrollTop, right: -scrollLeft }
       }
     >
       <div
         className={styles.thumb}
-        onMouseDown={onThumbMouseDown}
+        onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
         style={{
           [positionKey]: Math.min(
