@@ -1,6 +1,6 @@
 import React from 'react';
 import { classNames, handleExtractSize } from './utils';
-import { useThrottle, useEventListener } from './hooks';
+import { useEventListener } from './hooks';
 import ScrollBar from './ScrollBar';
 import type { ActionPosition, ScrollSize } from './types';
 import styles from './MacScrollbar.module.less';
@@ -41,7 +41,6 @@ export default function MacScrollbar({
   const [action, updateAction] = React.useState<ActionPosition>(initialAction);
 
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
-  const { scrollTop, scrollLeft } = ref.current || { scrollTop: 0, scrollLeft: 0 };
   const horizontalRatio = scrollWidth / offsetWidth;
   const verticalRatio = scrollHeight / offsetHeight;
 
@@ -65,12 +64,6 @@ export default function MacScrollbar({
     updateBoxSize(handleExtractSize(ref.current!));
   }, []);
 
-  const handleScroll = useThrottle(
-    (evt: React.UIEvent<HTMLDivElement, UIEvent>) =>
-      updateBoxSize(handleExtractSize(evt.target as HTMLDivElement)),
-    8,
-  );
-
   function updatePosition(position: number, horizontal?: boolean) {
     if (horizontal) {
       ref.current!.scrollLeft = position;
@@ -91,7 +84,6 @@ export default function MacScrollbar({
         overflowY: isDirectionEnable('vertical'),
       }}
       ref={ref}
-      onScroll={handleScroll}
       {...props}
     >
       {React.useMemo(() => children, [])}
@@ -100,8 +92,7 @@ export default function MacScrollbar({
         <ScrollBar
           horizontal
           isPress={action.isPressX}
-          scrollTop={scrollTop}
-          scrollLeft={scrollLeft}
+          scrollNode={ref.current}
           scrollSize={scrollWidth}
           offsetWidth={offsetWidth}
           offsetHeight={offsetHeight}
@@ -112,8 +103,7 @@ export default function MacScrollbar({
       {scrollHeight - offsetHeight > 0 && (
         <ScrollBar
           isPress={action.isPressY}
-          scrollTop={scrollTop}
-          scrollLeft={scrollLeft}
+          scrollNode={ref.current}
           scrollSize={scrollHeight}
           offsetWidth={offsetWidth}
           offsetHeight={offsetHeight}

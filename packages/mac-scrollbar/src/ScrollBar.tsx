@@ -14,8 +14,7 @@ export interface ScrollBarProps {
   theme?: 'dark';
   isPress: boolean;
 
-  scrollTop: number;
-  scrollLeft: number;
+  scrollNode: HTMLDivElement | null;
   scrollSize: number;
   offsetWidth: number;
   offsetHeight: number;
@@ -30,8 +29,7 @@ export default function ScrollBar({
   horizontal,
   isPress,
 
-  scrollTop,
-  scrollLeft,
+  scrollNode,
   scrollSize,
   offsetWidth,
   offsetHeight,
@@ -39,11 +37,49 @@ export default function ScrollBar({
   updateAction,
   updatePosition,
 }: ScrollBarProps) {
-  const [positionKey, sizeKey, scrollPosition, offsetSize] = horizontal
-    ? ['left', 'width', scrollLeft, offsetWidth]
-    : ['top', 'height', scrollTop, offsetHeight];
+  const [positionKey, sizeKey, offsetSize] = horizontal
+    ? ['left', 'width', offsetWidth]
+    : ['top', 'height', offsetHeight];
+
+  const slotRef = React.useRef<HTMLDivElement>(null);
+  const thumbRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    scrollNode?.addEventListener('scroll', (e) => {
+      const { scrollTop, scrollLeft } = e.target as HTMLDivElement;
+      const scrollPosition = horizontal ? scrollLeft : scrollTop;
+
+      updateElementStyle(
+        slotRef,
+        horizontal
+          ? {
+              bottom: -scrollTop,
+              left: scrollLeft,
+            }
+          : {
+              top: scrollTop,
+              right: -scrollLeft,
+            },
+      );
+
+      updateElementStyle(thumbRef, {
+        [positionKey]: Math.min(
+          (scrollPosition / scrollSize) * offsetSize,
+          offsetSize - minThumbSize,
+        ),
+      });
+    });
+  }, []);
+
+  function updateElementStyle(ref: React.RefObject<HTMLDivElement>, obj: Record<string, number>) {
+    Object.keys(obj).forEach((item) => {
+      // eslint-disable-next-line no-param-reassign
+      ref.current!.style[item] = `${obj[item]}px`;
+    });
+  }
 
   function handleScrollbarClick(e: React.MouseEvent<HTMLDivElement>) {
+    const scrollPosition = horizontal ? scrollNode!.scrollLeft : scrollNode!.scrollTop;
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
     const clickPosition = horizontal
       ? (e.clientX - rect.left) / rect.width
@@ -62,8 +98,8 @@ export default function ScrollBar({
     updateAction({
       isPressX: Boolean(horizontal),
       isPressY: !horizontal,
-      lastScrollTop: scrollTop,
-      lastScrollLeft: scrollLeft,
+      lastScrollTop: scrollNode!.scrollTop,
+      lastScrollLeft: scrollNode!.scrollLeft,
       pressStartX: e.clientX,
       pressStartY: e.clientY,
     });
@@ -75,23 +111,16 @@ export default function ScrollBar({
         [styles.active]: isPress,
       })}
       onClick={handleScrollbarClick}
-      style={
-        horizontal
-          ? { bottom: -scrollTop, left: scrollLeft }
-          : { top: scrollTop, right: -scrollLeft }
-      }
+      ref={slotRef}
     >
       <div
         className={styles.thumb}
         onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
         style={{
-          [positionKey]: Math.min(
-            (scrollPosition / scrollSize) * offsetSize,
-            offsetSize - minThumbSize,
-          ),
           [sizeKey]: Math.max((offsetSize / scrollSize) * offsetSize, minThumbSize),
         }}
+        ref={thumbRef}
       />
     </div>
   );
