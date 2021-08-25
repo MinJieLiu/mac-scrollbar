@@ -1,3 +1,5 @@
+export const minThumbSize = 20;
+
 export function handleExtractSize(target: HTMLDivElement) {
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = target;
   return {

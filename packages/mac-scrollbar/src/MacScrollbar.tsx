@@ -1,5 +1,5 @@
 import React from 'react';
-import { classNames, handleExtractSize } from './utils';
+import { classNames, handleExtractSize, minThumbSize } from './utils';
 import { useEventListener } from './hooks';
 import ScrollBar from './ScrollBar';
 import type { ActionPosition, ScrollSize } from './types';
@@ -36,7 +36,10 @@ export default function MacScrollbar({
   children,
   ...props
 }: MacScrollbarProps) {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const scrollBoxRef = React.useRef<HTMLDivElement>(null);
+  const horizontalRef = React.useRef<HTMLDivElement>(null);
+  const verticalRef = React.useRef<HTMLDivElement>(null);
+
   const [boxSize, updateBoxSize] = React.useState<ScrollSize>(initialSize);
   const [action, updateAction] = React.useState<ActionPosition>(initialAction);
 
@@ -61,15 +64,58 @@ export default function MacScrollbar({
   useEventListener('mouseup', () => updateAction(initialAction));
 
   React.useEffect(() => {
-    updateBoxSize(handleExtractSize(ref.current!));
+    updateBoxSize(handleExtractSize(scrollBoxRef.current!));
   }, []);
+
+  function handleScroll(evt: React.UIEvent<HTMLDivElement, UIEvent>) {
+    const { scrollTop, scrollLeft } = evt.target as HTMLDivElement;
+
+    if (horizontalRef.current) {
+      updateElementStyle(horizontalRef.current, {
+        bottom: -scrollTop,
+        left: scrollLeft,
+      });
+      updateThumbStyle(horizontalRef.current.firstChild as HTMLDivElement, scrollLeft, true);
+    }
+
+    if (verticalRef.current) {
+      updateElementStyle(verticalRef.current, {
+        top: scrollTop,
+        right: -scrollLeft,
+      });
+      updateThumbStyle(verticalRef.current.firstChild as HTMLDivElement, scrollTop);
+    }
+  }
+
+  function updateElementStyle(element: HTMLDivElement, obj: Record<string, number>) {
+    Object.keys(obj).forEach((item) => {
+      // eslint-disable-next-line no-param-reassign
+      element.style[item] = `${obj[item]}px`;
+    });
+  }
+
+  function updateThumbStyle(
+    thumbElement: HTMLDivElement,
+    scrollPosition: number,
+    horizontal?: boolean,
+  ) {
+    const [positionKey, scrollSize, offsetSize] = horizontal
+      ? ['left', scrollWidth, offsetWidth]
+      : ['top', scrollHeight, offsetHeight];
+    updateElementStyle(thumbElement, {
+      [positionKey]: Math.min(
+        (scrollPosition / scrollSize) * offsetSize,
+        offsetSize - minThumbSize,
+      ),
+    });
+  }
 
   function updatePosition(position: number, horizontal?: boolean) {
     if (horizontal) {
-      ref.current!.scrollLeft = position;
+      scrollBoxRef.current!.scrollLeft = position;
       return;
     }
-    ref.current!.scrollTop = position;
+    scrollBoxRef.current!.scrollTop = position;
   }
 
   function isDirectionEnable(curr: 'vertical' | 'horizontal' | 'auto') {
@@ -83,7 +129,8 @@ export default function MacScrollbar({
         overflowX: isDirectionEnable('horizontal'),
         overflowY: isDirectionEnable('vertical'),
       }}
-      ref={ref}
+      ref={scrollBoxRef}
+      onScroll={handleScroll}
       {...props}
     >
       {React.useMemo(() => children, [])}
@@ -92,23 +139,21 @@ export default function MacScrollbar({
         <ScrollBar
           horizontal
           isPress={action.isPressX}
-          scrollNode={ref.current}
+          grooveRef={horizontalRef}
           scrollSize={scrollWidth}
           offsetWidth={offsetWidth}
           offsetHeight={offsetHeight}
           updateAction={updateAction}
-          updatePosition={updatePosition}
         />
       )}
       {scrollHeight - offsetHeight > 0 && (
         <ScrollBar
           isPress={action.isPressY}
-          scrollNode={ref.current}
+          grooveRef={verticalRef}
           scrollSize={scrollHeight}
           offsetWidth={offsetWidth}
           offsetHeight={offsetHeight}
           updateAction={updateAction}
-          updatePosition={updatePosition}
         />
       )}
     </div>

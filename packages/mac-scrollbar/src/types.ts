@@ -6,8 +6,8 @@ export interface ScrollSize {
 }
 
 export interface ActionPosition {
-  isPressX: boolean;
-  isPressY: boolean;
+  isPressX?: boolean;
+  isPressY?: boolean;
   lastScrollTop: number;
   lastScrollLeft: number;
   pressStartX: number;
