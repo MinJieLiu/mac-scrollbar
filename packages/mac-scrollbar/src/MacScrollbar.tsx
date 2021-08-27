@@ -10,6 +10,7 @@ export interface MacScrollbarProps extends React.HtmlHTMLAttributes<HTMLDivEleme
    * @default auto
    */
   direction?: 'vertical' | 'horizontal' | 'auto';
+  innerRef?: React.RefObject<HTMLDivElement>;
   children: React.ReactNode;
 }
 
@@ -33,12 +34,15 @@ export default function MacScrollbar({
   direction = 'auto',
   className = '',
   style,
+  onScroll,
+  innerRef,
   children,
   ...props
 }: MacScrollbarProps) {
   const scrollBoxRef = React.useRef<HTMLDivElement>(null);
   const horizontalRef = React.useRef<HTMLDivElement>(null);
   const verticalRef = React.useRef<HTMLDivElement>(null);
+  const macScrollBarRef = innerRef || scrollBoxRef;
 
   const [boxSize, updateBoxSize] = React.useState<ScrollSize>(initialSize);
   const [action, updateAction] = React.useState<ActionPosition>(initialAction);
@@ -64,10 +68,13 @@ export default function MacScrollbar({
   useEventListener('mouseup', () => updateAction(initialAction));
 
   React.useEffect(() => {
-    updateBoxSize(handleExtractSize(scrollBoxRef.current!));
+    updateBoxSize(handleExtractSize(macScrollBarRef.current!));
   }, []);
 
   function handleScroll(evt: React.UIEvent<HTMLDivElement, UIEvent>) {
+    if (onScroll) {
+      onScroll(evt);
+    }
     const { scrollTop, scrollLeft } = evt.target as HTMLDivElement;
 
     if (horizontalRef.current) {
@@ -112,10 +119,10 @@ export default function MacScrollbar({
 
   function updatePosition(position: number, horizontal?: boolean) {
     if (horizontal) {
-      scrollBoxRef.current!.scrollLeft = position;
+      macScrollBarRef.current!.scrollLeft = position;
       return;
     }
-    scrollBoxRef.current!.scrollTop = position;
+    macScrollBarRef.current!.scrollTop = position;
   }
 
   function isDirectionEnable(curr: 'vertical' | 'horizontal' | 'auto') {
@@ -124,16 +131,16 @@ export default function MacScrollbar({
 
   return (
     <div
-      className={classNames(styles.scrollbarBox, className)}
+      className={classNames(styles.macScrollBar, className)}
       style={{
         overflowX: isDirectionEnable('horizontal'),
         overflowY: isDirectionEnable('vertical'),
       }}
-      ref={scrollBoxRef}
+      ref={macScrollBarRef}
       onScroll={handleScroll}
       {...props}
     >
-      {React.useMemo(() => children, [])}
+      {children}
 
       {scrollWidth - offsetWidth > 0 && (
         <ScrollBar
