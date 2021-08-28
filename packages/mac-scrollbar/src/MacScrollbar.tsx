@@ -109,9 +109,13 @@ export default function MacScrollbar({
     const [positionKey, scrollSize, offsetSize] = horizontal
       ? ['left', scrollWidth, offsetWidth]
       : ['top', scrollHeight, offsetHeight];
+
+    const realThumbSize = (offsetSize / scrollSize) * offsetSize;
+    const distance = Math.max(minThumbSize - realThumbSize, 0);
+
     updateElementStyle(thumbElement, {
       [positionKey]: Math.min(
-        (scrollPosition / scrollSize) * offsetSize,
+        (scrollPosition / scrollSize) * (offsetSize - distance),
         offsetSize - minThumbSize,
       ),
     });
