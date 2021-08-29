@@ -71,12 +71,3 @@ export function useThrottleCallback<CallbackArguments extends any[]>(
     [ms, leading],
   );
 }
-
-export function useThrottle<State>(
-  initialState: State | (() => State),
-  ms: number,
-  leading?: boolean,
-): [State, React.Dispatch<React.SetStateAction<State>>] {
-  const state = React.useState<State>(initialState);
-  return [state[0], useThrottleCallback(state[1], ms, leading)];
-}

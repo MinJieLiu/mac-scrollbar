@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import type React from 'react';
 
 export const minThumbSize = 20;
 
@@ -59,12 +58,15 @@ export function updateScrollPosition(
 }
 
 export function updateScrollElementStyle(
-  evt: React.UIEvent<HTMLDivElement, UIEvent>,
+  containerElement: HTMLDivElement | null | undefined,
   horizontalElement: HTMLElement | null | undefined,
   verticalElement: HTMLElement | null | undefined,
 ) {
+  if (!containerElement) {
+    return;
+  }
   const { scrollTop, scrollLeft, scrollWidth, scrollHeight, offsetWidth, offsetHeight } =
-    evt.target as HTMLDivElement;
+    containerElement;
 
   if (horizontalElement) {
     updateElementStyle(horizontalElement, {

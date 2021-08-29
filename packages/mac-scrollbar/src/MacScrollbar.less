@@ -2,12 +2,15 @@
   position: relative;
   width: 100%;
   height: 100%;
-  scrollbar-width: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
+  &.ms-prevent {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
   }
 
   &:hover {

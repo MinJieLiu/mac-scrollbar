@@ -7,7 +7,7 @@ import {
   updateScrollElementStyle,
   updateScrollPosition,
 } from './utils';
-import { useEventListener, useThrottle } from './hooks';
+import { useEventListener, useThrottleCallback } from './hooks';
 import ScrollBar from './ScrollBar';
 import type { ActionPosition, ScrollSize } from './types';
 import './MacScrollbar.less';
@@ -50,8 +50,17 @@ function MacScrollbarBase({
   const verticalRef = React.useRef<HTMLDivElement>(null);
   const macScrollBarRef = innerRef || scrollBoxRef;
 
-  const [boxSize, updateBoxSizeThrottle] = useThrottle<ScrollSize>(initialSize, 32, true);
+  const [boxSize, updateBoxSizeThrottle] = React.useState<ScrollSize>(initialSize);
   const [action, updateAction] = React.useState<ActionPosition>(initialAction);
+
+  const updateLayerThrottle = useThrottleCallback(
+    () => {
+      updateBoxSizeThrottle(handleExtractSize(macScrollBarRef.current!));
+      updateScrollElementStyle(macScrollBarRef.current, horizontalRef.current, verticalRef.current);
+    },
+    32,
+    true,
+  );
 
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
 
@@ -75,24 +84,22 @@ function MacScrollbarBase({
 
   useEventListener('mouseup', () => updateAction(initialAction));
 
-  useEventListener('resize', () =>
-    updateBoxSizeThrottle(handleExtractSize(macScrollBarRef.current!)),
-  );
+  useEventListener('resize', () => updateLayerThrottle());
 
   React.useEffect(() => {
-    updateBoxSizeThrottle(handleExtractSize(macScrollBarRef.current!));
+    updateLayerThrottle();
   }, []);
 
   function handleScroll(evt: React.UIEvent<HTMLDivElement, UIEvent>) {
     if (onScroll) {
       onScroll(evt);
     }
-    updateScrollElementStyle(evt, horizontalRef.current, verticalRef.current);
+    updateScrollElementStyle(macScrollBarRef.current, horizontalRef.current, verticalRef.current);
   }
 
   return (
     <div
-      className={classNames('ms-container', className)}
+      className={classNames('ms-container', 'ms-prevent', className)}
       ref={macScrollBarRef}
       onScroll={handleScroll}
       {...props}
@@ -126,6 +133,7 @@ function MacScrollbarBase({
 
 export function MacScrollbar({
   direction = 'auto',
+  className,
   style,
   innerRef,
   children,
@@ -139,14 +147,25 @@ export function MacScrollbar({
 
   if (!isEnableScrollbar()) {
     return (
-      <div style={currentStyle} ref={innerRef} {...props}>
+      <div
+        className={classNames('ms-container', className)}
+        style={currentStyle}
+        ref={innerRef}
+        {...props}
+      >
         {children}
       </div>
     );
   }
 
   return (
-    <MacScrollbarBase direction={direction} style={currentStyle} innerRef={innerRef} {...props}>
+    <MacScrollbarBase
+      direction={direction}
+      className={className}
+      style={currentStyle}
+      innerRef={innerRef}
+      {...props}
+    >
       {children}
     </MacScrollbarBase>
   );
