@@ -3,6 +3,7 @@ import {
   classNames,
   handleExtractSize,
   isDirectionEnable,
+  isEnableScrollbar,
   updateScrollElementStyle,
   updateScrollPosition,
 } from './utils';
@@ -36,10 +37,9 @@ const initialAction: ActionPosition = {
   pressStartY: 0,
 };
 
-export function MacScrollbar({
-  direction = 'auto',
+function MacScrollbarBase({
+  direction,
   className,
-  style,
   onScroll,
   innerRef,
   children,
@@ -93,10 +93,6 @@ export function MacScrollbar({
   return (
     <div
       className={classNames('ms-container', className)}
-      style={{
-        overflowX: isDirectionEnable(direction, 'horizontal'),
-        overflowY: isDirectionEnable(direction, 'vertical'),
-      }}
       ref={macScrollBarRef}
       onScroll={handleScroll}
       {...props}
@@ -125,5 +121,33 @@ export function MacScrollbar({
         />
       )}
     </div>
+  );
+}
+
+export function MacScrollbar({
+  direction = 'auto',
+  style,
+  innerRef,
+  children,
+  ...props
+}: MacScrollbarProps) {
+  const currentStyle = {
+    overflowX: isDirectionEnable(direction, 'horizontal'),
+    overflowY: isDirectionEnable(direction, 'vertical'),
+    ...style,
+  };
+
+  if (!isEnableScrollbar()) {
+    return (
+      <div style={currentStyle} ref={innerRef} {...props}>
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <MacScrollbarBase direction={direction} style={currentStyle} innerRef={innerRef} {...props}>
+      {children}
+    </MacScrollbarBase>
   );
 }

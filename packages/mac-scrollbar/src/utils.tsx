@@ -3,6 +3,14 @@ import type React from 'react';
 
 export const minThumbSize = 20;
 
+export function isEnableScrollbar() {
+  if (typeof navigator === 'undefined') {
+    return false;
+  }
+  // Windows/Linux
+  return navigator.userAgent.includes('Windows NT') || navigator.userAgent.includes('X11;');
+}
+
 export function handleExtractSize(target: HTMLDivElement) {
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = target;
   return {
@@ -16,7 +24,7 @@ export function handleExtractSize(target: HTMLDivElement) {
 export function isDirectionEnable(
   direction: 'vertical' | 'horizontal' | 'auto',
   curr: 'vertical' | 'horizontal' | 'auto',
-) {
+): 'auto' | undefined {
   return direction === 'auto' || curr === 'horizontal' ? 'auto' : undefined;
 }
 
