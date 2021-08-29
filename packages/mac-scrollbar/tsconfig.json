@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "src",
+    "rootDir": "src",
+    "declarationDir": "dist",
+    "outDir": "build",
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
@@ -11,7 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ES2015",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
@@ -23,5 +25,6 @@
     "noEmitOnError": true,
     "jsx": "react-jsx"
   },
-  "exclude": ["node_modules", "__tests__"]
+  "include": ["src", "typings.d.ts"],
+  "exclude": ["__tests__"]
 }

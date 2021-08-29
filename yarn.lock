@@ -5692,6 +5692,9 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+"mac-scrollbar@link:packages/mac-scrollbar":
+  version "0.0.0"
+
 make-dir@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-2.1.0.tgz#5f0310e18b8be898cc07009295a30ae41e91e6f5"
@@ -8844,9 +8847,6 @@ unicode-property-aliases-ecmascript@^1.0.4:
   resolved "https://registry.yarnpkg.com/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-1.1.0.tgz#dd57a99f6207bedff4628abefb94c50db941c8f4"
   integrity sha512-PqSoPh/pWetQ2phoj5RLiaqIk4kCNwoV3CI+LfGmWLKI3rE3kl1h59XpX2BjgDrmbxD9ARtQobPGU1SguCYuQg==
 
-"mac-scrollbar@link:packages/mac-scrollbar":
-  version "0.0.0"
-
 unified@^6.1.2:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/unified/-/unified-6.2.0.tgz#7fbd630f719126d67d40c644b7e3f617035f6dba"
@@ -9126,6 +9126,18 @@ vite@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.5.0.tgz#111ba3679432d426e44566acf480005a7914cbd6"
   integrity sha512-Dn4B+g54PJsMG5WCc4QeFy1ygMXRdTtFrUPegqfk4+vzVQcbF/DqqmI/1bxezArzbujBJg/67QeT5wz8edfJVQ==
+  dependencies:
+    esbuild "^0.12.17"
+    postcss "^8.3.6"
+    resolve "^1.20.0"
+    rollup "^2.38.5"
+  optionalDependencies:
+    fsevents "~2.3.2"
+
+vite@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.5.1.tgz#953c71a034c07b3ae0448d57664ec9c6862f23a8"
+  integrity sha512-FwmLbbz8MB1pBs9dKoRDgpiqoijif8hSK1+NNUYc12/cnf+pM2UFhhQ1rcpXgbMhm/5c2USZdVAf0FSkSxaFDA==
   dependencies:
     esbuild "^0.12.17"
     postcss "^8.3.6"

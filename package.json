@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "lerna run dev --scope=example --stream",
     "build": "lerna run build --scope=mac-scrollbar --stream",
-    "watch": "npm run build -- -- --watch",
+    "build:watch": "lerna run dev --scope=mac-scrollbar --stream",
     "lint": "npm run lint:js && npm run lint:style && npm run lint:prettier",
     "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty packages/ --fix",
     "lint:prettier": "prettier --check \"**/*\" --end-of-line auto",

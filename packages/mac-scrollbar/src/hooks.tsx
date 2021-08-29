@@ -1,19 +1,5 @@
 import React from 'react';
 
-export function useThrottle<T extends any[]>(func: (...args: T) => void, delay: number) {
-  const ref = React.useRef({ last: 0, func });
-  ref.current.func = func;
-
-  return React.useCallback((...args: T) => {
-    const that = ref.current;
-    const now = Date.now();
-    if (now > that.last + delay) {
-      that.last = now;
-      that.func(...args);
-    }
-  }, []);
-}
-
 export function useEventListener<K extends keyof WindowEventMap>(
   type: K,
   fn: (evt: WindowEventMap[K]) => void,
@@ -32,4 +18,65 @@ export function useEventListener<K extends keyof WindowEventMap>(
       window.removeEventListener(type, wrapper, options);
     };
   }, []);
+}
+
+export function useThrottleCallback<CallbackArguments extends any[]>(
+  callback: (...args: CallbackArguments) => void,
+  ms: number,
+  leading = false,
+): (...args: CallbackArguments) => void {
+  const callbackRef = React.useRef(callback);
+  callbackRef.current = callback;
+  const prev = React.useRef(0);
+  const trailingTimeout = React.useRef<ReturnType<typeof setTimeout>>();
+  const clearTrailing = () => trailingTimeout.current && clearTimeout(trailingTimeout.current);
+
+  React.useEffect(
+    () => () => {
+      prev.current = 0;
+      clearTrailing();
+    },
+    [ms, leading],
+  );
+
+  return React.useCallback(
+    (...args) => {
+      const now = Date.now();
+      const call = () => {
+        prev.current = now;
+        clearTrailing();
+        callbackRef.current.apply(null, args);
+      };
+      const { current } = prev;
+      // leading
+      if (leading && current === 0) {
+        call();
+        return;
+      }
+      // body
+      if (now - current > ms) {
+        if (current > 0) {
+          call();
+          return;
+        }
+        prev.current = now;
+      }
+      // trailing
+      clearTrailing();
+      trailingTimeout.current = setTimeout(() => {
+        call();
+        prev.current = 0;
+      }, ms);
+    },
+    [ms, leading],
+  );
+}
+
+export function useThrottle<State>(
+  initialState: State | (() => State),
+  ms: number,
+  leading?: boolean,
+): [State, React.Dispatch<React.SetStateAction<State>>] {
+  const state = React.useState<State>(initialState);
+  return [state[0], useThrottleCallback(state[1], ms, leading)];
 }

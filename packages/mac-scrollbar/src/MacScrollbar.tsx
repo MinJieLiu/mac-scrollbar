@@ -1,9 +1,15 @@
 import React from 'react';
-import { classNames, handleExtractSize, minThumbSize } from './utils';
-import { useEventListener } from './hooks';
+import {
+  classNames,
+  handleExtractSize,
+  isDirectionEnable,
+  updateScrollElementStyle,
+  updateScrollPosition,
+} from './utils';
+import { useEventListener, useThrottle } from './hooks';
 import ScrollBar from './ScrollBar';
 import type { ActionPosition, ScrollSize } from './types';
-import styles from './MacScrollbar.module.less';
+import './MacScrollbar.less';
 
 export interface MacScrollbarProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   /**
@@ -30,9 +36,9 @@ const initialAction: ActionPosition = {
   pressStartY: 0,
 };
 
-export default function MacScrollbar({
+export function MacScrollbar({
   direction = 'auto',
-  className = '',
+  className,
   style,
   onScroll,
   innerRef,
@@ -44,22 +50,24 @@ export default function MacScrollbar({
   const verticalRef = React.useRef<HTMLDivElement>(null);
   const macScrollBarRef = innerRef || scrollBoxRef;
 
-  const [boxSize, updateBoxSize] = React.useState<ScrollSize>(initialSize);
+  const [boxSize, updateBoxSizeThrottle] = useThrottle<ScrollSize>(initialSize, 32, true);
   const [action, updateAction] = React.useState<ActionPosition>(initialAction);
 
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
-  const horizontalRatio = scrollWidth / offsetWidth;
-  const verticalRatio = scrollHeight / offsetHeight;
 
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
-      updatePosition(
+      const horizontalRatio = scrollWidth / offsetWidth;
+      updateScrollPosition(
+        macScrollBarRef.current,
         Math.floor((evt.clientX - action.pressStartX) * horizontalRatio + action.lastScrollLeft),
         true,
       );
     }
     if (action.isPressY) {
-      updatePosition(
+      const verticalRatio = scrollHeight / offsetHeight;
+      updateScrollPosition(
+        macScrollBarRef.current,
         Math.floor((evt.clientY - action.pressStartY) * verticalRatio + action.lastScrollTop),
       );
     }
@@ -67,78 +75,27 @@ export default function MacScrollbar({
 
   useEventListener('mouseup', () => updateAction(initialAction));
 
+  useEventListener('resize', () =>
+    updateBoxSizeThrottle(handleExtractSize(macScrollBarRef.current!)),
+  );
+
   React.useEffect(() => {
-    updateBoxSize(handleExtractSize(macScrollBarRef.current!));
+    updateBoxSizeThrottle(handleExtractSize(macScrollBarRef.current!));
   }, []);
 
   function handleScroll(evt: React.UIEvent<HTMLDivElement, UIEvent>) {
     if (onScroll) {
       onScroll(evt);
     }
-    const { scrollTop, scrollLeft } = evt.target as HTMLDivElement;
-
-    if (horizontalRef.current) {
-      updateElementStyle(horizontalRef.current, {
-        bottom: -scrollTop,
-        left: scrollLeft,
-      });
-      updateThumbStyle(horizontalRef.current.firstChild as HTMLDivElement, scrollLeft, true);
-    }
-
-    if (verticalRef.current) {
-      updateElementStyle(verticalRef.current, {
-        top: scrollTop,
-        right: -scrollLeft,
-      });
-      updateThumbStyle(verticalRef.current.firstChild as HTMLDivElement, scrollTop);
-    }
-  }
-
-  function updateElementStyle(element: HTMLDivElement, obj: Record<string, number>) {
-    Object.keys(obj).forEach((item) => {
-      // eslint-disable-next-line no-param-reassign
-      element.style[item] = `${obj[item]}px`;
-    });
-  }
-
-  function updateThumbStyle(
-    thumbElement: HTMLDivElement,
-    scrollPosition: number,
-    horizontal?: boolean,
-  ) {
-    const [positionKey, scrollSize, offsetSize] = horizontal
-      ? ['left', scrollWidth, offsetWidth]
-      : ['top', scrollHeight, offsetHeight];
-
-    const realThumbSize = (offsetSize / scrollSize) * offsetSize;
-    const distance = Math.max(minThumbSize - realThumbSize, 0);
-
-    updateElementStyle(thumbElement, {
-      [positionKey]: Math.min(
-        (scrollPosition / scrollSize) * (offsetSize - distance),
-        offsetSize - minThumbSize,
-      ),
-    });
-  }
-
-  function updatePosition(position: number, horizontal?: boolean) {
-    if (horizontal) {
-      macScrollBarRef.current!.scrollLeft = position;
-      return;
-    }
-    macScrollBarRef.current!.scrollTop = position;
-  }
-
-  function isDirectionEnable(curr: 'vertical' | 'horizontal' | 'auto') {
-    return direction === 'auto' || curr === 'horizontal' ? 'auto' : undefined;
+    updateScrollElementStyle(evt, horizontalRef.current, verticalRef.current);
   }
 
   return (
     <div
-      className={classNames(styles.macScrollBar, className)}
+      className={classNames('ms-container', className)}
       style={{
-        overflowX: isDirectionEnable('horizontal'),
-        overflowY: isDirectionEnable('vertical'),
+        overflowX: isDirectionEnable(direction, 'horizontal'),
+        overflowY: isDirectionEnable(direction, 'vertical'),
       }}
       ref={macScrollBarRef}
       onScroll={handleScroll}

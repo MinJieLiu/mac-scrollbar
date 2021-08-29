@@ -1,5 +1,6 @@
 import React from 'react';
-import MacScrollbar from 'mac-scrollbar';
+import { MacScrollbar } from 'mac-scrollbar';
+import 'mac-scrollbar/dist/style.css';
 import './App.css';
 
 function App() {

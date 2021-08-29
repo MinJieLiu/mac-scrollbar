@@ -1,7 +1,7 @@
 import React from 'react';
-import { classNames, minThumbSize } from './utils';
+import { classNames, minThumbSize, updateScrollPosition } from './utils';
 import type { ActionPosition } from './types';
-import styles from './Scrollbar.module.less';
+import './Scrollbar.less';
 
 export interface ScrollBarProps {
   /**
@@ -50,11 +50,7 @@ export default function ScrollBar({
         ? Math.min(scrollSize, scrollPosition + offsetSize)
         : Math.max(0, scrollPosition - offsetSize);
 
-    if (horizontal) {
-      scrollNode.scrollLeft = position;
-      return;
-    }
-    scrollNode.scrollTop = position;
+    updateScrollPosition(scrollNode, position, horizontal);
   }
 
   function handleStart(e: React.MouseEvent<HTMLDivElement>) {
@@ -71,14 +67,14 @@ export default function ScrollBar({
 
   return (
     <div
-      className={classNames(styles.scrollbar, horizontal ? styles.horizontal : styles.vertical, {
-        [styles.active]: isPress,
+      className={classNames('ms-scrollbar', horizontal ? 'ms-x' : 'ms-y', {
+        'ms-active': isPress,
       })}
       onClick={handleScrollbarClick}
       ref={grooveRef}
     >
       <div
-        className={styles.thumb}
+        className="ms-thumb"
         onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
         style={{
