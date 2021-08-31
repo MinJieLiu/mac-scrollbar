@@ -1,11 +1,14 @@
 .ms-container {
   position: relative;
-  scrollbar-width: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
+  &.ms-prevent {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
   }
 
   &:hover {

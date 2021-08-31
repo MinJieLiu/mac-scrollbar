@@ -95,7 +95,7 @@ export default function ScrollBar({
 
   return (
     <div
-      className={classNames('ms-container', className)}
+      className={classNames('ms-container', 'ms-prevent', className)}
       ref={scrollBoxRef}
       onScroll={handleScroll}
       {...props}
