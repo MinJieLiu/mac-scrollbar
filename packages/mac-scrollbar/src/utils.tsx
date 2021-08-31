@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import type React from 'react';
 
 export const minThumbSize = 20;
 
@@ -8,6 +9,18 @@ export function isEnableScrollbar() {
   }
   // Windows/Linux
   return navigator.userAgent.includes('Windows NT') || navigator.userAgent.includes('X11;');
+}
+
+export function updateRef(
+  innerRef: React.Ref<HTMLDivElement> | undefined,
+  scrollBoxElement: HTMLDivElement | null,
+) {
+  if (typeof innerRef === 'function') {
+    innerRef(scrollBoxElement);
+    return;
+  }
+  // @ts-ignore
+  innerRef.current = scrollBoxElement;
 }
 
 export function handleExtractSize(target: HTMLDivElement) {

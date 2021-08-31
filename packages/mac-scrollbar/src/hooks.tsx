@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 import React from 'react';
+import { updateRef } from './utils';
 
 export function useEventListener<K extends keyof WindowEventMap>(
   type: K,
@@ -70,4 +72,16 @@ export function useThrottleCallback<CallbackArguments extends any[]>(
     },
     [ms, leading],
   );
+}
+
+export function useSyncRef(
+  innerRef: React.Ref<HTMLDivElement> | undefined,
+  scrollBoxRef: React.RefObject<HTMLDivElement>,
+) {
+  React.useEffect(() => {
+    updateRef(innerRef, scrollBoxRef.current);
+    return () => {
+      updateRef(innerRef, null);
+    };
+  }, [innerRef, scrollBoxRef]);
 }

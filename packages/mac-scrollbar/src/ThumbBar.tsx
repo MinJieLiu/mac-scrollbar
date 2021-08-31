@@ -1,9 +1,9 @@
 import React from 'react';
 import { classNames, minThumbSize, updateScrollPosition } from './utils';
 import type { ActionPosition } from './types';
-import './Scrollbar.less';
+import './ThumbBar.less';
 
-export interface ScrollBarProps {
+export interface ThumbBarProps {
   /**
    * @default vertical
    */
@@ -22,7 +22,7 @@ export interface ScrollBarProps {
   updateAction: React.Dispatch<React.SetStateAction<ActionPosition>>;
 }
 
-export default function ScrollBar({
+function ThumbBar({
   horizontal,
   isPress,
 
@@ -32,10 +32,10 @@ export default function ScrollBar({
   offsetHeight,
 
   updateAction,
-}: ScrollBarProps) {
+}: ThumbBarProps) {
   const [sizeKey, offsetSize] = horizontal ? ['width', offsetWidth] : ['height', offsetHeight];
 
-  function handleScrollbarClick(e: React.MouseEvent<HTMLDivElement>) {
+  function handleThumbBarClick(e: React.MouseEvent<HTMLDivElement>) {
     const scrollNode = grooveRef.current?.parentNode as HTMLDivElement;
     const { scrollLeft, scrollTop } = scrollNode;
     const scrollPosition = horizontal ? scrollLeft : scrollTop;
@@ -67,10 +67,10 @@ export default function ScrollBar({
 
   return (
     <div
-      className={classNames('ms-scrollbar', horizontal ? 'ms-x' : 'ms-y', {
+      className={classNames('ms-thumbBar', horizontal ? 'ms-x' : 'ms-y', {
         'ms-active': isPress,
       })}
-      onClick={handleScrollbarClick}
+      onClick={handleThumbBarClick}
       ref={grooveRef}
     >
       <div
@@ -84,3 +84,5 @@ export default function ScrollBar({
     </div>
   );
 }
+
+export default React.memo(ThumbBar);

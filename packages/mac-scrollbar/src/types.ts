@@ -1,3 +1,5 @@
+import type React from 'react';
+
 export interface ScrollSize {
   offsetWidth: number;
   scrollWidth: number;
@@ -12,4 +14,12 @@ export interface ActionPosition {
   lastScrollLeft: number;
   pressStartX: number;
   pressStartY: number;
+}
+
+export interface MacScrollbarProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+  /**
+   * @default auto
+   */
+  direction?: 'vertical' | 'horizontal' | 'auto';
+  children: React.ReactNode;
 }
