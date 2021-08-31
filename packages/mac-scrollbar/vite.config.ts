@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   build: {
     target: ['es2019'],
+    sourcemap: true,
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       fileName: (format) => `index.${format}.js`,

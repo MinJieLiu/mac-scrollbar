@@ -11,7 +11,7 @@ export const MacScrollbar = React.forwardRef<HTMLDivElement, MacScrollbarProps>(
       ...style,
     };
 
-    if (isEnableScrollbar()) {
+    if (!isEnableScrollbar()) {
       return (
         <div
           className={classNames('ms-container', className)}
