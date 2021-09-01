@@ -6,11 +6,11 @@ import {
   updateScrollPosition,
 } from './utils';
 import { useEventListener, useSyncRef, useThrottleCallback } from './hooks';
-import type { ActionPosition, MacScrollbarProps, ScrollSize } from './types';
+import type { ActionPosition, ScrollbarPropsBase, ScrollSize } from './types';
 import ThumbBar from './ThumbBar';
 import './Scrollbar.less';
 
-export interface ScrollbarProps extends MacScrollbarProps {
+export interface ScrollbarProps extends ScrollbarPropsBase {
   innerRef?: React.Ref<HTMLDivElement>;
 }
 
@@ -95,33 +95,35 @@ export default function ScrollBar({
 
   return (
     <div
-      className={classNames('ms-container', 'ms-prevent', className)}
+      className={classNames('ms-container', className)}
       ref={scrollBoxRef}
       onScroll={handleScroll}
       {...props}
     >
+      <div className="ms-scrollWrapper">
+        {scrollWidth - offsetWidth > 0 && (
+          <ThumbBar
+            horizontal
+            isPress={action.isPressX}
+            grooveRef={horizontalRef}
+            scrollSize={scrollWidth}
+            offsetWidth={offsetWidth}
+            offsetHeight={offsetHeight}
+            updateAction={updateAction}
+          />
+        )}
+        {scrollHeight - offsetHeight > 0 && (
+          <ThumbBar
+            isPress={action.isPressY}
+            grooveRef={verticalRef}
+            scrollSize={scrollHeight}
+            offsetWidth={offsetWidth}
+            offsetHeight={offsetHeight}
+            updateAction={updateAction}
+          />
+        )}
+      </div>
       {children}
-      {scrollWidth - offsetWidth > 0 && (
-        <ThumbBar
-          horizontal
-          isPress={action.isPressX}
-          grooveRef={horizontalRef}
-          scrollSize={scrollWidth}
-          offsetWidth={offsetWidth}
-          offsetHeight={offsetHeight}
-          updateAction={updateAction}
-        />
-      )}
-      {scrollHeight - offsetHeight > 0 && (
-        <ThumbBar
-          isPress={action.isPressY}
-          grooveRef={verticalRef}
-          scrollSize={scrollHeight}
-          offsetWidth={offsetWidth}
-          offsetHeight={offsetHeight}
-          updateAction={updateAction}
-        />
-      )}
     </div>
   );
 }

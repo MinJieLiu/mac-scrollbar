@@ -3,6 +3,8 @@ import type React from 'react';
 
 export const minThumbSize = 20;
 
+export const thumbBarSize = 16;
+
 export function isEnableScrollbar() {
   if (typeof navigator === 'undefined') {
     return false;
@@ -82,10 +84,6 @@ export function updateScrollElementStyle(
     containerElement;
 
   if (horizontalElement) {
-    updateElementStyle(horizontalElement, {
-      bottom: -scrollTop,
-      left: scrollLeft,
-    });
     updateThumbStyle(
       horizontalElement.firstChild as HTMLDivElement,
       scrollWidth,
@@ -96,10 +94,6 @@ export function updateScrollElementStyle(
   }
 
   if (verticalElement) {
-    updateElementStyle(verticalElement, {
-      top: scrollTop,
-      right: -scrollLeft,
-    });
     updateThumbStyle(
       verticalElement.firstChild as HTMLDivElement,
       scrollHeight,

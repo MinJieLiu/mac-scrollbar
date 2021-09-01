@@ -16,7 +16,7 @@ export interface ActionPosition {
   pressStartY: number;
 }
 
-export interface MacScrollbarProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+export interface ScrollbarPropsBase extends React.HtmlHTMLAttributes<HTMLDivElement> {
   /**
    * @default auto
    */

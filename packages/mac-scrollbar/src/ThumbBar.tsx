@@ -1,5 +1,5 @@
 import React from 'react';
-import { classNames, minThumbSize, updateScrollPosition } from './utils';
+import { classNames, minThumbSize, thumbBarSize, updateScrollPosition } from './utils';
 import type { ActionPosition } from './types';
 import './ThumbBar.less';
 
@@ -34,9 +34,12 @@ function ThumbBar({
   updateAction,
 }: ThumbBarProps) {
   const [sizeKey, offsetSize] = horizontal ? ['width', offsetWidth] : ['height', offsetHeight];
+  const [barPositionKey, barOffsetPosition] = horizontal
+    ? ['top', offsetHeight]
+    : ['left', offsetWidth];
 
   function handleThumbBarClick(e: React.MouseEvent<HTMLDivElement>) {
-    const scrollNode = grooveRef.current?.parentNode as HTMLDivElement;
+    const scrollNode = grooveRef.current?.parentNode?.parentNode as HTMLDivElement;
     const { scrollLeft, scrollTop } = scrollNode;
     const scrollPosition = horizontal ? scrollLeft : scrollTop;
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
@@ -54,7 +57,7 @@ function ThumbBar({
   }
 
   function handleStart(e: React.MouseEvent<HTMLDivElement>) {
-    const { scrollLeft, scrollTop } = grooveRef.current?.parentNode as HTMLDivElement;
+    const { scrollLeft, scrollTop } = grooveRef.current?.parentNode?.parentNode as HTMLDivElement;
     updateAction({
       isPressX: horizontal,
       isPressY: !horizontal,
@@ -72,6 +75,10 @@ function ThumbBar({
       })}
       onClick={handleThumbBarClick}
       ref={grooveRef}
+      style={{
+        [sizeKey]: offsetSize,
+        [barPositionKey]: barOffsetPosition - thumbBarSize,
+      }}
     >
       <div
         className="ms-thumb"
