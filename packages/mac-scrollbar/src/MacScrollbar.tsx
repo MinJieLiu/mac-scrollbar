@@ -1,24 +1,24 @@
 import React from 'react';
-import { isDirectionEnable, isEnableScrollbar } from './utils';
+import { isEnableStyle, isEnableScrollbar } from './utils';
 import Scrollbar from './Scrollbar';
 import type { ScrollbarPropsBase } from './types';
 
 export interface MacScrollbarProps extends ScrollbarPropsBase {
   /**
-   * @defaultValue 'auto'
+   * When set to true, macOS browsers will use native scrollbar.
    */
-  enable?: 'auto' | 'all';
+  suppressMacOS?: boolean;
 }
 
 export const MacScrollbar = React.forwardRef<HTMLDivElement, MacScrollbarProps>(
-  ({ direction = 'auto', enable = 'auto', style, children, ...props }, ref) => {
+  ({ suppressScrollX, suppressScrollY, suppressMacOS, style, children, ...props }, ref) => {
     const currentStyle = {
-      overflowX: isDirectionEnable(direction, 'horizontal'),
-      overflowY: isDirectionEnable(direction, 'vertical'),
+      overflowX: isEnableStyle(suppressScrollX),
+      overflowY: isEnableStyle(suppressScrollY),
       ...style,
     };
 
-    if (enable === 'auto' && !isEnableScrollbar()) {
+    if (suppressMacOS && !isEnableScrollbar()) {
       return (
         <div style={currentStyle} ref={ref} {...props}>
           {children}
@@ -27,7 +27,7 @@ export const MacScrollbar = React.forwardRef<HTMLDivElement, MacScrollbarProps>(
     }
 
     return (
-      <Scrollbar direction={direction} style={currentStyle} innerRef={ref} {...props}>
+      <Scrollbar style={currentStyle} innerRef={ref} {...props}>
         {children}
       </Scrollbar>
     );

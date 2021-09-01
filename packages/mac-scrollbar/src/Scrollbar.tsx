@@ -31,7 +31,6 @@ const initialAction: ActionPosition = {
 };
 
 export default function ScrollBar({
-  direction,
   className,
   onScroll,
   innerRef,

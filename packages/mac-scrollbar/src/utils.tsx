@@ -35,11 +35,8 @@ export function handleExtractSize(target: HTMLDivElement) {
   };
 }
 
-export function isDirectionEnable(
-  direction: 'vertical' | 'horizontal' | 'auto',
-  curr: 'vertical' | 'horizontal' | 'auto',
-): 'auto' | undefined {
-  return direction === 'auto' || curr === 'horizontal' ? 'auto' : undefined;
+export function isEnableStyle(disabled?: boolean) {
+  return disabled ? ('hidden' as const) : ('auto' as const);
 }
 
 export function classNames(...args: (string | undefined | Record<string, unknown>)[]) {

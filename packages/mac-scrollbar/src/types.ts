@@ -18,8 +18,12 @@ export interface ActionPosition {
 
 export interface ScrollbarPropsBase extends React.HtmlHTMLAttributes<HTMLDivElement> {
   /**
-   * @default auto
+   * When set to true, the scrollbar in X-axis will not be available, regardless of the content width.
    */
-  direction?: 'vertical' | 'horizontal' | 'auto';
+  suppressScrollX?: boolean;
+  /**
+   * When set to true, the scroll bar in Y-axis will not be available, regardless of the content height.
+   */
+  suppressScrollY?: boolean;
   children: React.ReactNode;
 }
