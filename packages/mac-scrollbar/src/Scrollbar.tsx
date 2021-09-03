@@ -35,6 +35,8 @@ export default function ScrollBar({
   onScroll,
   innerRef,
   children,
+  suppressScrollX,
+  suppressScrollY,
   ...props
 }: ScrollbarProps) {
   const scrollBoxRef = React.useRef<HTMLDivElement>(null);
@@ -100,7 +102,7 @@ export default function ScrollBar({
       {...props}
     >
       <div className="ms-scrollWrapper">
-        {scrollWidth - offsetWidth > 0 && (
+        {!suppressScrollX && scrollWidth - offsetWidth > 0 && (
           <ThumbBar
             horizontal
             isPress={action.isPressX}
@@ -111,7 +113,7 @@ export default function ScrollBar({
             updateAction={updateAction}
           />
         )}
-        {scrollHeight - offsetHeight > 0 && (
+        {!suppressScrollY && scrollHeight - offsetHeight > 0 && (
           <ThumbBar
             isPress={action.isPressY}
             grooveRef={verticalRef}

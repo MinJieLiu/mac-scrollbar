@@ -27,7 +27,13 @@ export const MacScrollbar = React.forwardRef<HTMLDivElement, MacScrollbarProps>(
     }
 
     return (
-      <Scrollbar style={currentStyle} innerRef={ref} {...props}>
+      <Scrollbar
+        style={currentStyle}
+        innerRef={ref}
+        suppressScrollX={suppressScrollX}
+        suppressScrollY={suppressScrollY}
+        {...props}
+      >
         {children}
       </Scrollbar>
     );
