@@ -17,12 +17,15 @@ export function updateRef(
   innerRef: React.Ref<HTMLDivElement> | undefined,
   scrollBoxElement: HTMLDivElement | null,
 ) {
+  if (!innerRef) {
+    return;
+  }
   if (typeof innerRef === 'function') {
     innerRef(scrollBoxElement);
     return;
   }
   // @ts-ignore
-  innerRef.current = scrollBoxElement;
+  (innerRef as React.MutableRefObject<HTMLDivElement>).current = scrollBoxElement;
 }
 
 export function handleExtractSize(target: HTMLDivElement) {
