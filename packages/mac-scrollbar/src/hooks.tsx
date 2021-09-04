@@ -36,6 +36,7 @@ export function useResizeObserver(
     });
 
     if (scrollBoxRef.current) {
+      resizeObserver.observe(scrollBoxRef.current);
       Array.from(scrollBoxRef.current.children).forEach((child) => {
         resizeObserver.observe(child);
       });
