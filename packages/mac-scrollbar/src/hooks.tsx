@@ -22,6 +22,30 @@ export function useEventListener<K extends keyof WindowEventMap>(
   }, []);
 }
 
+export function useResizeObserver(
+  scrollBoxRef: React.RefObject<HTMLDivElement>,
+  children: React.ReactNode,
+  callback: () => void,
+) {
+  const throttleCallback = useThrottleCallback(callback, 32, true);
+  const count = React.Children.count(children);
+
+  React.useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      throttleCallback();
+    });
+
+    if (scrollBoxRef.current) {
+      Array.from(scrollBoxRef.current.children).forEach((child) => {
+        resizeObserver.observe(child);
+      });
+    }
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [scrollBoxRef, count]);
+}
+
 export function useThrottleCallback<CallbackArguments extends any[]>(
   callback: (...args: CallbackArguments) => void,
   ms: number,

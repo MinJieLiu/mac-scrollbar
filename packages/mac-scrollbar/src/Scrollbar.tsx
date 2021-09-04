@@ -5,7 +5,7 @@ import {
   updateScrollElementStyle,
   updateScrollPosition,
 } from './utils';
-import { useEventListener, useSyncRef, useThrottleCallback } from './hooks';
+import { useEventListener, useResizeObserver, useSyncRef, useThrottleCallback } from './hooks';
 import type { ActionPosition, ScrollbarPropsBase, ScrollSize } from './types';
 import ThumbBar from './ThumbBar';
 import './Scrollbar.less';
@@ -49,17 +49,14 @@ export default function ScrollBar({
   useSyncRef(innerRef, scrollBoxRef);
 
   const updateLayerThrottle = useThrottleCallback(
-    (resize?: boolean) => {
-      if (resize) {
-        updateBoxSizeThrottle(handleExtractSize(scrollBoxRef.current!));
-      }
+    () => {
       updateScrollElementStyle(scrollBoxRef.current, horizontalRef.current, verticalRef.current);
     },
     8,
     true,
   );
 
-  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = scrollBoxRef.current || boxSize;
+  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
 
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
@@ -81,11 +78,10 @@ export default function ScrollBar({
 
   useEventListener('mouseup', () => updateAction(initialAction));
 
-  useEventListener('resize', () => updateLayerThrottle(true));
-
-  React.useEffect(() => {
-    updateLayerThrottle(true);
-  }, []);
+  useResizeObserver(scrollBoxRef, children, () => {
+    updateBoxSizeThrottle(handleExtractSize(scrollBoxRef.current!));
+    updateLayerThrottle();
+  });
 
   function handleScroll(evt: React.UIEvent<HTMLDivElement, UIEvent>) {
     if (onScroll) {
