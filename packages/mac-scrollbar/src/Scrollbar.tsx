@@ -33,6 +33,7 @@ const initialAction: ActionPosition = {
 export default function ScrollBar({
   className,
   onScroll,
+  onMouseEnter,
   innerRef,
   children,
   suppressScrollX,
@@ -43,7 +44,7 @@ export default function ScrollBar({
   const horizontalRef = React.useRef<HTMLDivElement>(null);
   const verticalRef = React.useRef<HTMLDivElement>(null);
 
-  const [boxSize, updateBoxSizeThrottle] = React.useState<ScrollSize>(initialSize);
+  const [boxSize, updateBoxSize] = React.useState<ScrollSize>(initialSize);
   const [action, updateAction] = React.useState<ActionPosition>(initialAction);
 
   useSyncRef(innerRef, scrollBoxRef);
@@ -56,7 +57,7 @@ export default function ScrollBar({
     true,
   );
 
-  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
+  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = scrollBoxRef.current || boxSize;
 
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
@@ -78,10 +79,7 @@ export default function ScrollBar({
 
   useEventListener('mouseup', () => updateAction(initialAction));
 
-  useResizeObserver(scrollBoxRef, children, () => {
-    updateBoxSizeThrottle(handleExtractSize(scrollBoxRef.current!));
-    updateLayerThrottle();
-  });
+  useResizeObserver(scrollBoxRef, children, handleUpdateLayer);
 
   function handleScroll(evt: React.UIEvent<HTMLDivElement, UIEvent>) {
     if (onScroll) {
@@ -90,11 +88,26 @@ export default function ScrollBar({
     updateLayerThrottle();
   }
 
+  function handleMouseEnter(evt: React.MouseEvent<HTMLDivElement>) {
+    if (onMouseEnter) {
+      onMouseEnter(evt);
+    }
+    handleUpdateLayer();
+  }
+
+  function handleUpdateLayer() {
+    if (scrollBoxRef.current) {
+      updateBoxSize(handleExtractSize(scrollBoxRef.current));
+      updateLayerThrottle();
+    }
+  }
+
   return (
     <div
       className={classNames('ms-container', className)}
       ref={scrollBoxRef}
       onScroll={handleScroll}
+      onMouseEnter={handleMouseEnter}
       {...props}
     >
       <div className="ms-scrollWrapper">
