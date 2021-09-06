@@ -70,7 +70,7 @@ function ThumbBar({
 
   return (
     <div
-      className={classNames('ms-thumbBar', horizontal ? 'ms-x' : 'ms-y', {
+      className={classNames('ms-track', horizontal ? 'ms-x' : 'ms-y', {
         'ms-active': isPress,
       })}
       onClick={handleThumbBarClick}

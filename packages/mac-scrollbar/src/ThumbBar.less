@@ -1,4 +1,4 @@
-.ms-thumbBar {
+.ms-track {
   position: absolute;
   background: transparent;
   opacity: 0;
@@ -73,14 +73,14 @@
 
   &.ms-active,
   &:hover {
-    background: rgba(248, 248, 248, 0.76);
-    border-color: #dfdfdf;
+    background: var(--ms-track-background);
+    border-color: var(--ms-track-border-color);
     opacity: 1;
   }
 
   .ms-thumb {
     position: absolute;
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--ms-thumb-color);
     border-radius: 6px;
     transition: width 0.2s ease-out, height 0.2s ease-out;
     user-select: none;

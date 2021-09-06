@@ -8,17 +8,29 @@
   }
 
   &:hover {
-    .ms-thumbBar {
+    .ms-track {
       opacity: 1;
     }
   }
 }
 
-.ms-scrollWrapper {
+.ms-track-box {
   position: sticky;
   top: 0;
   left: 0;
   z-index: 10;
   width: 0;
   height: 0;
+}
+
+.ms-theme-white {
+  --ms-track-background: rgba(248, 248, 248, 0.76);
+  --ms-track-border-color: #dfdfdf;
+  --ms-thumb-color: rgba(0, 0, 0, 0.5);
+}
+
+.ms-theme-dark {
+  --ms-track-background: rgba(210, 210, 210, 0.14);
+  --ms-track-border-color: rgba(228, 228, 228, 0.32);
+  --ms-thumb-color: rgba(255, 255, 255, 0.5);
 }

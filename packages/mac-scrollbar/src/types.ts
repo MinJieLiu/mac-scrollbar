@@ -25,5 +25,10 @@ export interface ScrollbarPropsBase extends React.HtmlHTMLAttributes<HTMLDivElem
    * When set to true, the scroll bar in Y-axis will not be available, regardless of the content height.
    */
   suppressScrollY?: boolean;
+  /**
+   * Adapt to the background color of the container.
+   * @default 'white'
+   */
+  theme?: 'white' | 'dark';
   children: React.ReactNode;
 }

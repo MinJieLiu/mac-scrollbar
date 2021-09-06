@@ -38,6 +38,7 @@ export default function ScrollBar({
   children,
   suppressScrollX,
   suppressScrollY,
+  theme = 'white',
   ...props
 }: ScrollbarProps) {
   const scrollBoxRef = React.useRef<HTMLDivElement>(null);
@@ -110,7 +111,7 @@ export default function ScrollBar({
       onMouseEnter={handleMouseEnter}
       {...props}
     >
-      <div className="ms-scrollWrapper">
+      <div className={classNames('ms-track-box', `ms-theme-${theme}`)}>
         {!suppressScrollX && scrollWidth - offsetWidth > 0 && (
           <ThumbBar
             horizontal
