@@ -30,11 +30,14 @@ export function updateRef(
 
 export function handleExtractSize(target: HTMLDivElement) {
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = target;
+  const { paddingTop, paddingLeft } = window.getComputedStyle(target);
   return {
     offsetWidth,
     scrollWidth,
     offsetHeight,
     scrollHeight,
+    paddingTop: parseInt(paddingTop, 10),
+    paddingLeft: parseInt(paddingLeft, 10),
   };
 }
 

@@ -6,7 +6,7 @@ import {
   updateScrollPosition,
 } from './utils';
 import { useEventListener, useResizeObserver, useSyncRef, useThrottleCallback } from './hooks';
-import type { ActionPosition, ScrollbarPropsBase, ScrollSize } from './types';
+import type { ActionPosition, ScrollbarPropsBase, BoxSize } from './types';
 import ThumbBar from './ThumbBar';
 import './Scrollbar.less';
 
@@ -14,11 +14,13 @@ export interface ScrollbarProps extends ScrollbarPropsBase {
   innerRef?: React.Ref<HTMLDivElement>;
 }
 
-const initialSize: ScrollSize = {
+const initialSize: BoxSize = {
   offsetWidth: 0,
   scrollWidth: 0,
   offsetHeight: 0,
   scrollHeight: 0,
+  paddingTop: 0,
+  paddingLeft: 0,
 };
 
 const initialAction: ActionPosition = {
@@ -45,7 +47,7 @@ export default function ScrollBar({
   const horizontalRef = React.useRef<HTMLDivElement>(null);
   const verticalRef = React.useRef<HTMLDivElement>(null);
 
-  const [boxSize, updateBoxSize] = React.useState<ScrollSize>(initialSize);
+  const [boxSize, updateBoxSize] = React.useState<BoxSize>(initialSize);
   const [action, updateAction] = React.useState<ActionPosition>(initialAction);
 
   useSyncRef(innerRef, scrollBoxRef);
@@ -58,7 +60,7 @@ export default function ScrollBar({
     true,
   );
 
-  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = scrollBoxRef.current || boxSize;
+  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
 
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
@@ -117,9 +119,7 @@ export default function ScrollBar({
             horizontal
             isPress={action.isPressX}
             grooveRef={horizontalRef}
-            scrollSize={scrollWidth}
-            offsetWidth={offsetWidth}
-            offsetHeight={offsetHeight}
+            boxSize={boxSize}
             updateAction={updateAction}
           />
         )}
@@ -127,9 +127,7 @@ export default function ScrollBar({
           <ThumbBar
             isPress={action.isPressY}
             grooveRef={verticalRef}
-            scrollSize={scrollHeight}
-            offsetWidth={offsetWidth}
-            offsetHeight={offsetHeight}
+            boxSize={boxSize}
             updateAction={updateAction}
           />
         )}

@@ -1,10 +1,12 @@
 import type React from 'react';
 
-export interface ScrollSize {
+export interface BoxSize {
   offsetWidth: number;
   scrollWidth: number;
   offsetHeight: number;
   scrollHeight: number;
+  paddingTop: number;
+  paddingLeft: number;
 }
 
 export interface ActionPosition {
