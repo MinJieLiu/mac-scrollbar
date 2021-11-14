@@ -4,6 +4,7 @@ import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
 
 export interface ThumbBarProps {
+  visible: boolean;
   /**
    * @default vertical
    */
@@ -21,6 +22,7 @@ export interface ThumbBarProps {
 }
 
 function ThumbBar({
+  visible,
   horizontal,
   isPress,
 
@@ -54,7 +56,9 @@ function ThumbBar({
   }
 
   function handleStart(e: React.MouseEvent<HTMLDivElement>) {
-    const { scrollLeft, scrollTop } = grooveRef.current?.parentNode?.parentNode as HTMLDivElement;
+    e.stopPropagation();
+    const trackBox = grooveRef.current?.parentNode as HTMLDivElement;
+    const { scrollLeft, scrollTop } = trackBox?.parentNode as HTMLDivElement;
     updateAction({
       isPressX: horizontal,
       isPressY: !horizontal,
@@ -69,6 +73,7 @@ function ThumbBar({
     <div
       className={classNames('ms-track', horizontal ? 'ms-x' : 'ms-y', {
         'ms-active': isPress,
+        'ms-track-show': visible,
       })}
       onClick={handleThumbBarClick}
       ref={grooveRef}

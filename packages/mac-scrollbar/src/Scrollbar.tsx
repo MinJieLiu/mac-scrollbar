@@ -5,7 +5,7 @@ import {
   updateScrollElementStyle,
   updateScrollPosition,
 } from './utils';
-import { useEventListener, useResizeObserver, useSyncRef, useThrottleCallback } from './hooks';
+import { useEventListener, useResizeObserver, useSyncRef, useDebounceCallback } from './hooks';
 import type { ActionPosition, ScrollbarPropsBase, BoxSize } from './types';
 import ThumbBar from './ThumbBar';
 import './Scrollbar.less';
@@ -49,15 +49,19 @@ export default function ScrollBar({
 
   const [boxSize, updateBoxSize] = React.useState<BoxSize>(initialSize);
   const [action, updateAction] = React.useState<ActionPosition>(initialAction);
+  const [barVisible, updateBarVisible] = React.useState<boolean>(true);
 
   useSyncRef(innerRef, scrollBoxRef);
 
-  const updateLayerThrottle = useThrottleCallback(
+  const delayHideScrollbar = useDebounceCallback(() => updateBarVisible(false), { wait: 3000 });
+
+  const updateLayerThrottle = useDebounceCallback(
     () => {
+      updateBarVisible(true);
+      delayHideScrollbar();
       updateScrollElementStyle(scrollBoxRef.current, horizontalRef.current, verticalRef.current);
     },
-    8,
-    true,
+    { maxWait: 8, leading: true },
   );
 
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
@@ -116,6 +120,7 @@ export default function ScrollBar({
       <div className={classNames('ms-track-box', `ms-theme-${theme}`)}>
         {!suppressScrollX && scrollWidth - offsetWidth > 0 && (
           <ThumbBar
+            visible={barVisible}
             horizontal
             isPress={action.isPressX}
             grooveRef={horizontalRef}
@@ -125,6 +130,7 @@ export default function ScrollBar({
         )}
         {!suppressScrollY && scrollHeight - offsetHeight > 0 && (
           <ThumbBar
+            visible={barVisible}
             isPress={action.isPressY}
             grooveRef={verticalRef}
             boxSize={boxSize}

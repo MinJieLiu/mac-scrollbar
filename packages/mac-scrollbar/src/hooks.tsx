@@ -2,24 +2,28 @@
 import React from 'react';
 import { updateRef } from './utils';
 
+export function useLatest<T>(something: T) {
+  const ref = React.useRef(something);
+  ref.current = something;
+  return ref;
+}
+
 export function useEventListener<K extends keyof WindowEventMap>(
   type: K,
   fn: (evt: WindowEventMap[K]) => void,
-  options?: boolean | AddEventListenerOptions,
 ) {
-  const funcRef = React.useRef(fn);
-  funcRef.current = fn;
+  const latest = useLatest(fn);
 
   React.useEffect(() => {
     function wrapper(evt: WindowEventMap[K]) {
-      funcRef.current(evt);
+      latest.current(evt);
     }
-    window.addEventListener(type, wrapper, options);
+    window.addEventListener(type, wrapper);
 
     return () => {
-      window.removeEventListener(type, wrapper, options);
+      window.removeEventListener(type, wrapper);
     };
-  }, []);
+  }, [type, latest]);
 }
 
 export function useResizeObserver(
@@ -27,7 +31,7 @@ export function useResizeObserver(
   children: React.ReactNode,
   callback: () => void,
 ) {
-  const throttleCallback = useThrottleCallback(callback, 32, true);
+  const throttleCallback = useDebounceCallback(callback, { maxWait: 32, leading: true });
   const count = React.Children.count(children);
 
   React.useEffect(() => {
@@ -47,13 +51,19 @@ export function useResizeObserver(
   }, [scrollBoxRef, count]);
 }
 
-export function useThrottleCallback<CallbackArguments extends any[]>(
+export function useDebounceCallback<CallbackArguments extends any[]>(
   callback: (...args: CallbackArguments) => void,
-  ms: number,
-  leading = false,
+  {
+    leading = false,
+    maxWait,
+    wait = maxWait || 0,
+  }: {
+    leading?: boolean;
+    maxWait?: number;
+    wait?: number;
+  },
 ): (...args: CallbackArguments) => void {
-  const callbackRef = React.useRef(callback);
-  callbackRef.current = callback;
+  const callbackRef = useLatest(callback);
   const prev = React.useRef(0);
   const trailingTimeout = React.useRef<ReturnType<typeof setTimeout>>();
   const clearTrailing = () => trailingTimeout.current && clearTimeout(trailingTimeout.current);
@@ -63,39 +73,47 @@ export function useThrottleCallback<CallbackArguments extends any[]>(
       prev.current = 0;
       clearTrailing();
     },
-    [ms, leading],
+    [wait, maxWait, leading],
   );
 
   return React.useCallback(
     (...args) => {
       const now = Date.now();
-      const call = () => {
+
+      function call() {
         prev.current = now;
         clearTrailing();
         callbackRef.current.apply(null, args);
-      };
-      const { current } = prev;
-      // leading
-      if (leading && current === 0) {
-        call();
-        return;
       }
-      // body
-      if (now - current > ms) {
-        if (current > 0) {
+      const last = prev.current;
+      const offset = now - last;
+      // leading
+      if (last === 0) {
+        if (leading) {
           call();
           return;
         }
         prev.current = now;
       }
+
+      // body
+      if (maxWait !== undefined) {
+        if (offset > maxWait) {
+          call();
+          return;
+        }
+      } else if (offset < wait) {
+        prev.current = now;
+      }
+
       // trailing
       clearTrailing();
       trailingTimeout.current = setTimeout(() => {
         call();
         prev.current = 0;
-      }, ms);
+      }, wait);
     },
-    [ms, leading],
+    [wait, maxWait, leading],
   );
 }
 

@@ -92,7 +92,7 @@ export function updateScrollElementStyle(
       scrollWidth,
       offsetWidth,
       scrollLeft,
-      true,
+      'left',
     );
   }
 
@@ -102,6 +102,7 @@ export function updateScrollElementStyle(
       scrollHeight,
       offsetHeight,
       scrollTop,
+      'top',
     );
   }
 }
@@ -111,15 +112,13 @@ export function updateThumbStyle(
   scrollSize: number,
   offsetSize: number,
   scrollPosition: number,
-  horizontal?: boolean,
+  direction: 'left' | 'top',
 ) {
-  const positionKey = horizontal ? 'left' : 'top';
-
   const realThumbSize = (offsetSize / scrollSize) * offsetSize;
   const distance = Math.max(minThumbSize - realThumbSize, 0);
 
   updateElementStyle(thumbElement, {
-    [positionKey]: Math.min(
+    [direction]: Math.min(
       (scrollPosition / scrollSize) * (offsetSize - distance),
       offsetSize - minThumbSize,
     ),
