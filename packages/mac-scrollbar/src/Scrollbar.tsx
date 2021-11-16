@@ -53,7 +53,7 @@ export default function ScrollBar({
 
   useSyncRef(innerRef, scrollBoxRef);
 
-  const delayHideScrollbar = useDebounceCallback(() => updateBarVisible(false), { wait: 3000 });
+  const delayHideScrollbar = useDebounceCallback(() => updateBarVisible(false), { wait: 1000 });
 
   const updateLayerThrottle = useDebounceCallback(
     () => {
