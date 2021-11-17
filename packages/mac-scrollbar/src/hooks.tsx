@@ -2,6 +2,15 @@
 import React from 'react';
 import { updateRef } from './utils';
 
+export function useInitial<T extends (...args: any) => any>(callback: T) {
+  const { current } = React.useRef({ initial: false, storeValue: undefined as ReturnType<T> });
+  if (!current.initial) {
+    current.initial = true;
+    current.storeValue = callback();
+  }
+  return current.storeValue;
+}
+
 export function useLatest<T>(something: T) {
   const ref = React.useRef(something);
   ref.current = something;
@@ -27,12 +36,10 @@ export function useEventListener<K extends keyof WindowEventMap>(
 }
 
 export function useResizeObserver(
-  scrollBoxRef: React.RefObject<HTMLDivElement>,
-  children: React.ReactNode,
+  scrollBoxRef: React.RefObject<HTMLElement | null>,
   callback: () => void,
 ) {
   const throttleCallback = useDebounceCallback(callback, { maxWait: 32, leading: true });
-  const count = React.Children.count(children);
 
   React.useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
@@ -48,7 +55,7 @@ export function useResizeObserver(
     return () => {
       resizeObserver.disconnect();
     };
-  }, [scrollBoxRef, count]);
+  }, [scrollBoxRef]);
 }
 
 export function useDebounceCallback<CallbackArguments extends any[]>(

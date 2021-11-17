@@ -1,5 +1,5 @@
 import React from 'react';
-import { MacScrollbar } from 'mac-scrollbar';
+import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar';
 import styled from 'styled-components';
 import 'mac-scrollbar/dist/style.css';
 
@@ -101,6 +101,7 @@ const baseIntro2 = (
 function App() {
   return (
     <>
+      <GlobalScrollbar />
       <Main>
         <WrapperAutoScrollbar>{baseIntro}</WrapperAutoScrollbar>
         <WrapperAutoScrollbar>

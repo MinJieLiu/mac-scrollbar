@@ -1,9 +1,9 @@
 import React from 'react';
 import { isEnableStyle, isEnableScrollbar } from './utils';
 import Scrollbar from './Scrollbar';
-import type { ScrollbarPropsBase } from './types';
+import type { ScrollbarBase } from './types';
 
-export interface MacScrollbarProps extends ScrollbarPropsBase {
+export interface MacScrollbarProps extends ScrollbarBase {
   /**
    * When set to true, macOS browsers will use native scrollbar.
    */

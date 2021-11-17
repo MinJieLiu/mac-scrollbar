@@ -28,7 +28,7 @@ export function updateRef(
   (innerRef as React.MutableRefObject<HTMLDivElement>).current = scrollBoxElement;
 }
 
-export function handleExtractSize(target: HTMLDivElement) {
+export function handleExtractSize(target: HTMLElement) {
   const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = target;
   const { paddingTop, paddingLeft } = window.getComputedStyle(target);
   return {
@@ -76,7 +76,7 @@ export function updateScrollPosition(
 }
 
 export function updateScrollElementStyle(
-  containerElement: HTMLDivElement | null | undefined,
+  containerElement: HTMLElement | null | undefined,
   horizontalElement: HTMLElement | null | undefined,
   verticalElement: HTMLElement | null | undefined,
 ) {

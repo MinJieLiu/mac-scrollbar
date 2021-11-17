@@ -18,7 +18,17 @@ export interface ActionPosition {
   pressStartY: number;
 }
 
-export interface ScrollbarPropsBase extends React.HtmlHTMLAttributes<HTMLDivElement> {
+export interface GlobalScrollbarBase {
+  /**
+   * Adapt to the background color of the container.
+   * @default 'white'
+   */
+  theme?: 'white' | 'dark';
+}
+
+export interface ScrollbarBase
+  extends GlobalScrollbarBase,
+    React.HtmlHTMLAttributes<HTMLDivElement> {
   /**
    * When set to true, the scrollbar in X-axis will not be available, regardless of the content width.
    */
@@ -27,10 +37,5 @@ export interface ScrollbarPropsBase extends React.HtmlHTMLAttributes<HTMLDivElem
    * When set to true, the scroll bar in Y-axis will not be available, regardless of the content height.
    */
   suppressScrollY?: boolean;
-  /**
-   * Adapt to the background color of the container.
-   * @default 'white'
-   */
-  theme?: 'white' | 'dark';
   children: React.ReactNode;
 }
