@@ -29,12 +29,12 @@ export function updateRef(
 }
 
 export function handleExtractSize(target: HTMLElement) {
-  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = target;
+  const { clientWidth, scrollWidth, clientHeight, scrollHeight } = target;
   const { paddingTop, paddingLeft } = window.getComputedStyle(target);
   return {
-    offsetWidth,
+    clientWidth,
     scrollWidth,
-    offsetHeight,
+    clientHeight,
     scrollHeight,
     paddingTop: parseInt(paddingTop, 10),
     paddingLeft: parseInt(paddingLeft, 10),
@@ -83,14 +83,14 @@ export function updateScrollElementStyle(
   if (!containerElement) {
     return;
   }
-  const { scrollTop, scrollLeft, scrollWidth, scrollHeight, offsetWidth, offsetHeight } =
+  const { scrollTop, scrollLeft, scrollWidth, scrollHeight, clientWidth, clientHeight } =
     containerElement;
 
   if (horizontalElement) {
     updateThumbStyle(
       horizontalElement.firstChild as HTMLDivElement,
       scrollWidth,
-      offsetWidth,
+      clientWidth,
       scrollLeft,
       'left',
     );
@@ -100,7 +100,7 @@ export function updateScrollElementStyle(
     updateThumbStyle(
       verticalElement.firstChild as HTMLDivElement,
       scrollHeight,
-      offsetHeight,
+      clientHeight,
       scrollTop,
       'top',
     );

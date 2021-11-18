@@ -118,6 +118,11 @@ function App() {
           <NoWrap>{baseIntro2}</NoWrap>
         </DarkThemeScrollbar>
       </Main>
+
+      <Main>
+        <NoWrap>{baseIntro2}</NoWrap>
+        <div>{baseIntro}</div>
+      </Main>
     </>
   );
 }

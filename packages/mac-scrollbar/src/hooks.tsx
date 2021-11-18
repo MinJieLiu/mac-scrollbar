@@ -47,10 +47,14 @@ export function useResizeObserver(
     });
 
     if (scrollBoxRef.current) {
-      resizeObserver.observe(scrollBoxRef.current);
-      Array.from(scrollBoxRef.current.children).forEach((child) => {
-        resizeObserver.observe(child);
-      });
+      if (scrollBoxRef.current === document.documentElement) {
+        resizeObserver.observe(document.body);
+      } else {
+        resizeObserver.observe(scrollBoxRef.current);
+        Array.from(scrollBoxRef.current.children).forEach((child) => {
+          resizeObserver.observe(child);
+        });
+      }
     }
     return () => {
       resizeObserver.disconnect();

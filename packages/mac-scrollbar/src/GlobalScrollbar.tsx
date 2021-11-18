@@ -16,16 +16,16 @@ function GlobalScrollbarInject({ theme = 'white' }: GlobalScrollbarBase) {
   const wrapper = useInitial(() => document.createElement('div'));
 
   React.useEffect(() => {
-    wrapper.classList.add('ms-track-box', `ms-theme-${theme}`);
+    wrapper.classList.add('ms-track-box', 'ms-track-global', `ms-theme-${theme}`);
+    document.documentElement.classList.add('ms-container');
     document.body.prepend(wrapper);
     return () => {
+      document.documentElement.classList.remove('ms-container');
       document.body.removeChild(wrapper);
     };
   }, [wrapper, theme]);
 
-  const { updateLayerThrottle, horizontalBar, verticalBar } = useScrollbar({
-    current: document.documentElement,
-  });
+  const { updateLayerThrottle, horizontalBar, verticalBar } = useScrollbar(window);
 
   useEventListener('scroll', updateLayerThrottle);
 

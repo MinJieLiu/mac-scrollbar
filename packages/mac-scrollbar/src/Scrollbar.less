@@ -3,8 +3,6 @@
 
   &::-webkit-scrollbar {
     display: none;
-    width: 0;
-    height: 0;
   }
 }
 
@@ -15,6 +13,10 @@
   z-index: 10;
   width: 0;
   height: 0;
+
+  &.ms-track-global {
+    position: fixed;
+  }
 }
 
 .ms-theme-white {

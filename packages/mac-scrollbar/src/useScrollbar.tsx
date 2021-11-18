@@ -5,9 +5,9 @@ import type { ActionPosition, BoxSize } from './types';
 import ThumbBar from './ThumbBar';
 
 const initialSize: BoxSize = {
-  offsetWidth: 0,
+  clientWidth: 0,
   scrollWidth: 0,
-  offsetHeight: 0,
+  clientHeight: 0,
   scrollHeight: 0,
   paddingTop: 0,
   paddingLeft: 0,
@@ -22,7 +22,16 @@ const initialAction: ActionPosition = {
   pressStartY: 0,
 };
 
-export default function useScrollbar(scrollBoxElement: React.MutableRefObject<HTMLElement | null>) {
+export default function useScrollbar(
+  scrollBoxElement: React.MutableRefObject<HTMLElement | null> | Window,
+) {
+  const containerRef = React.useMemo(() => {
+    if (scrollBoxElement === window) {
+      return { current: document.documentElement };
+    }
+    return scrollBoxElement as React.MutableRefObject<HTMLElement | null>;
+  }, [scrollBoxElement]);
+
   const horizontalRef = React.useRef<HTMLDivElement>(null);
   const verticalRef = React.useRef<HTMLDivElement>(null);
 
@@ -36,30 +45,26 @@ export default function useScrollbar(scrollBoxElement: React.MutableRefObject<HT
     () => {
       updateBarVisible(true);
       delayHideScrollbar();
-      updateScrollElementStyle(
-        scrollBoxElement.current,
-        horizontalRef.current,
-        verticalRef.current,
-      );
+      updateScrollElementStyle(containerRef.current, horizontalRef.current, verticalRef.current);
     },
     { maxWait: 8, leading: true },
   );
 
-  const { offsetWidth, scrollWidth, offsetHeight, scrollHeight } = boxSize;
+  const { clientWidth, scrollWidth, clientHeight, scrollHeight } = boxSize;
 
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
-      const horizontalRatio = scrollWidth / offsetWidth;
+      const horizontalRatio = scrollWidth / clientWidth;
       updateScrollPosition(
-        scrollBoxElement.current,
+        containerRef.current,
         Math.floor((evt.clientX - action.pressStartX) * horizontalRatio + action.lastScrollLeft),
         true,
       );
     }
     if (action.isPressY) {
-      const verticalRatio = scrollHeight / offsetHeight;
+      const verticalRatio = scrollHeight / clientHeight;
       updateScrollPosition(
-        scrollBoxElement.current,
+        containerRef.current,
         Math.floor((evt.clientY - action.pressStartY) * verticalRatio + action.lastScrollTop),
       );
     }
@@ -67,16 +72,16 @@ export default function useScrollbar(scrollBoxElement: React.MutableRefObject<HT
 
   useEventListener('mouseup', () => updateAction(initialAction));
 
-  useResizeObserver(scrollBoxElement, updateLayerNow);
+  useResizeObserver(containerRef, updateLayerNow);
 
   function updateLayerNow() {
-    if (scrollBoxElement.current) {
-      updateBoxSize(handleExtractSize(scrollBoxElement.current));
+    if (containerRef.current) {
+      updateBoxSize(handleExtractSize(containerRef.current));
       updateLayerThrottle();
     }
   }
 
-  const horizontalBar = scrollWidth - offsetWidth > 0 && (
+  const horizontalBar = scrollWidth - clientWidth > 0 && (
     <ThumbBar
       visible={barVisible}
       horizontal
@@ -87,7 +92,7 @@ export default function useScrollbar(scrollBoxElement: React.MutableRefObject<HT
     />
   );
 
-  const verticalBar = scrollHeight - offsetHeight > 0 && (
+  const verticalBar = scrollHeight - clientHeight > 0 && (
     <ThumbBar
       visible={barVisible}
       isPress={action.isPressY}

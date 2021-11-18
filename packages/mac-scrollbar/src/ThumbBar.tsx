@@ -31,15 +31,22 @@ function ThumbBar({
 
   updateAction,
 }: ThumbBarProps) {
-  const { offsetWidth, offsetHeight, paddingTop, paddingLeft, scrollWidth, scrollHeight } = boxSize;
+  const { clientWidth, clientHeight, paddingTop, paddingLeft, scrollWidth, scrollHeight } = boxSize;
 
   const [sizeKey, offsetSize, scrollSize] = horizontal
-    ? ['width', offsetWidth, scrollWidth]
-    : ['height', offsetHeight, scrollHeight];
+    ? ['width', clientWidth, scrollWidth]
+    : ['height', clientHeight, scrollHeight];
+
+  function getContainerBox() {
+    const targetNode = grooveRef.current?.parentNode?.parentNode as
+      | HTMLDivElement
+      | HTMLBodyElement;
+    return targetNode === document.body ? document.documentElement : targetNode;
+  }
 
   function handleThumbBarClick(e: React.MouseEvent<HTMLDivElement>) {
-    const scrollNode = grooveRef.current?.parentNode?.parentNode as HTMLDivElement;
-    const { scrollLeft, scrollTop } = scrollNode;
+    const containerBox = getContainerBox();
+    const { scrollLeft, scrollTop } = containerBox;
     const scrollPosition = horizontal ? scrollLeft : scrollTop;
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
     const clickPosition = horizontal
@@ -52,13 +59,12 @@ function ThumbBar({
         ? Math.min(scrollSize, scrollPosition + offsetSize)
         : Math.max(0, scrollPosition - offsetSize);
 
-    updateScrollPosition(scrollNode, position, horizontal);
+    updateScrollPosition(containerBox, position, horizontal);
   }
 
   function handleStart(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
-    const trackBox = grooveRef.current?.parentNode as HTMLDivElement;
-    const { scrollLeft, scrollTop } = trackBox?.parentNode as HTMLDivElement;
+    const { scrollLeft, scrollTop } = getContainerBox();
     updateAction({
       isPressX: horizontal,
       isPressY: !horizontal,
@@ -79,8 +85,8 @@ function ThumbBar({
       ref={grooveRef}
       style={{
         [sizeKey]: offsetSize,
-        top: (horizontal ? offsetHeight - thumbBarSize : 0) - paddingTop,
-        left: (horizontal ? 0 : offsetWidth - thumbBarSize) - paddingLeft,
+        top: (horizontal ? clientHeight - thumbBarSize : 0) - paddingTop,
+        left: (horizontal ? 0 : clientWidth - thumbBarSize) - paddingLeft,
       }}
     >
       <div

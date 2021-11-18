@@ -1,9 +1,9 @@
 import type React from 'react';
 
 export interface BoxSize {
-  offsetWidth: number;
+  clientWidth: number;
   scrollWidth: number;
-  offsetHeight: number;
+  clientHeight: number;
   scrollHeight: number;
   paddingTop: number;
   paddingLeft: number;
