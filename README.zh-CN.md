@@ -43,7 +43,7 @@ function App() {
 | theme           | 'white' I 'dark' | 适应容器的滚动条主题，默认 'white'                         |
 | suppressMacOS   | false            | 设置为 true 时，macOS 的浏览器将使用原生滚动条             |
 | suppressScrollX | false            | 设置为 true 时，无论内容宽度如何，X 轴上的滚动条都将不可用 |
-| suppressScrollY | false            | 设置为 true 时，无论内容高度如何，Y 轴的滚动条都将不可用。 |
+| suppressScrollY | false            | 设置为 true 时，无论内容高度如何，Y 轴的滚动条都将不可用   |
 
 #### GlobalScrollbar
 
