@@ -1,6 +1,8 @@
 # mac-scrollbar
 
-> Scrollbar component with macOS style.
+**English** | [中文](./README.zh_CN.md)
+
+> Scrollbar React component with macOS style.
 
 ## Usage
 
