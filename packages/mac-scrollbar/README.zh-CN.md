@@ -4,10 +4,31 @@
 
 > macOS 样式的 React 滚动条组件
 
+## 为什么使用 `mac-scrollbar`
+
+每个浏览器的滚动条都带有独特的样式，并且宽度也不一致，从而压缩内容区域的展示。现在，我们需要一个漂亮而又简约来自 macOS 样式的滚动条。
+
+- 使用原生浏览器滚动
+- 不影响设计布局
+- 不占用额外的 DOM 层级
+- 自动适应宽高的变化
+- 2KB 压缩尺寸
+- 支持 Chrome、Firefox >= 64、Microsoft Edge >= 79
+
+**注意** 此组件不兼容 IE11，需要兼容低版本浏览器勿用。
+
+![demo](./demo.gif)
+
 ## 安装
 
 ```shell
 yarn add mac-scrollbar
+```
+
+引入样式
+
+```jsx
+import 'mac-scrollbar/dist/style.css';
 ```
 
 基本使用
