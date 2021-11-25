@@ -16,9 +16,9 @@ function GlobalScrollbarInject({ theme = 'white' }: GlobalScrollbarBase) {
   const wrapper = useInitial(() => document.createElement('div'));
 
   React.useEffect(() => {
-    wrapper.classList.add('ms-track-box', 'ms-track-global', `ms-theme-${theme}`);
+    wrapper.classList.add(`ms-theme-${theme}`);
     document.documentElement.classList.add('ms-container');
-    document.body.prepend(wrapper);
+    document.body.append(wrapper);
     return () => {
       document.documentElement.classList.remove('ms-container');
       document.body.removeChild(wrapper);

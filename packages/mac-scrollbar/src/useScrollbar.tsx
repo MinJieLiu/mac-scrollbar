@@ -25,12 +25,13 @@ const initialAction: ActionPosition = {
 export default function useScrollbar(
   scrollBoxElement: React.MutableRefObject<HTMLElement | null> | Window,
 ) {
+  const isWindow = scrollBoxElement === window;
   const containerRef = React.useMemo(() => {
-    if (scrollBoxElement === window) {
+    if (isWindow) {
       return { current: document.documentElement };
     }
     return scrollBoxElement as React.MutableRefObject<HTMLElement | null>;
-  }, [scrollBoxElement]);
+  }, [isWindow, scrollBoxElement]);
 
   const horizontalRef = React.useRef<HTMLDivElement>(null);
   const verticalRef = React.useRef<HTMLDivElement>(null);
@@ -84,6 +85,7 @@ export default function useScrollbar(
   const horizontalBar = scrollWidth - clientWidth > 0 && (
     <ThumbBar
       visible={barVisible}
+      isWindow={isWindow}
       horizontal
       isPress={action.isPressX}
       grooveRef={horizontalRef}
@@ -95,6 +97,7 @@ export default function useScrollbar(
   const verticalBar = scrollHeight - clientHeight > 0 && (
     <ThumbBar
       visible={barVisible}
+      isWindow={isWindow}
       isPress={action.isPressY}
       grooveRef={verticalRef}
       boxSize={boxSize}

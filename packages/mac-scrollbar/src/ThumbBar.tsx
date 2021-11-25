@@ -5,6 +5,7 @@ import './ThumbBar.less';
 
 export interface ThumbBarProps {
   visible: boolean;
+  isWindow: boolean;
   /**
    * @default vertical
    */
@@ -23,6 +24,7 @@ export interface ThumbBarProps {
 
 function ThumbBar({
   visible,
+  isWindow,
   horizontal,
   isPress,
 
@@ -75,6 +77,14 @@ function ThumbBar({
     });
   }
 
+  const style = isWindow
+    ? ({ position: 'fixed' } as React.CSSProperties)
+    : ({
+        [sizeKey]: offsetSize,
+        top: (horizontal ? clientHeight - thumbBarSize : 0) - paddingTop,
+        left: (horizontal ? 0 : clientWidth - thumbBarSize) - paddingLeft,
+      } as React.CSSProperties);
+
   return (
     <div
       className={classNames('ms-track', horizontal ? 'ms-x' : 'ms-y', {
@@ -83,11 +93,7 @@ function ThumbBar({
       })}
       onClick={handleThumbBarClick}
       ref={grooveRef}
-      style={{
-        [sizeKey]: offsetSize,
-        top: (horizontal ? clientHeight - thumbBarSize : 0) - paddingTop,
-        left: (horizontal ? 0 : clientWidth - thumbBarSize) - paddingLeft,
-      }}
+      style={style}
     >
       <div
         className="ms-thumb"
