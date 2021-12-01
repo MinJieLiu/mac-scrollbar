@@ -2,6 +2,8 @@
 
 **English** | [中文](./packages/mac-scrollbar/README.zh-CN.md)
 
+[![npm](https://img.shields.io/npm/v/mac-scrollbar.svg?style=flat-square)](https://www.npmjs.com/package/mac-scrollbar) [![mac-scrollbar](https://badgen.net/bundlephobia/minzip/mac-scrollbar)](https://github.com/MinJieLiu/mac-scrollbar) [![mac-scrollbar](https://badgen.net/npm/dt/mac-scrollbar)](https://github.com/MinJieLiu/mac-scrollbar)
+
 > Scrollbar React component with macOS style.
 
 ## Why `mac-scrollbar`

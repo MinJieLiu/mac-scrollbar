@@ -2,6 +2,8 @@
 
 **中文** | [English](./README.md)
 
+[![npm](https://img.shields.io/npm/v/mac-scrollbar.svg?style=flat-square)](https://www.npmjs.com/package/mac-scrollbar) [![mac-scrollbar](https://badgen.net/bundlephobia/minzip/mac-scrollbar)](https://github.com/MinJieLiu/mac-scrollbar) [![mac-scrollbar](https://badgen.net/npm/dt/mac-scrollbar)](https://github.com/MinJieLiu/mac-scrollbar)
+
 > macOS 样式的 React 滚动条组件
 
 ## 为什么使用 `mac-scrollbar`
