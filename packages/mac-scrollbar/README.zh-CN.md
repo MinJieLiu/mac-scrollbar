@@ -65,6 +65,7 @@ function App() {
 | suppressMacOS   | false            | 设置为 true 时，macOS 的浏览器将使用原生滚动条             |
 | suppressScrollX | false            | 设置为 true 时，无论内容宽度如何，X 轴上的滚动条都将不可用 |
 | suppressScrollY | false            | 设置为 true 时，无论内容高度如何，Y 轴的滚动条都将不可用   |
+| as              | string           | 自定义元素类型。默认 'div'                                 |
 
 #### GlobalScrollbar
 

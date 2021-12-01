@@ -129,8 +129,8 @@ export function useDebounceCallback<CallbackArguments extends any[]>(
 }
 
 export function useSyncRef(
-  innerRef: React.Ref<HTMLDivElement> | undefined,
-  scrollBoxRef: React.RefObject<HTMLDivElement>,
+  innerRef: React.Ref<HTMLElement> | undefined,
+  scrollBoxRef: React.RefObject<HTMLElement>,
 ) {
   React.useEffect(() => {
     updateRef(innerRef, scrollBoxRef.current);

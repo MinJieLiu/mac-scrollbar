@@ -26,9 +26,7 @@ export interface GlobalScrollbarBase {
   theme?: 'white' | 'dark';
 }
 
-export interface ScrollbarBase
-  extends GlobalScrollbarBase,
-    React.HtmlHTMLAttributes<HTMLDivElement> {
+export interface ScrollbarBase extends GlobalScrollbarBase, React.HtmlHTMLAttributes<HTMLElement> {
   /**
    * When set to true, the scrollbar in X-axis will not be available, regardless of the content width.
    */
@@ -37,5 +35,8 @@ export interface ScrollbarBase
    * When set to true, the scroll bar in Y-axis will not be available, regardless of the content height.
    */
   suppressScrollY?: boolean;
+  /**
+   * children
+   */
   children: React.ReactNode;
 }

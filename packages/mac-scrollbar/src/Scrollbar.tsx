@@ -6,7 +6,8 @@ import useScrollbar from './useScrollbar';
 import './Scrollbar.less';
 
 export interface ScrollbarProps extends ScrollbarBase {
-  innerRef?: React.Ref<HTMLDivElement>;
+  innerRef?: React.Ref<HTMLElement>;
+  Wrapper: React.HTMLFactory<HTMLElement>;
 }
 
 export default function ScrollBar({
@@ -19,29 +20,30 @@ export default function ScrollBar({
   suppressScrollX,
   suppressScrollY,
   theme = 'white',
+  Wrapper,
   ...props
 }: ScrollbarProps) {
-  const scrollBoxRef = React.useRef<HTMLDivElement>(null);
+  const scrollBoxRef = React.useRef<HTMLElement>(null);
   useSyncRef(innerRef, scrollBoxRef);
 
   const { updateLayerThrottle, updateLayerNow, horizontalBar, verticalBar, updateBarVisible } =
     useScrollbar(scrollBoxRef);
 
-  function handleScroll(evt: React.UIEvent<HTMLDivElement, UIEvent>) {
+  function handleScroll(evt: React.UIEvent<HTMLElement, UIEvent>) {
     if (onScroll) {
       onScroll(evt);
     }
     updateLayerThrottle();
   }
 
-  function handleMouseEnter(evt: React.MouseEvent<HTMLDivElement>) {
+  function handleMouseEnter(evt: React.MouseEvent<HTMLElement>) {
     if (onMouseEnter) {
       onMouseEnter(evt);
     }
     updateLayerNow();
   }
 
-  function handleMouseLeave(evt: React.MouseEvent<HTMLDivElement>) {
+  function handleMouseLeave(evt: React.MouseEvent<HTMLElement>) {
     if (onMouseLeave) {
       onMouseLeave(evt);
     }
@@ -49,7 +51,7 @@ export default function ScrollBar({
   }
 
   return (
-    <div
+    <Wrapper
       className={classNames('ms-container', className)}
       ref={scrollBoxRef}
       onScroll={handleScroll}
@@ -62,6 +64,6 @@ export default function ScrollBar({
         {!suppressScrollY && verticalBar}
       </div>
       {children}
-    </div>
+    </Wrapper>
   );
 }

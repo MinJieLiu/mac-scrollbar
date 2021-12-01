@@ -14,8 +14,8 @@ export function isEnableScrollbar() {
 }
 
 export function updateRef(
-  innerRef: React.Ref<HTMLDivElement> | undefined,
-  scrollBoxElement: HTMLDivElement | null,
+  innerRef: React.Ref<HTMLElement> | undefined,
+  scrollBoxElement: HTMLElement | null,
 ) {
   if (!innerRef) {
     return;
@@ -25,7 +25,7 @@ export function updateRef(
     return;
   }
   // @ts-ignore
-  (innerRef as React.MutableRefObject<HTMLDivElement>).current = scrollBoxElement;
+  (innerRef as React.MutableRefObject<HTMLElement>).current = scrollBoxElement;
 }
 
 export function handleExtractSize(target: HTMLElement) {

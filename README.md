@@ -65,6 +65,7 @@ function App() {
 | suppressMacOS | false | When set to true, macOS browsers will use native scrollbar. |
 | suppressScrollX | false | When set to true, the scrollbar in X-axis will not be available, regardless of the content width. |
 | suppressScrollY | false | When set to true, the scroll bar in Y-axis will not be available, regardless of the content height. |
+| as | string | Custom element type. Default 'div' |
 
 #### GlobalScrollbar
 

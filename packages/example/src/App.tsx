@@ -1,13 +1,13 @@
 import React from 'react';
-import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar';
+import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar/src';
 import styled from 'styled-components';
 import 'mac-scrollbar/dist/style.css';
 
 const Main = styled.div`
-  padding: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  padding: 10px;
 `;
 
 const NoWrap = styled.div`
@@ -27,6 +27,8 @@ const LightThemeScrollbar = styled(MacScrollbar)`
 `;
 
 const DarkThemeScrollbar = styled(MacScrollbar)`
+  flex: 1;
+  height: 500px;
   padding: 20px;
   background: darkslategray;
   color: white;
@@ -114,9 +116,10 @@ function App() {
         </LightThemeScrollbar>
       </Main>
       <Main>
-        <DarkThemeScrollbar theme="dark">
-          <NoWrap>{baseIntro2}</NoWrap>
-        </DarkThemeScrollbar>
+        <DarkThemeScrollbar theme="dark">{baseIntro}</DarkThemeScrollbar>
+        <MacScrollbar as="main" style={{ flex: 1, height: 500 }}>
+          {baseIntro}
+        </MacScrollbar>
       </Main>
 
       <Main>

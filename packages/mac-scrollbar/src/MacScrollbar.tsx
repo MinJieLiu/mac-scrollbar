@@ -8,21 +8,30 @@ export interface MacScrollbarProps extends ScrollbarBase {
    * When set to true, macOS browsers will use native scrollbar.
    */
   suppressMacOS?: boolean;
+  /**
+   * Custom element type.
+   * @defaultValue 'div'
+   */
+  as?: keyof JSX.IntrinsicElements | string;
 }
 
-export const MacScrollbar = React.forwardRef<HTMLDivElement, MacScrollbarProps>(
-  ({ suppressScrollX, suppressScrollY, suppressMacOS, style, children, ...props }, ref) => {
+export const MacScrollbar = React.forwardRef<HTMLElement, MacScrollbarProps>(
+  (
+    { suppressScrollX, suppressScrollY, suppressMacOS, as = 'div', style, children, ...props },
+    ref,
+  ) => {
     const currentStyle = {
       overflowX: isEnableStyle(suppressScrollX),
       overflowY: isEnableStyle(suppressScrollY),
       ...style,
     };
+    const Wrapper = as as unknown as React.HTMLFactory<HTMLElement>;
 
     if (suppressMacOS && !isEnableScrollbar()) {
       return (
-        <div style={currentStyle} ref={ref} {...props}>
+        <Wrapper style={currentStyle} ref={ref} {...props}>
           {children}
-        </div>
+        </Wrapper>
       );
     }
 
@@ -32,6 +41,7 @@ export const MacScrollbar = React.forwardRef<HTMLDivElement, MacScrollbarProps>(
         innerRef={ref}
         suppressScrollX={suppressScrollX}
         suppressScrollY={suppressScrollY}
+        Wrapper={Wrapper}
         {...props}
       >
         {children}
