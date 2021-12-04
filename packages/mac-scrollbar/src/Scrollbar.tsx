@@ -17,6 +17,7 @@ export default function ScrollBar({
   onMouseLeave,
   innerRef,
   children,
+  minThumbSize,
   suppressScrollX,
   suppressScrollY,
   theme = 'white',
@@ -27,7 +28,7 @@ export default function ScrollBar({
   useSyncRef(innerRef, scrollBoxRef);
 
   const { updateLayerThrottle, updateLayerNow, horizontalBar, verticalBar, updateBarVisible } =
-    useScrollbar(scrollBoxRef);
+    useScrollbar({ scrollBox: scrollBoxRef, minThumbSize });
 
   function handleScroll(evt: React.UIEvent<HTMLElement, UIEvent>) {
     if (onScroll) {

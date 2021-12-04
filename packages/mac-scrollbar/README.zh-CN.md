@@ -59,19 +59,18 @@ function App() {
 
 ### API
 
-#### MacScrollbar
-
-| Name            | Type             | Description                                                |
-| :-------------- | :--------------- | :--------------------------------------------------------- |
-| theme           | 'white' I 'dark' | 适应容器的滚动条主题，默认 'white'                         |
-| suppressMacOS   | false            | 设置为 true 时，macOS 的浏览器将使用原生滚动条             |
-| suppressScrollX | false            | 设置为 true 时，无论内容宽度如何，X 轴上的滚动条都将不可用 |
-| suppressScrollY | false            | 设置为 true 时，无论内容高度如何，Y 轴的滚动条都将不可用   |
-| as              | string           | 自定义元素类型。默认 'div'                                 |
-
-#### GlobalScrollbar
+#### 公共
 
 | Name          | Type             | Description                                    |
 | :------------ | :--------------- | :--------------------------------------------- |
 | theme         | 'white' I 'dark' | 适应容器的滚动条主题，默认 'white'             |
-| suppressMacOS | false            | 设置为 true 时，macOS 的浏览器将使用原生滚动条 |
+| suppressMacOS | number           | 设置为 true 时，macOS 的浏览器将使用原生滚动条 |
+| minThumbSize  | number           | 最小的拇指条尺寸，默认 20                      |
+
+#### MacScrollbar
+
+| Name            | Type   | Description                                                |
+| :-------------- | :----- | :--------------------------------------------------------- |
+| suppressScrollX | number | 设置为 true 时，无论内容宽度如何，X 轴上的滚动条都将不可用 |
+| suppressScrollY | number | 设置为 true 时，无论内容高度如何，Y 轴的滚动条都将不可用   |
+| as              | string | 自定义元素类型。默认 'div'                                 |

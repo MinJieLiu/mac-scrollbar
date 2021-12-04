@@ -21,9 +21,14 @@ export interface ActionPosition {
 export interface GlobalScrollbarBase {
   /**
    * Adapt to the background color of the container.
-   * @default 'white'
+   * @defaultValue 'white'
    */
   theme?: 'white' | 'dark';
+  /**
+   * Minimum thumb bar size.
+   * @defaultValue 20
+   */
+  minThumbSize?: number;
 }
 
 export interface ScrollbarBase extends GlobalScrollbarBase, React.HtmlHTMLAttributes<HTMLElement> {

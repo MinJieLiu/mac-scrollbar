@@ -117,6 +117,9 @@ function App() {
       </Main>
       <Main>
         <DarkThemeScrollbar theme="dark">{baseIntro}</DarkThemeScrollbar>
+        <DarkThemeScrollbar theme="dark" minThumbSize={400}>
+          {baseIntro}
+        </DarkThemeScrollbar>
         <MacScrollbar as="main" style={{ flex: 1, height: 500 }}>
           {baseIntro}
         </MacScrollbar>

@@ -1,11 +1,12 @@
 import React from 'react';
-import { classNames, minThumbSize, thumbBarSize, updateScrollPosition } from './utils';
+import { classNames, computeRatio, trackSize, updateScrollPosition } from './utils';
 import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
 
 export interface ThumbBarProps {
   visible: boolean;
   isWindow: boolean;
+  minThumbSize?: number;
   /**
    * @default vertical
    */
@@ -25,6 +26,7 @@ export interface ThumbBarProps {
 function ThumbBar({
   visible,
   isWindow,
+  minThumbSize,
   horizontal,
   isPress,
 
@@ -81,8 +83,8 @@ function ThumbBar({
     ? ({ position: 'fixed' } as React.CSSProperties)
     : ({
         [sizeKey]: offsetSize,
-        top: (horizontal ? clientHeight - thumbBarSize : 0) - paddingTop,
-        left: (horizontal ? 0 : clientWidth - thumbBarSize) - paddingLeft,
+        top: (horizontal ? clientHeight - trackSize : 0) - paddingTop,
+        left: (horizontal ? 0 : clientWidth - trackSize) - paddingLeft,
       } as React.CSSProperties);
 
   return (
@@ -100,7 +102,7 @@ function ThumbBar({
         onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
         style={{
-          [sizeKey]: Math.max((offsetSize / scrollSize) * offsetSize, minThumbSize),
+          [sizeKey]: computeRatio(scrollSize, offsetSize, minThumbSize).thumbSize,
         }}
       />
     </div>

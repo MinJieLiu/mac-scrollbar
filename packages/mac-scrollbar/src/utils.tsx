@@ -1,9 +1,7 @@
 /* eslint-disable no-param-reassign */
 import type React from 'react';
 
-export const minThumbSize = 20;
-
-export const thumbBarSize = 16;
+export const trackSize = 16;
 
 export function isEnableScrollbar() {
   if (typeof navigator === 'undefined') {
@@ -60,6 +58,17 @@ export function updateElementStyle(element: HTMLElement, obj: Record<string, num
   }
 }
 
+export function computeRatio(scrollSize: number, clientSize: number, minThumbSize: number = 20) {
+  const realThumbSize = (clientSize / scrollSize) * clientSize;
+  const thumbSize = Math.max(minThumbSize, realThumbSize);
+  const remaining = clientSize - thumbSize;
+  const distance = scrollSize - clientSize;
+  return {
+    thumbSize,
+    ratio: remaining / distance,
+  };
+}
+
 export function updateScrollPosition(
   element: HTMLElement | null | undefined,
   position: number,
@@ -79,6 +88,7 @@ export function updateScrollElementStyle(
   containerElement: HTMLElement | null | undefined,
   horizontalElement: HTMLElement | null | undefined,
   verticalElement: HTMLElement | null | undefined,
+  minThumbSize?: number,
 ) {
   if (!containerElement) {
     return;
@@ -93,6 +103,7 @@ export function updateScrollElementStyle(
       clientWidth,
       scrollLeft,
       'left',
+      minThumbSize,
     );
   }
 
@@ -103,6 +114,7 @@ export function updateScrollElementStyle(
       clientHeight,
       scrollTop,
       'top',
+      minThumbSize,
     );
   }
 }
@@ -110,17 +122,14 @@ export function updateScrollElementStyle(
 export function updateThumbStyle(
   thumbElement: HTMLDivElement,
   scrollSize: number,
-  offsetSize: number,
+  clientSize: number,
   scrollPosition: number,
   direction: 'left' | 'top',
+  minThumbSize?: number,
 ) {
-  const realThumbSize = (offsetSize / scrollSize) * offsetSize;
-  const distance = Math.max(minThumbSize - realThumbSize, 0);
+  const { ratio } = computeRatio(scrollSize, clientSize, minThumbSize);
 
   updateElementStyle(thumbElement, {
-    [direction]: Math.min(
-      (scrollPosition / scrollSize) * (offsetSize - distance),
-      offsetSize - minThumbSize,
-    ),
+    [direction]: scrollPosition * ratio,
   });
 }

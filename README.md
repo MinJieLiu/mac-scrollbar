@@ -59,19 +59,18 @@ function App() {
 
 ### API
 
+#### Common
+
+| Name | Type | Description |
+| :-- | :-- | :-- |
+| theme | 'white' I 'dark' | Adapt to the background color of the container. Default 'white' |
+| suppressMacOS | number | When set to true, macOS browsers will use native scrollbar. |
+| minThumbSize | number | Minimum thumb bar size. Default 20 |
+
 #### MacScrollbar
 
 | Name | Type | Description |
 | :-- | :-- | :-- |
-| theme | 'white' I 'dark' | Adapt to the background color of the container. Default 'white' |
-| suppressMacOS | false | When set to true, macOS browsers will use native scrollbar. |
-| suppressScrollX | false | When set to true, the scrollbar in X-axis will not be available, regardless of the content width. |
-| suppressScrollY | false | When set to true, the scroll bar in Y-axis will not be available, regardless of the content height. |
+| suppressScrollX | number | When set to true, the scrollbar in X-axis will not be available, regardless of the content width. |
+| suppressScrollY | number | When set to true, the scroll bar in Y-axis will not be available, regardless of the content height. |
 | as | string | Custom element type. Default 'div' |
-
-#### GlobalScrollbar
-
-| Name | Type | Description |
-| :-- | :-- | :-- |
-| theme | 'white' I 'dark' | Adapt to the background color of the container. Default 'white' |
-| suppressMacOS | false | When set to true, macOS browsers will use native scrollbar. |

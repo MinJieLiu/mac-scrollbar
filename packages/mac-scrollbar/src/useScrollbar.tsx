@@ -1,6 +1,11 @@
 import React from 'react';
 import { useDebounceCallback, useEventListener, useResizeObserver } from './hooks';
-import { handleExtractSize, updateScrollElementStyle, updateScrollPosition } from './utils';
+import {
+  computeRatio,
+  handleExtractSize,
+  updateScrollElementStyle,
+  updateScrollPosition,
+} from './utils';
 import type { ActionPosition, BoxSize } from './types';
 import ThumbBar from './ThumbBar';
 
@@ -22,16 +27,19 @@ const initialAction: ActionPosition = {
   pressStartY: 0,
 };
 
-export default function useScrollbar(
-  scrollBoxElement: React.MutableRefObject<HTMLElement | null> | Window,
-) {
-  const isWindow = scrollBoxElement === window;
+export interface UseScrollbarParams {
+  scrollBox: React.MutableRefObject<HTMLElement | null> | Window;
+  minThumbSize?: number;
+}
+
+export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarParams) {
+  const isWindow = scrollBox === window;
   const containerRef = React.useMemo(() => {
     if (isWindow) {
       return { current: document.documentElement };
     }
-    return scrollBoxElement as React.MutableRefObject<HTMLElement | null>;
-  }, [isWindow, scrollBoxElement]);
+    return scrollBox as React.MutableRefObject<HTMLElement | null>;
+  }, [isWindow, scrollBox]);
 
   const horizontalRef = React.useRef<HTMLDivElement>(null);
   const verticalRef = React.useRef<HTMLDivElement>(null);
@@ -46,7 +54,12 @@ export default function useScrollbar(
     () => {
       updateBarVisible(true);
       delayHideScrollbar();
-      updateScrollElementStyle(containerRef.current, horizontalRef.current, verticalRef.current);
+      updateScrollElementStyle(
+        containerRef.current,
+        horizontalRef.current,
+        verticalRef.current,
+        minThumbSize,
+      );
     },
     { maxWait: 8, leading: true },
   );
@@ -55,18 +68,20 @@ export default function useScrollbar(
 
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
-      const horizontalRatio = scrollWidth / clientWidth;
+      const horizontalRatio = computeRatio(scrollWidth, clientWidth, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
-        Math.floor((evt.clientX - action.pressStartX) * horizontalRatio + action.lastScrollLeft),
+        Math.floor(
+          (evt.clientX - action.pressStartX) * (1 / horizontalRatio) + action.lastScrollLeft,
+        ),
         true,
       );
     }
     if (action.isPressY) {
-      const verticalRatio = scrollHeight / clientHeight;
+      const verticalRatio = computeRatio(scrollHeight, clientHeight, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
-        Math.floor((evt.clientY - action.pressStartY) * verticalRatio + action.lastScrollTop),
+        Math.floor((evt.clientY - action.pressStartY) * (1 / verticalRatio) + action.lastScrollTop),
       );
     }
   });
@@ -86,6 +101,7 @@ export default function useScrollbar(
     <ThumbBar
       visible={barVisible}
       isWindow={isWindow}
+      minThumbSize={minThumbSize}
       horizontal
       isPress={action.isPressX}
       grooveRef={horizontalRef}
@@ -98,6 +114,7 @@ export default function useScrollbar(
     <ThumbBar
       visible={barVisible}
       isWindow={isWindow}
+      minThumbSize={minThumbSize}
       isPress={action.isPressY}
       grooveRef={verticalRef}
       boxSize={boxSize}
