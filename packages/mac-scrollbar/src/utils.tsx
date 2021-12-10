@@ -46,7 +46,14 @@ export function isEnableStyle(disabled?: boolean) {
 export function classNames(...args: (string | undefined | Record<string, unknown>)[]) {
   return args
     .flatMap((item) =>
-      typeof item === 'object' ? Object.keys(item).map((n) => (item[n] ? n : undefined)) : item,
+      typeof item === 'object'
+        ? Object.keys(item).reduce((prev, curr) => {
+            if (item[curr]) {
+              prev.push(curr);
+            }
+            return prev;
+          }, [] as string[])
+        : item,
     )
     .join(' ');
 }
