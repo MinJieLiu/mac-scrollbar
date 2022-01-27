@@ -30,7 +30,7 @@ yarn add mac-scrollbar
 Import style
 
 ```jsx
-import 'mac-scrollbar/dist/style.css';
+import 'mac-scrollbar/dist/mac-scrollbar.css';
 ```
 
 Basic

@@ -7,7 +7,6 @@ module.exports = {
     'no-confusing-arrow': 0,
     'no-nested-ternary': 0,
     'no-console': 2,
-    'no-param-reassign': [2, { props: true, ignorePropertyModificationsFor: ['draft'] }],
     'react/no-this-in-sfc': 0,
   },
 };

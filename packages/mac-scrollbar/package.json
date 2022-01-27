@@ -1,11 +1,16 @@
 {
   "name": "mac-scrollbar",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "A macos style react scroll bar component",
   "author": "MinJieLiu <liumingyi_1@163.com>",
-  "main": "./dist/index.cjs.js",
-  "module": "./dist/index.es.js",
-  "types": "./src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./dist/mac-scrollbar.module.js",
+    "./dist/style.css": "./dist/mac-scrollbar.css"
+  },
+  "source": "src/index.ts",
+  "module": "./dist/mac-scrollbar.module.js",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MinJieLiu/mac-scrollbar.git"
@@ -16,15 +21,19 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
+    "build": "microbundle --jsx React.createElement --external react,react-dom --format esm",
     "prepublishOnly": "npm run build"
   },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ],
   "devDependencies": {
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
     "less": "^4.1.1",
+    "microbundle": "^0.14.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "vite": "^2.5.1"
+    "react-dom": "^17.0.2"
   }
 }

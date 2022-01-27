@@ -18,6 +18,7 @@ LICENSE
 yarn-error.log
 .history
 CNAME
+*.gif
 .idea
 .vscode
 .npmrc

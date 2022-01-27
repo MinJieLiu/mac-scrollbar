@@ -2,7 +2,6 @@
   "compilerOptions": {
     "rootDir": "src",
     "declarationDir": "dist",
-    "outDir": "build",
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
@@ -23,7 +22,7 @@
     "isolatedModules": true,
     "declaration": true,
     "noEmitOnError": true,
-    "jsx": "react-jsx"
+    "jsx": "react"
   },
   "include": ["src", "typings.d.ts"],
   "exclude": ["__tests__"]

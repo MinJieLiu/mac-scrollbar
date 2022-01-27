@@ -1,5 +1,5 @@
 import React from 'react';
-import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar/src';
+import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar';
 import styled from 'styled-components';
 import 'mac-scrollbar/dist/style.css';
 
@@ -50,9 +50,9 @@ const baseIntro = (
       can easily pass rich data through your app and keep state out of the DOM.
     </p>
     <p>
-      Learn Once, Write Anywhere: We don't make assumptions about the rest of your technology stack,
-      so you can develop new features in React without rewriting existing code. React can also
-      render on the server using Node and power mobile apps using React Native.
+      Learn Once, Write Anywhere: We don&apos;t make assumptions about the rest of your technology
+      stack, so you can develop new features in React without rewriting existing code. React can
+      also render on the server using Node and power mobile apps using React Native.
     </p>
 
     <p>Learn how to use React in your own project.</p>
@@ -65,7 +65,7 @@ const baseIntro = (
 
     <p>Use Online Playgrounds to get a taste of React.</p>
     <p>Add React to a Website as a script tag in one minute.</p>
-    <p>Create a New React App if you're looking for a powerful JavaScript toolchain.</p>
+    <p>Create a New React App if you&apos;re looking for a powerful JavaScript toolchain.</p>
     <p>You can use React as a script tag from a CDN, or as a react package on npm.</p>
 
     <h3>Documentation</h3>
@@ -94,9 +94,9 @@ const baseIntro2 = (
     Component-Based: Build encapsulated components that manage their own state, then compose them to
     make complex UIs. Since component logic is written in JavaScript instead of templates, you can
     easily pass rich data through your app and keep state out of the DOM. Learn Once, Write
-    Anywhere: We don't make assumptions about the rest of your technology stack, so you can develop
-    new features in React without rewriting existing code. React can also render on the server using
-    Node and power mobile apps using React Native.
+    Anywhere: We don&apos;t make assumptions about the rest of your technology stack, so you can
+    develop new features in React without rewriting existing code. React can also render on the
+    server using Node and power mobile apps using React Native.
   </>
 );
 
@@ -105,7 +105,7 @@ function App() {
     <>
       <GlobalScrollbar />
       <Main>
-        <WrapperAutoScrollbar>{baseIntro}</WrapperAutoScrollbar>
+        <WrapperAutoScrollbar forwardedAs="section">{baseIntro}</WrapperAutoScrollbar>
         <WrapperAutoScrollbar>
           <NoWrap>{baseIntro}</NoWrap>
         </WrapperAutoScrollbar>
