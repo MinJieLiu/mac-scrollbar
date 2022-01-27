@@ -3,6 +3,7 @@
   "description": "A macos style react scroll bar component",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "dev": "pnpm -C ./packages/example dev",
     "build": "pnpm -C ./packages/mac-scrollbar build",
     "deploy:example": "pnpm -C ./packages/example deploy",
