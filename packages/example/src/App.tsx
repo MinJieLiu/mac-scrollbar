@@ -1,7 +1,7 @@
 import React from 'react';
 import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar';
 import styled from 'styled-components';
-import 'mac-scrollbar/dist/style.css';
+import 'mac-scrollbar/dist/mac-scrollbar.css';
 
 const Main = styled.div`
   display: flex;
@@ -116,8 +116,8 @@ function App() {
         </LightThemeScrollbar>
       </Main>
       <Main>
-        <DarkThemeScrollbar theme="dark">{baseIntro}</DarkThemeScrollbar>
-        <DarkThemeScrollbar theme="dark" minThumbSize={400}>
+        <DarkThemeScrollbar skin="dark">{baseIntro}</DarkThemeScrollbar>
+        <DarkThemeScrollbar skin="dark" minThumbSize={400}>
           {baseIntro}
         </DarkThemeScrollbar>
         <MacScrollbar as="main" style={{ flex: 1, height: 500 }}>

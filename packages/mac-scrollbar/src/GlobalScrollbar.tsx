@@ -12,7 +12,7 @@ export interface GlobalScrollbarProps extends GlobalScrollbarBase {
   suppressMacOS?: boolean;
 }
 
-function GlobalScrollbarInject({ skin = 'white', minThumbSize }: GlobalScrollbarBase) {
+function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarBase) {
   const wrapper = useInitial(() => document.createElement('div'));
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function GlobalScrollbarInject({ skin = 'white', minThumbSize }: GlobalScrollbar
 
   const { updateLayerThrottle, horizontalBar, verticalBar } = useScrollbar({
     scrollBox: window,
-    minThumbSize,
+    ...props,
   });
 
   useEventListener('scroll', updateLayerThrottle);

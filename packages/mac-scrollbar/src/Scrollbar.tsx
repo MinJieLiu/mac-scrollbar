@@ -16,10 +16,14 @@ export default function ScrollBar({
   onMouseLeave,
   innerRef,
   children,
-  minThumbSize,
   suppressScrollX,
   suppressScrollY,
   skin = 'white',
+  trackSize,
+  trackEndGap,
+  thumbSize,
+  thumbHoverSize,
+  minThumbSize,
   Wrapper,
   ...props
 }: ScrollbarProps) {
@@ -27,7 +31,14 @@ export default function ScrollBar({
   useSyncRef(innerRef, scrollBoxRef);
 
   const { updateLayerThrottle, updateLayerNow, horizontalBar, verticalBar, updateBarVisible } =
-    useScrollbar({ scrollBox: scrollBoxRef, minThumbSize });
+    useScrollbar({
+      scrollBox: scrollBoxRef,
+      trackSize,
+      trackEndGap,
+      thumbSize,
+      thumbHoverSize,
+      minThumbSize,
+    });
 
   function handleScroll(evt: React.UIEvent<HTMLElement, UIEvent>) {
     if (onScroll) {

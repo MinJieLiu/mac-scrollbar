@@ -81,6 +81,7 @@ export function updateScrollElementStyle(
   containerElement: HTMLElement | null | undefined,
   horizontalElement: HTMLElement | null | undefined,
   verticalElement: HTMLElement | null | undefined,
+  emptySize: number,
   minThumbSize?: number,
 ) {
   if (!containerElement) {
@@ -93,7 +94,7 @@ export function updateScrollElementStyle(
     updateThumbStyle(
       horizontalElement.firstChild as HTMLDivElement,
       scrollWidth,
-      clientWidth,
+      clientWidth - emptySize,
       scrollLeft,
       'left',
       minThumbSize,
@@ -104,7 +105,7 @@ export function updateScrollElementStyle(
     updateThumbStyle(
       verticalElement.firstChild as HTMLDivElement,
       scrollHeight,
-      clientHeight,
+      clientHeight - emptySize,
       scrollTop,
       'top',
       minThumbSize,

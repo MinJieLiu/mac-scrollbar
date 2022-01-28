@@ -64,8 +64,12 @@ function App() {
 | Name | Type | Description |
 | :-- | :-- | :-- |
 | skin | 'white' I 'dark' | Adapt to the background color of the container. Default 'white' |
-| suppressMacOS | number | When set to true, macOS browsers will use native scrollbar. |
+| trackSize | number | Scrollbar track size. Default 16 |
+| trackEndGap | number | Gap at the cross end of the scroll bar. Default 16 |
+| thumbSize | number | Scrollbar thumb size. Default 6 |
+| thumbHoverSize | number | Scrollbar hover thumb size. Default 12 |
 | minThumbSize | number | Minimum thumb bar size. Default 20 |
+| suppressMacOS | number | When set to true, macOS browsers will use native scrollbar. |
 
 #### MacScrollbar
 

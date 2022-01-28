@@ -7,6 +7,7 @@ export interface ThumbBarProps {
   visible: boolean;
   isWindow: boolean;
   minThumbSize?: number;
+  gapSize: number;
   /**
    * @default vertical
    */
@@ -23,6 +24,7 @@ function ThumbBar({
   visible,
   isWindow,
   minThumbSize,
+  gapSize,
   horizontal,
   isPress,
 
@@ -43,8 +45,8 @@ function ThumbBar({
   } = boxSize;
 
   const [sizeKey, offsetSize, scrollSize] = horizontal
-    ? ['width', clientWidth, scrollWidth]
-    : ['height', clientHeight, scrollHeight];
+    ? ['width', clientWidth - gapSize, scrollWidth]
+    : ['height', clientHeight - gapSize, scrollHeight];
 
   function getContainerBox() {
     const targetNode = trackRef.current?.parentNode?.parentNode as HTMLDivElement | HTMLBodyElement;
@@ -92,7 +94,7 @@ function ThumbBar({
               left: -paddingLeft,
             }
           : {
-              top: paddingTop,
+              top: paddingTop - gapSize,
               right: -paddingRight,
               transform: 'translateY(-100%)',
             }),
@@ -112,7 +114,7 @@ function ThumbBar({
         onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
         style={{
-          [sizeKey]: computeRatio(scrollSize, offsetSize, minThumbSize).thumbSize,
+          [sizeKey]: computeRatio(scrollSize, offsetSize + gapSize / 2, minThumbSize).thumbSize,
         }}
       />
     </div>

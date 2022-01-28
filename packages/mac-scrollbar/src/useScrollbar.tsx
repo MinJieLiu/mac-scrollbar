@@ -6,6 +6,7 @@ import {
   updateScrollElementStyle,
   updateScrollPosition,
 } from './utils';
+import type { GlobalScrollbarBase } from './types';
 import type { ActionPosition, BoxSize } from './types';
 import ThumbBar from './ThumbBar';
 
@@ -29,12 +30,18 @@ const initialAction: ActionPosition = {
   pressStartY: 0,
 };
 
-export interface UseScrollbarParams {
+export interface UseScrollbarParams extends GlobalScrollbarBase {
   scrollBox: React.MutableRefObject<HTMLElement | null> | Window;
-  minThumbSize?: number;
 }
 
-export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarParams) {
+export default function useScrollbar({
+  scrollBox,
+  // trackSize,
+  trackEndGap = 16,
+  // thumbSize,
+  // thumbHoverSize,
+  minThumbSize,
+}: UseScrollbarParams) {
   const isWindow = scrollBox === window;
   const containerRef = useMemo(() => {
     if (isWindow) {
@@ -52,6 +59,11 @@ export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarPa
 
   const delayHideScrollbar = useDebounceCallback(() => updateBarVisible(false), { wait: 1000 });
 
+  const { clientWidth, scrollWidth, clientHeight, scrollHeight } = boxSize;
+  const showHorizontalBar = scrollWidth - clientWidth > 0;
+  const showVerticalBar = scrollHeight - clientHeight > 0;
+  const gapSize = showHorizontalBar && showVerticalBar ? trackEndGap : 0;
+
   const updateLayerThrottle = useDebounceCallback(
     () => {
       updateBarVisible(true);
@@ -60,17 +72,16 @@ export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarPa
         containerRef.current,
         horizontalRef.current,
         verticalRef.current,
+        gapSize,
         minThumbSize,
       );
     },
     { maxWait: 8, leading: true },
   );
 
-  const { clientWidth, scrollWidth, clientHeight, scrollHeight } = boxSize;
-
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
-      const horizontalRatio = computeRatio(scrollWidth, clientWidth, minThumbSize).ratio;
+      const horizontalRatio = computeRatio(scrollWidth, clientWidth - gapSize, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
         Math.floor(
@@ -80,7 +91,7 @@ export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarPa
       );
     }
     if (action.isPressY) {
-      const verticalRatio = computeRatio(scrollHeight, clientHeight, minThumbSize).ratio;
+      const verticalRatio = computeRatio(scrollHeight, clientHeight - gapSize, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
         Math.floor((evt.clientY - action.pressStartY) * (1 / verticalRatio) + action.lastScrollTop),
@@ -99,11 +110,12 @@ export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarPa
     }
   }
 
-  const horizontalBar = scrollWidth - clientWidth > 0 && (
+  const horizontalBar = showHorizontalBar && (
     <ThumbBar
       visible={barVisible}
       isWindow={isWindow}
       minThumbSize={minThumbSize}
+      gapSize={gapSize}
       horizontal
       isPress={action.isPressX}
       trackRef={horizontalRef}
@@ -112,11 +124,12 @@ export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarPa
     />
   );
 
-  const verticalBar = scrollHeight - clientHeight > 0 && (
+  const verticalBar = showVerticalBar && (
     <ThumbBar
       visible={barVisible}
       isWindow={isWindow}
       minThumbSize={minThumbSize}
+      gapSize={gapSize}
       isPress={action.isPressY}
       trackRef={verticalRef}
       boxSize={boxSize}
