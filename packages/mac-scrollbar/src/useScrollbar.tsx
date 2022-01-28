@@ -36,9 +36,7 @@ export interface UseScrollbarParams extends GlobalScrollbarBase {
 
 export default function useScrollbar({
   scrollBox,
-  trackSize,
   trackEndGap = 16,
-  thumbSize,
   minThumbSize,
 }: UseScrollbarParams) {
   const isGlobal = scrollBox === window;
@@ -80,7 +78,7 @@ export default function useScrollbar({
 
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
-      const horizontalRatio = computeRatio(scrollWidth, clientWidth - gapSize, minThumbSize).ratio;
+      const horizontalRatio = computeRatio(scrollWidth, clientWidth, gapSize, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
         Math.floor(
@@ -90,7 +88,7 @@ export default function useScrollbar({
       );
     }
     if (action.isPressY) {
-      const verticalRatio = computeRatio(scrollHeight, clientHeight - gapSize, minThumbSize).ratio;
+      const verticalRatio = computeRatio(scrollHeight, clientHeight, gapSize, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
         Math.floor((evt.clientY - action.pressStartY) * (1 / verticalRatio) + action.lastScrollTop),
@@ -113,8 +111,6 @@ export default function useScrollbar({
     <ThumbBar
       visible={barVisible}
       isGlobal={isGlobal}
-      trackSize={trackSize}
-      thumbSize={thumbSize}
       minThumbSize={minThumbSize}
       gapSize={gapSize}
       horizontal
@@ -129,8 +125,6 @@ export default function useScrollbar({
     <ThumbBar
       visible={barVisible}
       isGlobal={isGlobal}
-      trackSize={trackSize}
-      thumbSize={thumbSize}
       minThumbSize={minThumbSize}
       gapSize={gapSize}
       isPress={action.isPressY}

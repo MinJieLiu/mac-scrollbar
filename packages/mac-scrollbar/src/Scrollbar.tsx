@@ -19,9 +19,7 @@ export default function ScrollBar({
   suppressScrollX,
   suppressScrollY,
   skin = 'white',
-  trackSize,
   trackEndGap,
-  thumbSize,
   minThumbSize,
   Wrapper,
   ...props
@@ -32,9 +30,7 @@ export default function ScrollBar({
   const { updateLayerThrottle, updateLayerNow, horizontalBar, verticalBar, updateBarVisible } =
     useScrollbar({
       scrollBox: scrollBoxRef,
-      trackSize,
       trackEndGap,
-      thumbSize,
       minThumbSize,
     });
 

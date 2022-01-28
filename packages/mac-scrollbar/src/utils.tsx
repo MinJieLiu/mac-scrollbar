@@ -51,10 +51,16 @@ export function updateElementStyle(element: HTMLElement, obj: Record<string, num
   }
 }
 
-export function computeRatio(scrollSize: number, clientSize: number, minThumbSize: number = 20) {
-  const realThumbSize = (clientSize / scrollSize) * clientSize;
+export function computeRatio(
+  scrollSize: number,
+  clientSize: number,
+  gapSize: number,
+  minThumbSize: number = 20,
+) {
+  const boxSize = clientSize - gapSize;
+  const realThumbSize = (boxSize / scrollSize) * boxSize;
   const thumbSize = Math.max(minThumbSize, realThumbSize);
-  const remaining = clientSize - thumbSize;
+  const remaining = boxSize - thumbSize;
   const distance = scrollSize - clientSize;
   return {
     thumbSize,
@@ -94,9 +100,10 @@ export function updateScrollElementStyle(
     updateThumbStyle(
       horizontalElement.firstChild as HTMLDivElement,
       scrollWidth,
-      clientWidth - emptySize,
+      clientWidth,
       scrollLeft,
       'left',
+      emptySize,
       minThumbSize,
     );
   }
@@ -105,9 +112,10 @@ export function updateScrollElementStyle(
     updateThumbStyle(
       verticalElement.firstChild as HTMLDivElement,
       scrollHeight,
-      clientHeight - emptySize,
+      clientHeight,
       scrollTop,
       'top',
+      emptySize,
       minThumbSize,
     );
   }
@@ -119,9 +127,10 @@ export function updateThumbStyle(
   clientSize: number,
   scrollPosition: number,
   direction: 'left' | 'top',
+  emptySize: number,
   minThumbSize?: number,
 ) {
-  const { ratio } = computeRatio(scrollSize, clientSize, minThumbSize);
+  const { ratio } = computeRatio(scrollSize, clientSize, emptySize, minThumbSize);
 
   updateElementStyle(thumbElement, {
     [direction]: scrollPosition * ratio,

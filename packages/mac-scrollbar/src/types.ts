@@ -27,20 +27,10 @@ export interface GlobalScrollbarBase {
    */
   skin?: 'white' | 'dark';
   /**
-   * Scrollbar track size.
-   * @defaultValue 16
-   */
-  trackSize?: number;
-  /**
    * Gap at the cross end of the scroll bar.
    * @defaultValue 16
    */
   trackEndGap?: number;
-  /**
-   * Scrollbar thumb size.
-   * @defaultValue 6
-   */
-  thumbSize?: number;
   /**
    * Minimum thumb bar size.
    * @defaultValue 20

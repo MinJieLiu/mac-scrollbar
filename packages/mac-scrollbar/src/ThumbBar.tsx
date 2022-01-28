@@ -6,8 +6,6 @@ import './ThumbBar.less';
 export interface ThumbBarProps {
   visible: boolean;
   isGlobal: boolean;
-  trackSize?: number;
-  thumbSize?: number;
   minThumbSize?: number;
   gapSize: number;
   /**
@@ -25,8 +23,6 @@ export interface ThumbBarProps {
 function ThumbBar({
   visible,
   isGlobal,
-  trackSize,
-  thumbSize,
   minThumbSize,
   gapSize,
   horizontal,
@@ -49,8 +45,8 @@ function ThumbBar({
   } = boxSize;
 
   const [sizeKey, offsetSize, scrollSize] = horizontal
-    ? ['width', clientWidth - gapSize, scrollWidth]
-    : ['height', clientHeight - gapSize, scrollHeight];
+    ? ['width', clientWidth, scrollWidth]
+    : ['height', clientHeight, scrollHeight];
 
   function getContainerBox() {
     const targetNode = trackRef.current?.parentNode?.parentNode as HTMLDivElement | HTMLBodyElement;
@@ -87,26 +83,22 @@ function ThumbBar({
       pressStartY: e.clientY,
     });
   }
-  const trackSizeKey = horizontal ? 'height' : 'width';
 
-  const style: React.CSSProperties = {
-    [trackSizeKey]: trackSize,
-    ...(isGlobal
-      ? { position: 'fixed' }
-      : {
-          [sizeKey]: offsetSize,
-          ...(horizontal
-            ? {
-                bottom: -paddingBottom,
-                left: -paddingLeft,
-              }
-            : {
-                top: paddingTop - gapSize,
-                right: -paddingRight,
-                transform: 'translateY(-100%)',
-              }),
-        }),
-  };
+  const style: React.CSSProperties = isGlobal
+    ? { position: 'fixed' }
+    : {
+        [sizeKey]: offsetSize - gapSize,
+        ...(horizontal
+          ? {
+              bottom: -paddingBottom,
+              left: -paddingLeft,
+            }
+          : {
+              top: paddingTop - gapSize,
+              right: -paddingRight,
+              transform: 'translateY(-100%)',
+            }),
+      };
 
   return (
     <div
@@ -122,8 +114,7 @@ function ThumbBar({
         onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
         style={{
-          [sizeKey]: computeRatio(scrollSize, offsetSize + gapSize / 2, minThumbSize).thumbSize,
-          [trackSizeKey]: thumbSize,
+          [sizeKey]: computeRatio(scrollSize, offsetSize, gapSize, minThumbSize).thumbSize,
         }}
       />
     </div>

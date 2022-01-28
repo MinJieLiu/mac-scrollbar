@@ -1,7 +1,6 @@
 import React from 'react';
-import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar';
+import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar/src';
 import styled from 'styled-components';
-import 'mac-scrollbar/dist/mac-scrollbar.css';
 
 const Main = styled.div`
   display: flex;
