@@ -1,14 +1,13 @@
 /* eslint-disable no-param-reassign */
 import type React from 'react';
 
-export const trackSize = 16;
-
 export function isEnableScrollbar() {
   if (typeof navigator === 'undefined') {
     return false;
   }
+  const { userAgent } = navigator;
   // Windows/Linux
-  return navigator.userAgent.includes('Windows NT') || navigator.userAgent.includes('X11;');
+  return userAgent.includes('Windows NT') || userAgent.includes('X11;');
 }
 
 export function updateRef(
@@ -28,34 +27,21 @@ export function updateRef(
 
 export function handleExtractSize(target: HTMLElement) {
   const { clientWidth, scrollWidth, clientHeight, scrollHeight } = target;
-  const { paddingTop, paddingLeft } = window.getComputedStyle(target);
+  const { paddingTop, paddingRight, paddingBottom, paddingLeft } = window.getComputedStyle(target);
   return {
     clientWidth,
     scrollWidth,
     clientHeight,
     scrollHeight,
     paddingTop: parseInt(paddingTop, 10),
+    paddingRight: parseInt(paddingRight, 10),
+    paddingBottom: parseInt(paddingBottom, 10),
     paddingLeft: parseInt(paddingLeft, 10),
   };
 }
 
 export function isEnableStyle(disabled?: boolean) {
   return disabled ? ('hidden' as const) : ('auto' as const);
-}
-
-export function classNames(...args: (string | undefined | Record<string, unknown>)[]) {
-  return args
-    .flatMap((item) =>
-      typeof item === 'object'
-        ? Object.keys(item).reduce((prev, curr) => {
-            if (item[curr]) {
-              prev.push(curr);
-            }
-            return prev;
-          }, [] as string[])
-        : item,
-    )
-    .join(' ');
 }
 
 export function updateElementStyle(element: HTMLElement, obj: Record<string, number>) {

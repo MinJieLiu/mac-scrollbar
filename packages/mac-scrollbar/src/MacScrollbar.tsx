@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { isEnableStyle, isEnableScrollbar } from './utils';
 import Scrollbar from './Scrollbar';
 import type { ScrollbarBase } from './types';
@@ -15,7 +15,7 @@ export interface MacScrollbarProps extends ScrollbarBase {
   as?: keyof JSX.IntrinsicElements | string;
 }
 
-export const MacScrollbar = React.forwardRef<HTMLElement, MacScrollbarProps>(
+export const MacScrollbar = forwardRef<HTMLElement, MacScrollbarProps>(
   (
     { suppressScrollX, suppressScrollY, suppressMacOS, as = 'div', style, children, ...props },
     ref,

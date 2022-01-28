@@ -6,6 +6,8 @@ export interface BoxSize {
   clientHeight: number;
   scrollHeight: number;
   paddingTop: number;
+  paddingRight: number;
+  paddingBottom: number;
   paddingLeft: number;
 }
 
@@ -23,7 +25,7 @@ export interface GlobalScrollbarBase {
    * Adapt to the background color of the container.
    * @defaultValue 'white'
    */
-  theme?: 'white' | 'dark';
+  skin?: 'white' | 'dark';
   /**
    * Minimum thumb bar size.
    * @defaultValue 20

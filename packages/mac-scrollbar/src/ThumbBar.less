@@ -29,6 +29,7 @@
       top: 0;
       right: 2px;
       width: 6px;
+      transition: width 0.3s ease-out;
 
       &:hover {
         width: 12px;
@@ -63,6 +64,7 @@
       bottom: 2px;
       left: 0;
       height: 6px;
+      transition:  height 0.3s ease-out;
 
       &:hover {
         height: 12px;
@@ -86,11 +88,14 @@
     opacity: 1;
   }
 
+  &.ms-active {
+    z-index: 20;
+  }
+
   .ms-thumb {
     position: absolute;
     background: var(--ms-thumb-color);
     border-radius: 6px;
-    transition: width 0.3s ease-out, height 0.3s ease-out;
     user-select: none;
   }
 }

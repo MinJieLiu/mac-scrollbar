@@ -1,5 +1,4 @@
-import React from 'react';
-import { classNames } from './utils';
+import React, { useRef } from 'react';
 import { useSyncRef } from './hooks';
 import type { ScrollbarBase } from './types';
 import useScrollbar from './useScrollbar';
@@ -11,7 +10,7 @@ export interface ScrollbarProps extends ScrollbarBase {
 }
 
 export default function ScrollBar({
-  className,
+  className = '',
   onScroll,
   onMouseEnter,
   onMouseLeave,
@@ -20,11 +19,11 @@ export default function ScrollBar({
   minThumbSize,
   suppressScrollX,
   suppressScrollY,
-  theme = 'white',
+  skin = 'white',
   Wrapper,
   ...props
 }: ScrollbarProps) {
-  const scrollBoxRef = React.useRef<HTMLElement>(null);
+  const scrollBoxRef = useRef<HTMLElement>(null);
   useSyncRef(innerRef, scrollBoxRef);
 
   const { updateLayerThrottle, updateLayerNow, horizontalBar, verticalBar, updateBarVisible } =
@@ -53,14 +52,14 @@ export default function ScrollBar({
 
   return (
     <Wrapper
-      className={classNames('ms-container', className)}
+      className={['ms-container', className].join(' ')}
       ref={scrollBoxRef}
       onScroll={handleScroll}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <div className={classNames('ms-track-box', `ms-theme-${theme}`)}>
+      <div className={`ms-track-box ms-theme-${skin}`}>
         {!suppressScrollX && horizontalBar}
         {!suppressScrollY && verticalBar}
       </div>

@@ -1,9 +1,10 @@
 /* eslint-disable no-param-reassign */
-import React from 'react';
+import type { RefObject, Ref } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { updateRef } from './utils';
 
 export function useInitial<T extends (...args: any) => any>(callback: T) {
-  const { current } = React.useRef({ initial: false, storeValue: undefined as ReturnType<T> });
+  const { current } = useRef({ initial: false, storeValue: undefined as ReturnType<T> });
   if (!current.initial) {
     current.initial = true;
     current.storeValue = callback();
@@ -12,7 +13,7 @@ export function useInitial<T extends (...args: any) => any>(callback: T) {
 }
 
 export function useLatest<T>(something: T) {
-  const ref = React.useRef(something);
+  const ref = useRef(something);
   ref.current = something;
   return ref;
 }
@@ -23,7 +24,7 @@ export function useEventListener<K extends keyof WindowEventMap>(
 ) {
   const latest = useLatest(fn);
 
-  React.useEffect(() => {
+  useEffect(() => {
     function wrapper(evt: WindowEventMap[K]) {
       latest.current(evt);
     }
@@ -36,12 +37,12 @@ export function useEventListener<K extends keyof WindowEventMap>(
 }
 
 export function useResizeObserver(
-  scrollBoxRef: React.RefObject<HTMLElement | null>,
+  scrollBoxRef: RefObject<HTMLElement | null>,
   callback: () => void,
 ) {
-  const throttleCallback = useDebounceCallback(callback, { maxWait: 32, leading: true });
+  const throttleCallback = useDebounceCallback(callback, { maxWait: 8, leading: true });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
       throttleCallback();
     });
@@ -75,11 +76,11 @@ export function useDebounceCallback<CallbackArguments extends any[]>(
   },
 ): (...args: CallbackArguments) => void {
   const callbackRef = useLatest(callback);
-  const prev = React.useRef(0);
-  const trailingTimeout = React.useRef<ReturnType<typeof setTimeout>>();
+  const prev = useRef(0);
+  const trailingTimeout = useRef<ReturnType<typeof setTimeout>>();
   const clearTrailing = () => trailingTimeout.current && clearTimeout(trailingTimeout.current);
 
-  React.useEffect(
+  useEffect(
     () => () => {
       prev.current = 0;
       clearTrailing();
@@ -87,7 +88,7 @@ export function useDebounceCallback<CallbackArguments extends any[]>(
     [wait, maxWait, leading],
   );
 
-  return React.useCallback(
+  return useCallback(
     (...args) => {
       const now = Date.now();
 
@@ -129,10 +130,10 @@ export function useDebounceCallback<CallbackArguments extends any[]>(
 }
 
 export function useSyncRef(
-  innerRef: React.Ref<HTMLElement> | undefined,
-  scrollBoxRef: React.RefObject<HTMLElement>,
+  innerRef: Ref<HTMLElement> | undefined,
+  scrollBoxRef: RefObject<HTMLElement>,
 ) {
-  React.useEffect(() => {
+  useEffect(() => {
     updateRef(innerRef, scrollBoxRef.current);
     return () => {
       updateRef(innerRef, null);

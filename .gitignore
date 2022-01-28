@@ -16,6 +16,7 @@ yarn-error.log
 .idea
 package-lock.json
 *bak
+.husky
 
 
 # visual studio code

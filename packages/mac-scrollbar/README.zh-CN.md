@@ -63,7 +63,7 @@ function App() {
 
 | Name          | Type             | Description                                    |
 | :------------ | :--------------- | :--------------------------------------------- |
-| theme         | 'white' I 'dark' | 适应容器的滚动条主题，默认 'white'             |
+| skin         | 'white' I 'dark' | 适应容器的滚动条主题，默认 'white'             |
 | suppressMacOS | number           | 设置为 true 时，macOS 的浏览器将使用原生滚动条 |
 | minThumbSize  | number           | 最小的拇指条尺寸，默认 20                      |
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useDebounceCallback, useEventListener, useResizeObserver } from './hooks';
 import {
   computeRatio,
@@ -15,6 +15,8 @@ const initialSize: BoxSize = {
   clientHeight: 0,
   scrollHeight: 0,
   paddingTop: 0,
+  paddingRight: 0,
+  paddingBottom: 0,
   paddingLeft: 0,
 };
 
@@ -34,19 +36,19 @@ export interface UseScrollbarParams {
 
 export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarParams) {
   const isWindow = scrollBox === window;
-  const containerRef = React.useMemo(() => {
+  const containerRef = useMemo(() => {
     if (isWindow) {
       return { current: document.documentElement };
     }
     return scrollBox as React.MutableRefObject<HTMLElement | null>;
   }, [isWindow, scrollBox]);
 
-  const horizontalRef = React.useRef<HTMLDivElement>(null);
-  const verticalRef = React.useRef<HTMLDivElement>(null);
+  const horizontalRef = useRef<HTMLDivElement>(null);
+  const verticalRef = useRef<HTMLDivElement>(null);
 
-  const [boxSize, updateBoxSize] = React.useState<BoxSize>(initialSize);
-  const [action, updateAction] = React.useState<ActionPosition>(initialAction);
-  const [barVisible, updateBarVisible] = React.useState<boolean>(true);
+  const [boxSize, updateBoxSize] = useState<BoxSize>(initialSize);
+  const [action, updateAction] = useState<ActionPosition>(initialAction);
+  const [barVisible, updateBarVisible] = useState<boolean>(true);
 
   const delayHideScrollbar = useDebounceCallback(() => updateBarVisible(false), { wait: 1000 });
 
@@ -104,7 +106,7 @@ export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarPa
       minThumbSize={minThumbSize}
       horizontal
       isPress={action.isPressX}
-      grooveRef={horizontalRef}
+      trackRef={horizontalRef}
       boxSize={boxSize}
       updateAction={updateAction}
     />
@@ -116,7 +118,7 @@ export default function useScrollbar({ scrollBox, minThumbSize }: UseScrollbarPa
       isWindow={isWindow}
       minThumbSize={minThumbSize}
       isPress={action.isPressY}
-      grooveRef={verticalRef}
+      trackRef={verticalRef}
       boxSize={boxSize}
       updateAction={updateAction}
     />

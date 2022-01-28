@@ -1,5 +1,5 @@
 import React from 'react';
-import { classNames, computeRatio, trackSize, updateScrollPosition } from './utils';
+import { computeRatio, updateScrollPosition } from './utils';
 import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
 
@@ -11,13 +11,9 @@ export interface ThumbBarProps {
    * @default vertical
    */
   horizontal?: boolean;
-  /**
-   * @default white
-   */
-  theme?: 'dark';
   isPress: boolean | undefined;
 
-  grooveRef: React.RefObject<HTMLDivElement>;
+  trackRef: React.RefObject<HTMLDivElement>;
   boxSize: BoxSize;
 
   updateAction: React.Dispatch<React.SetStateAction<ActionPosition>>;
@@ -30,21 +26,28 @@ function ThumbBar({
   horizontal,
   isPress,
 
-  grooveRef,
+  trackRef,
   boxSize,
 
   updateAction,
 }: ThumbBarProps) {
-  const { clientWidth, clientHeight, paddingTop, paddingLeft, scrollWidth, scrollHeight } = boxSize;
+  const {
+    clientWidth,
+    clientHeight,
+    paddingTop,
+    paddingRight,
+    paddingBottom,
+    paddingLeft,
+    scrollWidth,
+    scrollHeight,
+  } = boxSize;
 
   const [sizeKey, offsetSize, scrollSize] = horizontal
     ? ['width', clientWidth, scrollWidth]
     : ['height', clientHeight, scrollHeight];
 
   function getContainerBox() {
-    const targetNode = grooveRef.current?.parentNode?.parentNode as
-      | HTMLDivElement
-      | HTMLBodyElement;
+    const targetNode = trackRef.current?.parentNode?.parentNode as HTMLDivElement | HTMLBodyElement;
     return targetNode === document.body ? document.documentElement : targetNode;
   }
 
@@ -83,18 +86,25 @@ function ThumbBar({
     ? ({ position: 'fixed' } as React.CSSProperties)
     : ({
         [sizeKey]: offsetSize,
-        top: (horizontal ? clientHeight - trackSize : 0) - paddingTop,
-        left: (horizontal ? 0 : clientWidth - trackSize) - paddingLeft,
+        ...(horizontal
+          ? {
+              bottom: -paddingBottom,
+              left: -paddingLeft,
+            }
+          : {
+              top: paddingTop,
+              right: -paddingRight,
+              transform: 'translateY(-100%)',
+            }),
       } as React.CSSProperties);
 
   return (
     <div
-      className={classNames('ms-track', horizontal ? 'ms-x' : 'ms-y', {
-        'ms-active': isPress,
-        'ms-track-show': visible,
-      })}
+      className={`ms-track ${horizontal ? 'ms-x' : 'ms-y'} ${
+        isPress ? 'ms-active' : visible ? 'ms-track-show' : ''
+      }`}
       onClick={handleThumbBarClick}
-      ref={grooveRef}
+      ref={trackRef}
       style={style}
     >
       <div

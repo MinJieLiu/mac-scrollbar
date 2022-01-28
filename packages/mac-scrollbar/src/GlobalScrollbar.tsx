@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { isEnableScrollbar } from './utils';
 import { useEventListener, useInitial } from './hooks';
@@ -12,18 +12,18 @@ export interface GlobalScrollbarProps extends GlobalScrollbarBase {
   suppressMacOS?: boolean;
 }
 
-function GlobalScrollbarInject({ theme = 'white', minThumbSize }: GlobalScrollbarBase) {
+function GlobalScrollbarInject({ skin = 'white', minThumbSize }: GlobalScrollbarBase) {
   const wrapper = useInitial(() => document.createElement('div'));
 
-  React.useEffect(() => {
-    wrapper.classList.add(`ms-theme-${theme}`);
+  useEffect(() => {
+    wrapper.classList.add(`ms-theme-${skin}`);
     document.documentElement.classList.add('ms-container');
     document.body.append(wrapper);
     return () => {
       document.documentElement.classList.remove('ms-container');
       document.body.removeChild(wrapper);
     };
-  }, [wrapper, theme]);
+  }, [wrapper, skin]);
 
   const { updateLayerThrottle, horizontalBar, verticalBar } = useScrollbar({
     scrollBox: window,
