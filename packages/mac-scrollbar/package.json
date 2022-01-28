@@ -4,6 +4,10 @@
   "description": "A macos style react scroll bar component",
   "author": "MinJieLiu <liumingyi_1@163.com>",
   "type": "module",
+  "exports": {
+    ".": "./dist/mac-scrollbar.module.js",
+    "./dist/style.css": "./dist/mac-scrollbar.css"
+  },
   "source": "src/index.ts",
   "module": "./dist/mac-scrollbar.module.js",
   "types": "./dist/index.d.ts",

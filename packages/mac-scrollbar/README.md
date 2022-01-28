@@ -67,7 +67,6 @@ function App() {
 | trackSize | number | Scrollbar track size. Default 16 |
 | trackEndGap | number | Gap at the cross end of the scroll bar. Default 16 |
 | thumbSize | number | Scrollbar thumb size. Default 6 |
-| thumbHoverSize | number | Scrollbar hover thumb size. Default 12 |
 | minThumbSize | number | Minimum thumb bar size. Default 20 |
 | suppressMacOS | number | When set to true, macOS browsers will use native scrollbar. |
 

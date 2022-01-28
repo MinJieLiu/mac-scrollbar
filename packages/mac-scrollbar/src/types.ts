@@ -42,11 +42,6 @@ export interface GlobalScrollbarBase {
    */
   thumbSize?: number;
   /**
-   * Scrollbar hover thumb size.
-   * @defaultValue 12
-   */
-  thumbHoverSize?: number;
-  /**
    * Minimum thumb bar size.
    * @defaultValue 20
    */

@@ -22,7 +22,6 @@ export default function ScrollBar({
   trackSize,
   trackEndGap,
   thumbSize,
-  thumbHoverSize,
   minThumbSize,
   Wrapper,
   ...props
@@ -36,7 +35,6 @@ export default function ScrollBar({
       trackSize,
       trackEndGap,
       thumbSize,
-      thumbHoverSize,
       minThumbSize,
     });
 

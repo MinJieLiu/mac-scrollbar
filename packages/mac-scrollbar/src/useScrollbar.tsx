@@ -36,19 +36,18 @@ export interface UseScrollbarParams extends GlobalScrollbarBase {
 
 export default function useScrollbar({
   scrollBox,
-  // trackSize,
+  trackSize,
   trackEndGap = 16,
-  // thumbSize,
-  // thumbHoverSize,
+  thumbSize,
   minThumbSize,
 }: UseScrollbarParams) {
-  const isWindow = scrollBox === window;
+  const isGlobal = scrollBox === window;
   const containerRef = useMemo(() => {
-    if (isWindow) {
+    if (isGlobal) {
       return { current: document.documentElement };
     }
     return scrollBox as React.MutableRefObject<HTMLElement | null>;
-  }, [isWindow, scrollBox]);
+  }, [isGlobal, scrollBox]);
 
   const horizontalRef = useRef<HTMLDivElement>(null);
   const verticalRef = useRef<HTMLDivElement>(null);
@@ -113,7 +112,9 @@ export default function useScrollbar({
   const horizontalBar = showHorizontalBar && (
     <ThumbBar
       visible={barVisible}
-      isWindow={isWindow}
+      isGlobal={isGlobal}
+      trackSize={trackSize}
+      thumbSize={thumbSize}
       minThumbSize={minThumbSize}
       gapSize={gapSize}
       horizontal
@@ -127,7 +128,9 @@ export default function useScrollbar({
   const verticalBar = showVerticalBar && (
     <ThumbBar
       visible={barVisible}
-      isWindow={isWindow}
+      isGlobal={isGlobal}
+      trackSize={trackSize}
+      thumbSize={thumbSize}
       minThumbSize={minThumbSize}
       gapSize={gapSize}
       isPress={action.isPressY}

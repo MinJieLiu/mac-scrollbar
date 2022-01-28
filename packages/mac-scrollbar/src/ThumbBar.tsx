@@ -5,7 +5,9 @@ import './ThumbBar.less';
 
 export interface ThumbBarProps {
   visible: boolean;
-  isWindow: boolean;
+  isGlobal: boolean;
+  trackSize?: number;
+  thumbSize?: number;
   minThumbSize?: number;
   gapSize: number;
   /**
@@ -22,7 +24,9 @@ export interface ThumbBarProps {
 
 function ThumbBar({
   visible,
-  isWindow,
+  isGlobal,
+  trackSize,
+  thumbSize,
   minThumbSize,
   gapSize,
   horizontal,
@@ -83,22 +87,26 @@ function ThumbBar({
       pressStartY: e.clientY,
     });
   }
+  const trackSizeKey = horizontal ? 'height' : 'width';
 
-  const style = isWindow
-    ? ({ position: 'fixed' } as React.CSSProperties)
-    : ({
-        [sizeKey]: offsetSize,
-        ...(horizontal
-          ? {
-              bottom: -paddingBottom,
-              left: -paddingLeft,
-            }
-          : {
-              top: paddingTop - gapSize,
-              right: -paddingRight,
-              transform: 'translateY(-100%)',
-            }),
-      } as React.CSSProperties);
+  const style: React.CSSProperties = {
+    [trackSizeKey]: trackSize,
+    ...(isGlobal
+      ? { position: 'fixed' }
+      : {
+          [sizeKey]: offsetSize,
+          ...(horizontal
+            ? {
+                bottom: -paddingBottom,
+                left: -paddingLeft,
+              }
+            : {
+                top: paddingTop - gapSize,
+                right: -paddingRight,
+                transform: 'translateY(-100%)',
+              }),
+        }),
+  };
 
   return (
     <div
@@ -115,6 +123,7 @@ function ThumbBar({
         onClick={(e) => e.stopPropagation()}
         style={{
           [sizeKey]: computeRatio(scrollSize, offsetSize + gapSize / 2, minThumbSize).thumbSize,
+          [trackSizeKey]: thumbSize,
         }}
       />
     </div>

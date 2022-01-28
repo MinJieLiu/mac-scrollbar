@@ -1,4 +1,4 @@
-@ms-scrollbar-track-size: 16px;
+@ms-track-size: var(--ms-track-size, 16px);
 
 .ms-track {
   position: absolute;
@@ -14,14 +14,14 @@
   &.ms-y {
     top: 0;
     right: 0;
-    width: @ms-scrollbar-track-size;
+    width: @ms-track-size;
     height: 100%;
     border-left: 1px solid transparent;
 
     &.ms-active,
     &:hover {
       .ms-thumb {
-        width: @ms-scrollbar-track-size - 4;
+        width: calc(@ms-track-size - 4px);
       }
     }
 
@@ -39,7 +39,7 @@
         position: absolute;
         top: 0;
         right: -2px;
-        width: @ms-scrollbar-track-size;
+        width: @ms-track-size;
         height: 100%;
         content: '';
       }
@@ -50,13 +50,13 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: @ms-scrollbar-track-size;
+    height: @ms-track-size;
     border-top: 1px solid transparent;
 
     &.ms-active,
     &:hover {
       .ms-thumb {
-        height: @ms-scrollbar-track-size - 4;
+        height: calc(@ms-track-size - 4px);
       }
     }
 
@@ -64,7 +64,7 @@
       bottom: 2px;
       left: 0;
       height: 6px;
-      transition:  height 0.3s ease-out;
+      transition: height 0.3s ease-out;
 
       &:hover {
         height: 12px;
@@ -75,7 +75,7 @@
         bottom: -2px;
         left: 0;
         width: 100%;
-        height: @ms-scrollbar-track-size;
+        height: @ms-track-size;
         content: '';
       }
     }
