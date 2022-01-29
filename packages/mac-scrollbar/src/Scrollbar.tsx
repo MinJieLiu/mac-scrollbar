@@ -20,6 +20,8 @@ export default function ScrollBar({
   suppressScrollY,
   skin = 'white',
   trackEndGap,
+  trackStyle,
+  thumbStyle,
   minThumbSize,
   Wrapper,
   ...props
@@ -31,6 +33,8 @@ export default function ScrollBar({
     useScrollbar({
       scrollBox: scrollBoxRef,
       trackEndGap,
+      trackStyle,
+      thumbStyle,
       minThumbSize,
     });
 
@@ -57,7 +61,7 @@ export default function ScrollBar({
 
   return (
     <Wrapper
-      className={['ms-container', className].join(' ')}
+      className={`ms-container${className && ` ${className}`}`}
       ref={scrollBoxRef}
       onScroll={handleScroll}
       onMouseEnter={handleMouseEnter}

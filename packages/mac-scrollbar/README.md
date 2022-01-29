@@ -65,6 +65,8 @@ function App() {
 | :-- | :-- | :-- |
 | skin | 'white' I 'dark' | Adapt to the background color of the container. Default 'white' |
 | trackEndGap | number | Gap at the cross end of the scroll bar. Default 16 |
+| trackStyle | (horizontal?: boolean) => CSSProperties |  |
+| thumbStyle | (horizontal?: boolean) => CSSProperties |  |
 | minThumbSize | number | Minimum thumb bar size. Default 20 |
 | suppressMacOS | number | When set to true, macOS browsers will use native scrollbar. |
 

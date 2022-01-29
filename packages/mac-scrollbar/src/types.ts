@@ -32,6 +32,14 @@ export interface GlobalScrollbarBase {
    */
   trackEndGap?: number;
   /**
+   * Track style.
+   */
+  trackStyle?: (horizontal?: boolean) => React.CSSProperties;
+  /**
+   * Thumb bar style.
+   */
+  thumbStyle?: (horizontal?: boolean) => React.CSSProperties;
+  /**
    * Minimum thumb bar size.
    * @defaultValue 20
    */

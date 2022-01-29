@@ -37,6 +37,8 @@ export interface UseScrollbarParams extends GlobalScrollbarBase {
 export default function useScrollbar({
   scrollBox,
   trackEndGap = 16,
+  trackStyle,
+  thumbStyle,
   minThumbSize,
 }: UseScrollbarParams) {
   const isGlobal = scrollBox === window;
@@ -111,6 +113,8 @@ export default function useScrollbar({
     <ThumbBar
       visible={barVisible}
       isGlobal={isGlobal}
+      trackStyle={trackStyle}
+      thumbStyle={thumbStyle}
       minThumbSize={minThumbSize}
       gapSize={gapSize}
       horizontal
@@ -125,6 +129,8 @@ export default function useScrollbar({
     <ThumbBar
       visible={barVisible}
       isGlobal={isGlobal}
+      trackStyle={trackStyle}
+      thumbStyle={thumbStyle}
       minThumbSize={minThumbSize}
       gapSize={gapSize}
       isPress={action.isPressY}

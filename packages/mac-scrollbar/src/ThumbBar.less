@@ -1,4 +1,5 @@
 @ms-track-size: var(--ms-track-size, 16px);
+@ms-track-gutter: var(--ms-track-gutter, 2px);
 
 .ms-track {
   position: absolute;
@@ -21,24 +22,24 @@
     &.ms-active,
     &:hover {
       .ms-thumb {
-        width: calc(@ms-track-size - 4px);
+        width: calc(@ms-track-size - @ms-track-gutter * 2);
       }
     }
 
     .ms-thumb {
       top: 0;
-      right: 2px;
+      right: @ms-track-gutter;
       width: 6px;
       transition: width 0.3s ease-out;
 
       &:hover {
-        width: 12px;
+        width: calc(@ms-track-size - @ms-track-gutter * 2);
       }
 
       &:after {
         position: absolute;
         top: 0;
-        right: -2px;
+        right: calc(@ms-track-gutter * -1);
         width: @ms-track-size;
         height: 100%;
         content: '';
@@ -56,23 +57,23 @@
     &.ms-active,
     &:hover {
       .ms-thumb {
-        height: calc(@ms-track-size - 4px);
+        height: calc(@ms-track-size - @ms-track-gutter * 2);
       }
     }
 
     .ms-thumb {
-      bottom: 2px;
+      bottom: @ms-track-gutter;
       left: 0;
       height: 6px;
       transition: height 0.3s ease-out;
 
       &:hover {
-        height: 12px;
+        width: calc(@ms-track-size - @ms-track-gutter * 2);
       }
 
       &:after {
         position: absolute;
-        bottom: -2px;
+        bottom: calc(@ms-track-gutter * -1);
         left: 0;
         width: 100%;
         height: @ms-track-size;

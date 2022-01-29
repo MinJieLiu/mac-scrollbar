@@ -6,6 +6,8 @@ import './ThumbBar.less';
 export interface ThumbBarProps {
   visible: boolean;
   isGlobal: boolean;
+  trackStyle?: (horizontal?: boolean) => React.CSSProperties;
+  thumbStyle?: (horizontal?: boolean) => React.CSSProperties;
   minThumbSize?: number;
   gapSize: number;
   /**
@@ -23,6 +25,8 @@ export interface ThumbBarProps {
 function ThumbBar({
   visible,
   isGlobal,
+  trackStyle,
+  thumbStyle,
   minThumbSize,
   gapSize,
   horizontal,
@@ -84,26 +88,29 @@ function ThumbBar({
     });
   }
 
-  const style: React.CSSProperties = isGlobal
-    ? { position: 'fixed' }
-    : {
-        [sizeKey]: offsetSize - gapSize,
-        ...(horizontal
-          ? {
-              bottom: -paddingBottom,
-              left: -paddingLeft,
-            }
-          : {
-              top: paddingTop - gapSize,
-              right: -paddingRight,
-              transform: 'translateY(-100%)',
-            }),
-      };
+  const style: React.CSSProperties = {
+    ...(isGlobal
+      ? { position: 'fixed', [sizeKey]: gapSize > 0 ? `calc(100% - ${gapSize}px)` : undefined }
+      : {
+          [sizeKey]: offsetSize - gapSize,
+          ...(horizontal
+            ? {
+                bottom: -paddingBottom,
+                left: -paddingLeft,
+              }
+            : {
+                top: paddingTop - gapSize,
+                right: -paddingRight,
+                transform: 'translateY(-100%)',
+              }),
+        }),
+    ...(trackStyle && trackStyle(horizontal)),
+  };
 
   return (
     <div
-      className={`ms-track ${horizontal ? 'ms-x' : 'ms-y'} ${
-        isPress ? 'ms-active' : visible ? 'ms-track-show' : ''
+      className={`ms-track${horizontal ? ' ms-x' : ' ms-y'}${
+        isPress ? ' ms-active' : visible ? ' ms-track-show' : ''
       }`}
       onClick={handleThumbBarClick}
       ref={trackRef}
@@ -115,6 +122,7 @@ function ThumbBar({
         onClick={(e) => e.stopPropagation()}
         style={{
           [sizeKey]: computeRatio(scrollSize, offsetSize, gapSize, minThumbSize).thumbSize,
+          ...(thumbStyle && thumbStyle(horizontal)),
         }}
       />
     </div>

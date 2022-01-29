@@ -119,7 +119,12 @@ function App() {
         <DarkThemeScrollbar skin="dark" minThumbSize={400}>
           {baseIntro}
         </DarkThemeScrollbar>
-        <MacScrollbar as="main" style={{ flex: 1, height: 500 }}>
+        <MacScrollbar
+          as="main"
+          style={{ flex: 1, height: 500 }}
+          trackStyle={(horizontal) => ({ [horizontal ? 'height' : 'width']: 0 })}
+          thumbStyle={(horizontal) => ({ [horizontal ? 'height' : 'width']: 4 })}
+        >
           {baseIntro}
         </MacScrollbar>
       </Main>

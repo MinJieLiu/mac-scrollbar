@@ -61,12 +61,14 @@ function App() {
 
 #### 公共
 
-| Name           | Type             | Description                                    |
-| :------------- | :--------------- | :--------------------------------------------- |
-| skin           | 'white' I 'dark' | 适应容器的滚动条主题，默认 'white'             |
-| trackEndGap    | number           | 滚动条交叉末端的间隙，默认 16                  |
-| minThumbSize   | number           | 最小的拇指条尺寸，默认 20                      |
-| suppressMacOS  | number           | 设置为 true 时，macOS 的浏览器将使用原生滚动条 |
+| Name | Type | Description |
+| :-- | :-- | :-- |
+| skin | 'white' I 'dark' | 适应容器的滚动条主题，默认 'white' |
+| trackEndGap | number | 滚动条交叉末端的间隙，默认 16 |
+| trackStyle | (horizontal?: boolean) => CSSProperties |  |
+| thumbStyle | (horizontal?: boolean) => CSSProperties |  |
+| minThumbSize | number | 最小的拇指条尺寸，默认 20 |
+| suppressMacOS | number | 设置为 true 时，macOS 的浏览器将使用原生滚动条 |
 
 #### MacScrollbar
 
