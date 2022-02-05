@@ -25,12 +25,18 @@ function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarBase
     };
   }, [wrapper, skin]);
 
-  const { updateLayerThrottle, horizontalBar, verticalBar } = useScrollbar({
+  const { updateLayerNow, updateLayerThrottle, horizontalBar, verticalBar } = useScrollbar({
     scrollBox: window,
     ...props,
   });
 
-  useEventListener('scroll', updateLayerThrottle);
+  useEventListener('scroll', () => {
+    if (!(horizontalBar || verticalBar)) {
+      updateLayerNow();
+      return;
+    }
+    updateLayerThrottle();
+  });
 
   return createPortal(
     <>

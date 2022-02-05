@@ -1,6 +1,6 @@
 {
   "name": "mac-scrollbar",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "A macos style react scroll bar component",
   "author": "MinJieLiu <liumingyi_1@163.com>",
   "type": "module",
