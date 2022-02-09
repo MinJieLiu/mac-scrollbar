@@ -18,6 +18,7 @@ export default function ScrollBar({
   children,
   suppressScrollX,
   suppressScrollY,
+  suppressHideScrollbar,
   skin = 'white',
   trackEndGap,
   trackStyle,
@@ -36,6 +37,7 @@ export default function ScrollBar({
       trackStyle,
       thumbStyle,
       minThumbSize,
+      suppressHideScrollbar
     });
 
   function handleScroll(evt: React.UIEvent<HTMLElement, UIEvent>) {
