@@ -40,6 +40,7 @@ export default function useScrollbar({
   trackStyle,
   thumbStyle,
   minThumbSize,
+  suppressHideScrollbar = false,
 }: UseScrollbarParams) {
   const isGlobal = scrollBox === window;
   const containerRef = useMemo(() => {
@@ -66,7 +67,7 @@ export default function useScrollbar({
   const updateLayerThrottle = useDebounceCallback(
     () => {
       updateBarVisible(true);
-      delayHideScrollbar();
+      !suppressHideScrollbar && delayHideScrollbar();
       updateScrollElementStyle(
         containerRef.current,
         horizontalRef.current,
