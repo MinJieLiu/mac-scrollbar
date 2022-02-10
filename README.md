@@ -68,7 +68,8 @@ function App() {
 | trackStyle | (horizontal?: boolean) => CSSProperties |  |
 | thumbStyle | (horizontal?: boolean) => CSSProperties |  |
 | minThumbSize | number | Minimum thumb bar size. Default 20 |
-| suppressMacOS | number | When set to true, macOS browsers will use native scrollbar. |
+| suppressHideScrollbar | boolean | When set to true, the scrollbar will not be automatically hidden. |
+| suppressMacOS | boolean | When set to true, macOS browsers will use native scrollbar. |
 
 #### MacScrollbar
 

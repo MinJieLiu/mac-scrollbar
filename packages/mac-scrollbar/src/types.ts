@@ -44,6 +44,10 @@ export interface GlobalScrollbarBase {
    * @defaultValue 20
    */
   minThumbSize?: number;
+  /**
+   * When set to true, the scrollbar will not be automatically hidden.
+   */
+  suppressHideScrollbar?: boolean;
 }
 
 export interface ScrollbarBase extends GlobalScrollbarBase, React.HtmlHTMLAttributes<HTMLElement> {

@@ -68,7 +68,8 @@ function App() {
 | trackStyle | (horizontal?: boolean) => CSSProperties |  |
 | thumbStyle | (horizontal?: boolean) => CSSProperties |  |
 | minThumbSize | number | 最小的拇指条尺寸，默认 20 |
-| suppressMacOS | number | 设置为 true 时，macOS 的浏览器将使用原生滚动条 |
+| suppressHideScrollbar | boolean | 设置为 true 时，滚动条都不会自动隐藏 |
+| suppressMacOS | boolean | 设置为 true 时，macOS 的浏览器将使用原生滚动条 |
 
 #### MacScrollbar
 
