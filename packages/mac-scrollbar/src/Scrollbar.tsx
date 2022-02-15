@@ -30,14 +30,14 @@ export default function ScrollBar({
   const scrollBoxRef = useRef<HTMLElement>(null);
   useSyncRef(innerRef, scrollBoxRef);
 
-  const { updateLayerThrottle, updateLayerNow, horizontalBar, verticalBar, updateBarVisible } =
+  const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle, updateBarVisible] =
     useScrollbar({
       scrollBox: scrollBoxRef,
       trackEndGap,
       trackStyle,
       thumbStyle,
       minThumbSize,
-      suppressHideScrollbar
+      suppressHideScrollbar,
     });
 
   function handleScroll(evt: React.UIEvent<HTMLElement, UIEvent>) {

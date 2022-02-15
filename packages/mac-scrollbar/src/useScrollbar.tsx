@@ -11,14 +11,14 @@ import type { ActionPosition, BoxSize } from './types';
 import ThumbBar from './ThumbBar';
 
 const initialSize: BoxSize = {
-  clientWidth: 0,
-  scrollWidth: 0,
-  clientHeight: 0,
-  scrollHeight: 0,
-  paddingTop: 0,
-  paddingRight: 0,
-  paddingBottom: 0,
-  paddingLeft: 0,
+  CW: 0,
+  SW: 0,
+  CH: 0,
+  SH: 0,
+  PT: 0,
+  PR: 0,
+  PB: 0,
+  PL: 0,
 };
 
 const initialAction: ActionPosition = {
@@ -59,9 +59,9 @@ export default function useScrollbar({
 
   const delayHideScrollbar = useDebounceCallback(() => updateBarVisible(false), { wait: 1000 });
 
-  const { clientWidth, scrollWidth, clientHeight, scrollHeight } = boxSize;
-  const showHorizontalBar = scrollWidth - clientWidth > 0;
-  const showVerticalBar = scrollHeight - clientHeight > 0;
+  const { CW, SW, CH, SH } = boxSize;
+  const showHorizontalBar = SW - CW > 0;
+  const showVerticalBar = SH - CH > 0;
   const gapSize = showHorizontalBar && showVerticalBar ? trackEndGap : 0;
 
   const updateLayerThrottle = useDebounceCallback(
@@ -83,7 +83,7 @@ export default function useScrollbar({
 
   useEventListener('mousemove', (evt) => {
     if (action.isPressX) {
-      const horizontalRatio = computeRatio(scrollWidth, clientWidth, gapSize, minThumbSize).ratio;
+      const horizontalRatio = computeRatio(SW, CW, gapSize, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
         Math.floor(
@@ -93,7 +93,7 @@ export default function useScrollbar({
       );
     }
     if (action.isPressY) {
-      const verticalRatio = computeRatio(scrollHeight, clientHeight, gapSize, minThumbSize).ratio;
+      const verticalRatio = computeRatio(SH, CH, gapSize, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
         Math.floor((evt.clientY - action.pressStartY) * (1 / verticalRatio) + action.lastScrollTop),
@@ -143,12 +143,11 @@ export default function useScrollbar({
     />
   );
 
-  return {
-    updateLayerThrottle,
-    updateLayerNow,
+  return [
     horizontalBar,
     verticalBar,
-
+    updateLayerNow,
+    updateLayerThrottle,
     updateBarVisible,
-  };
+  ] as const;
 }

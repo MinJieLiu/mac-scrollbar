@@ -1,14 +1,22 @@
 import type React from 'react';
 
 export interface BoxSize {
-  clientWidth: number;
-  scrollWidth: number;
-  clientHeight: number;
-  scrollHeight: number;
-  paddingTop: number;
-  paddingRight: number;
-  paddingBottom: number;
-  paddingLeft: number;
+  // clientWidth
+  CW: number;
+  // scrollWidth
+  SW: number;
+  // clientHeight
+  CH: number;
+  // scrollHeight
+  SH: number;
+  // paddingTop
+  PT: number;
+  // paddingRight
+  PR: number;
+  // paddingBottom
+  PB: number;
+  // paddingLeft
+  PL: number;
 }
 
 export interface ActionPosition {

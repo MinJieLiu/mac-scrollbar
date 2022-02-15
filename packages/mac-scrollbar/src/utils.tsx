@@ -29,14 +29,14 @@ export function handleExtractSize(target: HTMLElement) {
   const { clientWidth, scrollWidth, clientHeight, scrollHeight } = target;
   const { paddingTop, paddingRight, paddingBottom, paddingLeft } = window.getComputedStyle(target);
   return {
-    clientWidth,
-    scrollWidth,
-    clientHeight,
-    scrollHeight,
-    paddingTop: parseInt(paddingTop, 10),
-    paddingRight: parseInt(paddingRight, 10),
-    paddingBottom: parseInt(paddingBottom, 10),
-    paddingLeft: parseInt(paddingLeft, 10),
+    CW: clientWidth,
+    SW: scrollWidth,
+    CH: clientHeight,
+    SH: scrollHeight,
+    PT: parseInt(paddingTop, 10),
+    PR: parseInt(paddingRight, 10),
+    PB: parseInt(paddingBottom, 10),
+    PL: parseInt(paddingLeft, 10),
   };
 }
 

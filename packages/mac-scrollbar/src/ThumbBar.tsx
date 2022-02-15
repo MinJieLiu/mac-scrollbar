@@ -37,20 +37,9 @@ function ThumbBar({
 
   updateAction,
 }: ThumbBarProps) {
-  const {
-    clientWidth,
-    clientHeight,
-    paddingTop,
-    paddingRight,
-    paddingBottom,
-    paddingLeft,
-    scrollWidth,
-    scrollHeight,
-  } = boxSize;
+  const { CW, CH, PT, PR, PB, PL, SW, SH } = boxSize;
 
-  const [sizeKey, offsetSize, scrollSize] = horizontal
-    ? ['width', clientWidth, scrollWidth]
-    : ['height', clientHeight, scrollHeight];
+  const [sizeKey, offsetSize, scrollSize] = horizontal ? ['width', CW, SW] : ['height', CH, SH];
 
   function getContainerBox() {
     const targetNode = trackRef.current?.parentNode?.parentNode as HTMLDivElement | HTMLBodyElement;
@@ -95,12 +84,12 @@ function ThumbBar({
           [sizeKey]: offsetSize - gapSize,
           ...(horizontal
             ? {
-                bottom: -paddingBottom,
-                left: -paddingLeft,
+                bottom: -PB,
+                left: -PL,
               }
             : {
-                top: paddingTop - gapSize,
-                right: -paddingRight,
+                top: PT - gapSize,
+                right: -PR,
                 transform: 'translateY(-100%)',
               }),
         }),

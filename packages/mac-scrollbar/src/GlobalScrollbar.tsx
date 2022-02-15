@@ -17,15 +17,18 @@ function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarBase
 
   useEffect(() => {
     wrapper.classList.add(`ms-theme-${skin}`);
-    document.documentElement.classList.add('ms-container');
+    const wrapperCls = 'ms-container';
+    const docClassList = document.documentElement.classList;
+
+    docClassList.add(wrapperCls);
     document.body.append(wrapper);
     return () => {
-      document.documentElement.classList.remove('ms-container');
+      docClassList.remove(wrapperCls);
       document.body.removeChild(wrapper);
     };
   }, [wrapper, skin]);
 
-  const { updateLayerNow, updateLayerThrottle, horizontalBar, verticalBar } = useScrollbar({
+  const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle] = useScrollbar({
     scrollBox: window,
     ...props,
   });

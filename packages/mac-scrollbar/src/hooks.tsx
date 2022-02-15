@@ -19,8 +19,9 @@ export function useLatest<T>(something: T) {
 }
 
 export function useEventListener<K extends keyof WindowEventMap>(
-  type: K,
+  type: K | undefined,
   fn: (evt: WindowEventMap[K]) => void,
+  options?: AddEventListenerOptions,
 ) {
   const latest = useLatest(fn);
 
@@ -28,12 +29,15 @@ export function useEventListener<K extends keyof WindowEventMap>(
     function wrapper(evt: WindowEventMap[K]) {
       latest.current(evt);
     }
-    window.addEventListener(type, wrapper);
-
+    if (type) {
+      window.addEventListener(type, wrapper, options);
+    }
     return () => {
-      window.removeEventListener(type, wrapper);
+      if (type) {
+        window.removeEventListener(type, wrapper);
+      }
     };
-  }, [type, latest]);
+  }, [type]);
 }
 
 export function useResizeObserver(
