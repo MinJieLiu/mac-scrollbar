@@ -20,12 +20,14 @@ export interface BoxSize {
 }
 
 export interface ActionPosition {
-  isPressX?: boolean;
-  isPressY?: boolean;
-  lastScrollTop: number;
-  lastScrollLeft: number;
-  pressStartX: number;
-  pressStartY: number;
+  pinX?: boolean;
+  pinY?: boolean;
+  // lastScrollTop
+  lastST: number;
+  // lastScrollLeft
+  lastSL: number;
+  startX: number;
+  startY: number;
 }
 
 export interface GlobalScrollbarBase {

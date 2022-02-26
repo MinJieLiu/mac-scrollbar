@@ -4,12 +4,12 @@ import { useRef, useEffect, useCallback } from 'react';
 import { updateRef } from './utils';
 
 export function useInitial<T extends (...args: any) => any>(callback: T) {
-  const { current } = useRef({ initial: false, storeValue: undefined as ReturnType<T> });
-  if (!current.initial) {
-    current.initial = true;
-    current.storeValue = callback();
+  const { current } = useRef({ sign: false, fn: undefined as ReturnType<T> });
+  if (!current.sign) {
+    current.sign = true;
+    current.fn = callback();
   }
-  return current.storeValue;
+  return current.fn;
 }
 
 export function useLatest<T>(something: T) {

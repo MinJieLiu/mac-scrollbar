@@ -22,12 +22,12 @@ const initialSize: BoxSize = {
 };
 
 const initialAction: ActionPosition = {
-  isPressX: false,
-  isPressY: false,
-  lastScrollTop: 0,
-  lastScrollLeft: 0,
-  pressStartX: 0,
-  pressStartY: 0,
+  pinX: false,
+  pinY: false,
+  lastST: 0,
+  lastSL: 0,
+  startX: 0,
+  startY: 0,
 };
 
 export interface UseScrollbarParams extends GlobalScrollbarBase {
@@ -82,21 +82,19 @@ export default function useScrollbar({
   );
 
   useEventListener('mousemove', (evt) => {
-    if (action.isPressX) {
+    if (action.pinX) {
       const horizontalRatio = computeRatio(SW, CW, gapSize, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
-        Math.floor(
-          (evt.clientX - action.pressStartX) * (1 / horizontalRatio) + action.lastScrollLeft,
-        ),
+        Math.floor((evt.clientX - action.startX) * (1 / horizontalRatio) + action.lastSL),
         true,
       );
     }
-    if (action.isPressY) {
+    if (action.pinY) {
       const verticalRatio = computeRatio(SH, CH, gapSize, minThumbSize).ratio;
       updateScrollPosition(
         containerRef.current,
-        Math.floor((evt.clientY - action.pressStartY) * (1 / verticalRatio) + action.lastScrollTop),
+        Math.floor((evt.clientY - action.startY) * (1 / verticalRatio) + action.lastST),
       );
     }
   });
@@ -121,7 +119,7 @@ export default function useScrollbar({
       minThumbSize={minThumbSize}
       gapSize={gapSize}
       horizontal
-      isPress={action.isPressX}
+      isPress={action.pinX}
       trackRef={horizontalRef}
       boxSize={boxSize}
       updateAction={updateAction}
@@ -136,7 +134,7 @@ export default function useScrollbar({
       thumbStyle={thumbStyle}
       minThumbSize={minThumbSize}
       gapSize={gapSize}
-      isPress={action.isPressY}
+      isPress={action.pinY}
       trackRef={verticalRef}
       boxSize={boxSize}
       updateAction={updateAction}

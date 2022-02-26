@@ -68,12 +68,12 @@ function ThumbBar({
     e.stopPropagation();
     const { scrollLeft, scrollTop } = getContainerBox();
     updateAction({
-      isPressX: horizontal,
-      isPressY: !horizontal,
-      lastScrollTop: scrollTop,
-      lastScrollLeft: scrollLeft,
-      pressStartX: e.clientX,
-      pressStartY: e.clientY,
+      pinX: horizontal,
+      pinY: !horizontal,
+      lastST: scrollTop,
+      lastSL: scrollLeft,
+      startX: e.clientX,
+      startY: e.clientY,
     });
   }
 
