@@ -79,7 +79,7 @@ function ThumbBar({
 
   const style: React.CSSProperties = {
     ...(isGlobal
-      ? { position: 'fixed', [sizeKey]: gapSize > 0 ? `calc(100% - ${gapSize}px)` : undefined }
+      ? { [sizeKey]: gapSize > 0 ? `calc(100% - ${gapSize}px)` : undefined }
       : {
           [sizeKey]: offsetSize - gapSize,
           ...(horizontal

@@ -16,7 +16,7 @@ function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarBase
   const wrapper = useInitial(() => document.createElement('div'));
 
   useEffect(() => {
-    wrapper.classList.add(`ms-theme-${skin}`);
+    wrapper.classList.add('ms-track-global', `ms-theme-${skin}`);
     const wrapperCls = 'ms-container';
     const docClassList = document.documentElement.classList;
 

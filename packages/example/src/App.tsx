@@ -124,6 +124,7 @@ function App() {
           style={{ flex: 1, height: 500 }}
           trackStyle={(horizontal) => ({ [horizontal ? 'height' : 'width']: 0 })}
           thumbStyle={(horizontal) => ({ [horizontal ? 'height' : 'width']: 4 })}
+          suppressHideScrollbar
         >
           {baseIntro}
         </MacScrollbar>

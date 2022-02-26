@@ -30,7 +30,7 @@ export default function ScrollBar({
   const scrollBoxRef = useRef<HTMLElement>(null);
   useSyncRef(innerRef, scrollBoxRef);
 
-  const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle, updateBarVisible] =
+  const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle, hideScrollbar] =
     useScrollbar({
       scrollBox: scrollBoxRef,
       trackEndGap,
@@ -58,7 +58,7 @@ export default function ScrollBar({
     if (onMouseLeave) {
       onMouseLeave(evt);
     }
-    updateBarVisible(false);
+    hideScrollbar();
   }
 
   return (

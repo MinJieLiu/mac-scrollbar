@@ -57,7 +57,8 @@ export default function useScrollbar({
   const [action, updateAction] = useState<ActionPosition>(initialAction);
   const [barVisible, updateBarVisible] = useState<boolean>(true);
 
-  const delayHideScrollbar = useDebounceCallback(() => updateBarVisible(false), { wait: 1000 });
+  const hideScrollbar = () => !suppressHideScrollbar && updateBarVisible(false);
+  const delayHideScrollbar = useDebounceCallback(hideScrollbar, { wait: 1000 });
 
   const { CW, SW, CH, SH } = boxSize;
   const showHorizontalBar = SW - CW > 0;
@@ -67,9 +68,7 @@ export default function useScrollbar({
   const updateLayerThrottle = useDebounceCallback(
     () => {
       updateBarVisible(true);
-      if (!suppressHideScrollbar) {
-        delayHideScrollbar();
-      }
+      delayHideScrollbar();
       updateScrollElementStyle(
         containerRef.current,
         horizontalRef.current,
@@ -141,11 +140,5 @@ export default function useScrollbar({
     />
   );
 
-  return [
-    horizontalBar,
-    verticalBar,
-    updateLayerNow,
-    updateLayerThrottle,
-    updateBarVisible,
-  ] as const;
+  return [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle, hideScrollbar] as const;
 }

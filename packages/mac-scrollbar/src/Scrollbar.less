@@ -1,3 +1,5 @@
+@ms-z-index: var(--ms-z-index, 20);
+
 .ms-container {
   scrollbar-width: none;
 
@@ -10,9 +12,14 @@
   position: sticky;
   top: 100%;
   left: 0;
-  z-index: 10;
+  z-index: @ms-z-index;
+}
 
-  &.ms-track-global {
+.ms-track-global {
+  position: relative;
+  z-index: @ms-z-index;
+
+  .ms-track {
     position: fixed;
   }
 }
