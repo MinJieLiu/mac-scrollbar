@@ -2,12 +2,7 @@
 import type React from 'react';
 
 export function isEnableScrollbar() {
-  if (typeof navigator === 'undefined') {
-    return false;
-  }
-  const { userAgent } = navigator;
-  // Windows/Linux
-  return userAgent.includes('Windows NT') || userAgent.includes('X11;');
+  return typeof navigator !== 'undefined';
 }
 
 export function updateRef(
@@ -25,6 +20,18 @@ export function updateRef(
   (innerRef as React.MutableRefObject<HTMLElement>).current = scrollBoxElement;
 }
 
+export function getGapSize(
+  trackGap: number | [startX: number, endX: number, startY: number, endY: number],
+  showBothBar: boolean,
+): [startX: number, gapX: number, startY: number, gapY: number] {
+  if (Array.isArray(trackGap)) {
+    const [startX, endX, startY, endY] = trackGap;
+    return [startX, startX + endX, startY, startY + endY];
+  }
+  const endGap = showBothBar ? trackGap : 0;
+  return [0, endGap, 0, endGap];
+}
+
 export function handleExtractSize(target: HTMLElement) {
   const { clientWidth, scrollWidth, clientHeight, scrollHeight } = target;
   const { paddingTop, paddingRight, paddingBottom, paddingLeft } = window.getComputedStyle(target);
@@ -40,8 +47,8 @@ export function handleExtractSize(target: HTMLElement) {
   };
 }
 
-export function isEnableStyle(disabled?: boolean) {
-  return disabled ? ('hidden' as const) : ('auto' as const);
+export function isEnableStyle(disabled?: boolean): 'hidden' | 'auto' {
+  return disabled ? 'hidden' : 'auto';
 }
 
 export function updateElementStyle(element: HTMLElement, obj: Record<string, number>) {
@@ -87,7 +94,8 @@ export function updateScrollElementStyle(
   containerElement: HTMLElement | null | undefined,
   horizontalElement: HTMLElement | null | undefined,
   verticalElement: HTMLElement | null | undefined,
-  emptySize: number,
+  gapX: number,
+  gapY: number,
   minThumbSize?: number,
 ) {
   if (!containerElement) {
@@ -97,42 +105,14 @@ export function updateScrollElementStyle(
     containerElement;
 
   if (horizontalElement) {
-    updateThumbStyle(
-      horizontalElement.firstChild as HTMLDivElement,
-      scrollWidth,
-      clientWidth,
-      scrollLeft,
-      'left',
-      emptySize,
-      minThumbSize,
-    );
+    updateElementStyle(horizontalElement.firstChild as HTMLDivElement, {
+      left: scrollLeft * computeRatio(scrollWidth, clientWidth, gapX, minThumbSize).ratio,
+    });
   }
 
   if (verticalElement) {
-    updateThumbStyle(
-      verticalElement.firstChild as HTMLDivElement,
-      scrollHeight,
-      clientHeight,
-      scrollTop,
-      'top',
-      emptySize,
-      minThumbSize,
-    );
+    updateElementStyle(verticalElement.firstChild as HTMLDivElement, {
+      top: scrollTop * computeRatio(scrollHeight, clientHeight, gapY, minThumbSize).ratio,
+    });
   }
-}
-
-export function updateThumbStyle(
-  thumbElement: HTMLDivElement,
-  scrollSize: number,
-  clientSize: number,
-  scrollPosition: number,
-  direction: 'left' | 'top',
-  emptySize: number,
-  minThumbSize?: number,
-) {
-  const { ratio } = computeRatio(scrollSize, clientSize, emptySize, minThumbSize);
-
-  updateElementStyle(thumbElement, {
-    [direction]: scrollPosition * ratio,
-  });
 }

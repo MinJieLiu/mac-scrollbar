@@ -124,10 +124,19 @@ function App() {
           style={{ flex: 1, height: 500 }}
           trackStyle={(horizontal) => ({ [horizontal ? 'height' : 'width']: 0 })}
           thumbStyle={(horizontal) => ({ [horizontal ? 'height' : 'width']: 4 })}
-          suppressHideScrollbar
+          suppressAutoHide
         >
           {baseIntro}
         </MacScrollbar>
+      </Main>
+
+      <Main>
+        <DarkThemeScrollbar skin="dark" trackGap={[10, 16, 10, 16]} style={{ borderRadius: 10 }}>
+          <NoWrap>{baseIntro}</NoWrap>
+        </DarkThemeScrollbar>
+        <DarkThemeScrollbar skin="dark" trackGap={[20, 20, 20, 20]} style={{ borderRadius: 20 }}>
+          <NoWrap>{baseIntro}</NoWrap>
+        </DarkThemeScrollbar>
       </Main>
 
       <Main>

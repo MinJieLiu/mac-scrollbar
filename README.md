@@ -19,7 +19,7 @@ The scroll bar of each browser has a unique style and the width is also inconsis
 
 **Note** This component is not compatible with IE11, it needs to be compatible with lower version browsers.
 
-![demo](./packages/mac-scrollbar/demo.gif)
+![demo](./demo.gif)
 
 ## Usage
 
@@ -63,13 +63,12 @@ function App() {
 
 | Name | Type | Description |
 | :-- | :-- | :-- |
-| skin | 'white' I 'dark' | Adapt to the background color of the container. Default 'white' |
-| trackEndGap | number | Gap at the cross end of the scroll bar. Default 16 |
+| skin | 'white' \| 'dark' | Adapt to the background color of the container. Default 'white' |
+| trackGap | number \| [startX: number, endX: number, startY: number, endY: number] | Gap at the cross end of the scroll bar. Default 16 |
 | trackStyle | (horizontal?: boolean) => CSSProperties |  |
 | thumbStyle | (horizontal?: boolean) => CSSProperties |  |
 | minThumbSize | number | Minimum thumb bar size. Default 20 |
-| suppressHideScrollbar | boolean | When set to true, the scrollbar will not be automatically hidden. |
-| suppressMacOS | boolean | When set to true, macOS browsers will use native scrollbar. |
+| suppressAutoHide | boolean | When set to true, the scrollbar will not be automatically hidden. |
 
 #### MacScrollbar
 

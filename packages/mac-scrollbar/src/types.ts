@@ -37,11 +37,6 @@ export interface GlobalScrollbarBase {
    */
   skin?: 'white' | 'dark';
   /**
-   * Gap at the cross end of the scroll bar.
-   * @defaultValue 16
-   */
-  trackEndGap?: number;
-  /**
    * Track style.
    */
   trackStyle?: (horizontal?: boolean) => React.CSSProperties;
@@ -57,7 +52,7 @@ export interface GlobalScrollbarBase {
   /**
    * When set to true, the scrollbar will not be automatically hidden.
    */
-  suppressHideScrollbar?: boolean;
+  suppressAutoHide?: boolean;
 }
 
 export interface ScrollbarBase extends GlobalScrollbarBase, React.HtmlHTMLAttributes<HTMLElement> {
@@ -69,6 +64,11 @@ export interface ScrollbarBase extends GlobalScrollbarBase, React.HtmlHTMLAttrib
    * When set to true, the scroll bar in Y-axis will not be available, regardless of the content height.
    */
   suppressScrollY?: boolean;
+  /**
+   * Gap at the cross end of the scroll bar.
+   * @defaultValue 16
+   */
+  trackGap?: number | [startX: number, endX: number, startY: number, endY: number];
   /**
    * children
    */

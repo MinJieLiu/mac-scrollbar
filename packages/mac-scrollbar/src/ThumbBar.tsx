@@ -1,4 +1,5 @@
-import React from 'react';
+import type { CSSProperties, RefObject, MouseEvent, Dispatch, SetStateAction } from 'react';
+import React, { memo } from 'react';
 import { computeRatio, updateScrollPosition } from './utils';
 import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
@@ -6,20 +7,21 @@ import './ThumbBar.less';
 export interface ThumbBarProps {
   visible: boolean;
   isGlobal: boolean;
-  trackStyle?: (horizontal?: boolean) => React.CSSProperties;
-  thumbStyle?: (horizontal?: boolean) => React.CSSProperties;
+  trackStyle?: (horizontal?: boolean) => CSSProperties;
+  thumbStyle?: (horizontal?: boolean) => CSSProperties;
   minThumbSize?: number;
-  gapSize: number;
+  start: number;
+  gap: number;
   /**
    * @default vertical
    */
   horizontal?: boolean;
-  isPress: boolean | undefined;
+  pin: boolean | undefined;
 
-  trackRef: React.RefObject<HTMLDivElement>;
+  trackRef: RefObject<HTMLDivElement>;
   boxSize: BoxSize;
 
-  updateAction: React.Dispatch<React.SetStateAction<ActionPosition>>;
+  update: Dispatch<SetStateAction<ActionPosition>>;
 }
 
 function ThumbBar({
@@ -28,14 +30,15 @@ function ThumbBar({
   trackStyle,
   thumbStyle,
   minThumbSize,
-  gapSize,
+  start,
+  gap,
   horizontal,
-  isPress,
+  pin,
 
   trackRef,
   boxSize,
 
-  updateAction,
+  update,
 }: ThumbBarProps) {
   const { CW, CH, PT, PR, PB, PL, SW, SH } = boxSize;
 
@@ -46,7 +49,7 @@ function ThumbBar({
     return targetNode === document.body ? document.documentElement : targetNode;
   }
 
-  function handleThumbBarClick(e: React.MouseEvent<HTMLDivElement>) {
+  function handleThumbBarClick(e: MouseEvent<HTMLDivElement>) {
     const containerBox = getContainerBox();
     const { scrollLeft, scrollTop } = containerBox;
     const scrollPosition = horizontal ? scrollLeft : scrollTop;
@@ -64,10 +67,10 @@ function ThumbBar({
     updateScrollPosition(containerBox, position, horizontal);
   }
 
-  function handleStart(e: React.MouseEvent<HTMLDivElement>) {
+  function handleStart(e: MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
     const { scrollLeft, scrollTop } = getContainerBox();
-    updateAction({
+    update({
       pinX: horizontal,
       pinY: !horizontal,
       lastST: scrollTop,
@@ -77,18 +80,18 @@ function ThumbBar({
     });
   }
 
-  const style: React.CSSProperties = {
+  const style: CSSProperties = {
     ...(isGlobal
-      ? { [sizeKey]: gapSize > 0 ? `calc(100% - ${gapSize}px)` : undefined }
+      ? { [sizeKey]: gap > 0 ? `calc(100% - ${gap}px)` : undefined }
       : {
-          [sizeKey]: offsetSize - gapSize,
+          [sizeKey]: offsetSize - gap,
           ...(horizontal
             ? {
                 bottom: -PB,
-                left: -PL,
+                left: -PL + start,
               }
             : {
-                top: PT - gapSize,
+                top: PT - gap + start,
                 right: -PR,
                 transform: 'translateY(-100%)',
               }),
@@ -99,7 +102,7 @@ function ThumbBar({
   return (
     <div
       className={`ms-track${horizontal ? ' ms-x' : ' ms-y'}${
-        isPress ? ' ms-active' : visible ? ' ms-track-show' : ''
+        pin ? ' ms-active' : visible ? ' ms-track-show' : ''
       }`}
       onClick={handleThumbBarClick}
       ref={trackRef}
@@ -110,7 +113,7 @@ function ThumbBar({
         onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
         style={{
-          [sizeKey]: computeRatio(scrollSize, offsetSize, gapSize, minThumbSize).thumbSize,
+          [sizeKey]: computeRatio(scrollSize, offsetSize, gap, minThumbSize).thumbSize,
           ...(thumbStyle && thumbStyle(horizontal)),
         }}
       />
@@ -118,4 +121,4 @@ function ThumbBar({
   );
 }
 
-export default React.memo(ThumbBar);
+export default memo(ThumbBar);

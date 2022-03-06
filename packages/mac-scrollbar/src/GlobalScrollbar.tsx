@@ -7,12 +7,13 @@ import useScrollbar from './useScrollbar';
 
 export interface GlobalScrollbarProps extends GlobalScrollbarBase {
   /**
-   * When set to true, macOS browsers will use native scrollbar.
+   * Gap at the cross end of the scroll bar.
+   * @defaultValue 16
    */
-  suppressMacOS?: boolean;
+  trackGap?: number;
 }
 
-function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarBase) {
+function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarProps) {
   const wrapper = useInitial(() => document.createElement('div'));
 
   useEffect(() => {
@@ -28,10 +29,10 @@ function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarBase
     };
   }, [wrapper, skin]);
 
-  const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle] = useScrollbar({
-    scrollBox: window,
-    ...props,
-  });
+  const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle] = useScrollbar(
+    window,
+    props,
+  );
 
   useEventListener('scroll', () => {
     if (!(horizontalBar || verticalBar)) {
@@ -50,8 +51,8 @@ function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarBase
   );
 }
 
-export function GlobalScrollbar({ suppressMacOS, ...props }: GlobalScrollbarProps) {
-  if (suppressMacOS && !isEnableScrollbar()) {
+export function GlobalScrollbar(props: GlobalScrollbarProps) {
+  if (!isEnableScrollbar()) {
     return null;
   }
   return <GlobalScrollbarInject {...props} />;

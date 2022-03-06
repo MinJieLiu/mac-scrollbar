@@ -19,8 +19,6 @@
 
 **注意** 此组件不兼容 IE11，需要兼容低版本浏览器勿用。
 
-![demo](./demo.gif)
-
 ## 安装
 
 ```shell
@@ -63,13 +61,12 @@ function App() {
 
 | Name | Type | Description |
 | :-- | :-- | :-- |
-| skin | 'white' I 'dark' | 适应容器的滚动条主题，默认 'white' |
-| trackEndGap | number | 滚动条交叉末端的间隙，默认 16 |
+| skin | 'white' \| 'dark' | 适应容器的滚动条主题，默认 'white' |
+| trackGap | number \| [startX: number, endX: number, startY: number, endY: number] | 滚动条交叉末端的间隙，默认 16 |
 | trackStyle | (horizontal?: boolean) => CSSProperties |  |
 | thumbStyle | (horizontal?: boolean) => CSSProperties |  |
 | minThumbSize | number | 最小的拇指条尺寸，默认 20 |
-| suppressHideScrollbar | boolean | 设置为 true 时，滚动条都不会自动隐藏 |
-| suppressMacOS | boolean | 设置为 true 时，macOS 的浏览器将使用原生滚动条 |
+| suppressAutoHide | boolean | 设置为 true 时，滚动条都不会自动隐藏 |
 
 #### MacScrollbar
 
