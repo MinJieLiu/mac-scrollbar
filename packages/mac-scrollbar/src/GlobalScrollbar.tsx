@@ -51,7 +51,7 @@ function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarBase
 }
 
 export function GlobalScrollbar({ suppressMacOS, ...props }: GlobalScrollbarProps) {
-  if (suppressMacOS || !isEnableScrollbar()) {
+  if (suppressMacOS && !isEnableScrollbar()) {
     return null;
   }
   return <GlobalScrollbarInject {...props} />;
