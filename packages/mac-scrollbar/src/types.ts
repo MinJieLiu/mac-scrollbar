@@ -33,9 +33,9 @@ export interface ActionPosition {
 export interface GlobalScrollbarBase {
   /**
    * Adapt to the background color of the container.
-   * @defaultValue 'white'
+   * @defaultValue 'light'
    */
-  skin?: 'white' | 'dark';
+  skin?: 'light' | 'dark';
   /**
    * Track style.
    */
