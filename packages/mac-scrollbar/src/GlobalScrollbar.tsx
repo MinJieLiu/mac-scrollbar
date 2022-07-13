@@ -13,11 +13,12 @@ export interface GlobalScrollbarProps extends GlobalScrollbarBase {
   trackGap?: number;
 }
 
-function GlobalScrollbarInject({ skin = 'white', ...props }: GlobalScrollbarProps) {
+function GlobalScrollbarInject({ skin = 'light', ...props }: GlobalScrollbarProps) {
   const wrapper = useInitial(() => document.createElement('div'));
 
   useEffect(() => {
     wrapper.classList.add('ms-track-global', `ms-theme-${skin}`);
+    wrapper.classList.remove(`ms-theme-${skin === 'light' ? 'dark' : 'light'}`);
     const wrapperCls = 'ms-container';
     const docClassList = document.documentElement.classList;
 

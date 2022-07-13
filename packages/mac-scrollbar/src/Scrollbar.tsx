@@ -19,7 +19,7 @@ export default function ScrollBar({
   suppressScrollX,
   suppressScrollY,
   suppressAutoHide,
-  skin = 'white',
+  skin = 'light',
   trackGap,
   trackStyle,
   thumbStyle,
