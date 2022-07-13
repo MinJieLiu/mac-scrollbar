@@ -61,7 +61,7 @@ function App() {
 
 | Name | Type | Description |
 | :-- | :-- | :-- |
-| skin | 'white' \| 'dark' | 适应容器的滚动条主题，默认 'white' |
+| skin | 'light' \| 'dark' | 适应容器的滚动条主题，默认 'light' |
 | trackGap | number \| [startX: number, endX: number, startY: number, endY: number] | 滚动条交叉末端的间隙，默认 16 |
 | trackStyle | (horizontal?: boolean) => CSSProperties |  |
 | thumbStyle | (horizontal?: boolean) => CSSProperties |  |

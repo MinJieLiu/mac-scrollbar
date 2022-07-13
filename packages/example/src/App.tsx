@@ -122,7 +122,11 @@ function App() {
         <MacScrollbar
           as="main"
           style={{ flex: 1, height: 500 }}
-          trackStyle={(horizontal) => ({ [horizontal ? 'height' : 'width']: 0 })}
+          trackStyle={(horizontal) => ({
+            [horizontal ? 'height' : 'width']: 0,
+            right: 2,
+            border: 0,
+          })}
           thumbStyle={(horizontal) => ({ [horizontal ? 'height' : 'width']: 4 })}
           suppressAutoHide
         >

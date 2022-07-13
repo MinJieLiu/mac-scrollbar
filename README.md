@@ -63,7 +63,7 @@ function App() {
 
 | Name | Type | Description |
 | :-- | :-- | :-- |
-| skin | 'white' \| 'dark' | Adapt to the background color of the container. Default 'white' |
+| skin | 'light' \| 'dark' | Adapt to the background color of the container. Default 'light' |
 | trackGap | number \| [startX: number, endX: number, startY: number, endY: number] | Gap at the cross end of the scroll bar. Default 16 |
 | trackStyle | (horizontal?: boolean) => CSSProperties |  |
 | thumbStyle | (horizontal?: boolean) => CSSProperties |  |
