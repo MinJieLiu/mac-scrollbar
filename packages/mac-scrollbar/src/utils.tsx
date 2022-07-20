@@ -1,23 +1,5 @@
-/* eslint-disable no-param-reassign */
-import type React from 'react';
-
 export function isEnableScrollbar() {
   return typeof navigator !== 'undefined';
-}
-
-export function updateRef(
-  innerRef: React.Ref<HTMLElement> | undefined,
-  scrollBoxElement: HTMLElement | null,
-) {
-  if (!innerRef) {
-    return;
-  }
-  if (typeof innerRef === 'function') {
-    innerRef(scrollBoxElement);
-    return;
-  }
-  // @ts-ignore
-  (innerRef as React.MutableRefObject<HTMLElement>).current = scrollBoxElement;
 }
 
 export function getGapSize(

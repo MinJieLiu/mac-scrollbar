@@ -1,7 +1,5 @@
-/* eslint-disable no-param-reassign */
-import type { RefObject, Ref } from 'react';
+import type { RefObject } from 'react';
 import { useRef, useEffect, useCallback } from 'react';
-import { updateRef } from './utils';
 
 export function useInitial<T extends (...args: any) => any>(callback: T) {
   const { current } = useRef({ sign: false, fn: undefined as ReturnType<T> });
@@ -131,16 +129,4 @@ export function useDebounceCallback<CallbackArguments extends any[]>(
     },
     [wait, maxWait, leading],
   );
-}
-
-export function useSyncRef(
-  innerRef: Ref<HTMLElement> | undefined,
-  scrollBoxRef: RefObject<HTMLElement>,
-) {
-  useEffect(() => {
-    updateRef(innerRef, scrollBoxRef.current);
-    return () => {
-      updateRef(innerRef, null);
-    };
-  }, [innerRef, scrollBoxRef]);
 }

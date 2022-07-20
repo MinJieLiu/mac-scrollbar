@@ -1,11 +1,10 @@
-import React, { useRef } from 'react';
-import { useSyncRef } from './hooks';
+import React, { useImperativeHandle, useRef } from 'react';
 import type { ScrollbarBase } from './types';
 import useScrollbar from './useScrollbar';
 import './Scrollbar.less';
 
 export interface ScrollbarProps extends ScrollbarBase {
-  innerRef?: React.Ref<HTMLElement>;
+  innerRef?: React.Ref<HTMLElement | null>;
   Wrapper: React.HTMLFactory<HTMLElement>;
 }
 
@@ -28,7 +27,7 @@ export default function ScrollBar({
   ...props
 }: ScrollbarProps) {
   const scrollBoxRef = useRef<HTMLElement>(null);
-  useSyncRef(innerRef, scrollBoxRef);
+  useImperativeHandle(innerRef, () => scrollBoxRef.current);
 
   const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle, hideScrollbar] =
     useScrollbar(scrollBoxRef, {
