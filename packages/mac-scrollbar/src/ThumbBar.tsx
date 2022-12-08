@@ -110,6 +110,11 @@ function ThumbBar({
     >
       <div
         className="ms-thumb"
+        draggable="true"
+        onDragStartCapture={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
         onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
         style={{
