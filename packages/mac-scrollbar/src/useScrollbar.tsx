@@ -78,23 +78,27 @@ export default function useScrollbar(
     { maxWait: 8, leading: true },
   );
 
-  useEventListener('mousemove', (evt) => {
-    if (action.pinX) {
-      const horizontalRatio = computeRatio(SW, CW, gapX, minThumbSize).ratio;
-      updateScrollPosition(
-        containerRef.current,
-        Math.floor((evt.clientX - action.startX) * (1 / horizontalRatio) + action.lastSL),
-        true,
-      );
-    }
-    if (action.pinY) {
-      const verticalRatio = computeRatio(SH, CH, gapY, minThumbSize).ratio;
-      updateScrollPosition(
-        containerRef.current,
-        Math.floor((evt.clientY - action.startY) * (1 / verticalRatio) + action.lastST),
-      );
-    }
-  });
+  useEventListener(
+    'mousemove',
+    (evt) => {
+      if (action.pinX) {
+        const horizontalRatio = computeRatio(SW, CW, gapX, minThumbSize).ratio;
+        updateScrollPosition(
+          containerRef.current,
+          Math.floor((evt.clientX - action.startX) * (1 / horizontalRatio) + action.lastSL),
+          true,
+        );
+      }
+      if (action.pinY) {
+        const verticalRatio = computeRatio(SH, CH, gapY, minThumbSize).ratio;
+        updateScrollPosition(
+          containerRef.current,
+          Math.floor((evt.clientY - action.startY) * (1 / verticalRatio) + action.lastST),
+        );
+      }
+    },
+    { capture: true },
+  );
 
   useEventListener('mouseup', () => updateAction(initialAction));
 
