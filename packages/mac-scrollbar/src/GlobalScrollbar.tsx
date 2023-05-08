@@ -10,7 +10,7 @@ export interface GlobalScrollbarProps extends GlobalScrollbarBase {
    * Gap at the cross end of the scroll bar.
    * @defaultValue 16
    */
-  trackGap?: number;
+  trackGap?: number | [startX: number, endX: number, startY: number, endY: number];
 }
 
 function GlobalScrollbarInject({ skin = 'light', ...props }: GlobalScrollbarProps) {
