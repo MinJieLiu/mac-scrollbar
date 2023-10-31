@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { useDebounceCallback, useEventListener, useResizeObserver } from './hooks';
+import { useDebounceCallback, useEventListener, useObserverListening } from './hooks';
 import {
   computeRatio,
   getGapSize,
@@ -102,7 +102,7 @@ export default function useScrollbar(
 
   useEventListener('mouseup', () => updateAction(initialAction));
 
-  useResizeObserver(containerRef, updateLayerNow);
+  useObserverListening(containerRef, updateLayerNow);
 
   function updateLayerNow() {
     if (containerRef.current) {

@@ -38,7 +38,7 @@ export function useEventListener<K extends keyof WindowEventMap>(
   }, [type]);
 }
 
-export function useResizeObserver(
+export function useObserverListening(
   scrollBoxRef: RefObject<HTMLElement | null>,
   callback: () => void,
 ) {
@@ -48,19 +48,30 @@ export function useResizeObserver(
     const resizeObserver = new ResizeObserver(() => {
       throttleCallback();
     });
+    const mutationObserver = new MutationObserver(() => {
+      handleObserve();
+    });
 
-    if (scrollBoxRef.current) {
-      if (scrollBoxRef.current === document.documentElement) {
-        resizeObserver.observe(document.body);
-      } else {
-        resizeObserver.observe(scrollBoxRef.current);
-        Array.from(scrollBoxRef.current.children).forEach((child) => {
-          resizeObserver.observe(child);
-        });
+    function handleObserve() {
+      if (scrollBoxRef.current) {
+        if (scrollBoxRef.current === document.documentElement) {
+          resizeObserver.observe(document.body);
+        } else {
+          resizeObserver.observe(scrollBoxRef.current);
+          Array.from(scrollBoxRef.current.children).forEach((child) => {
+            resizeObserver.observe(child);
+          });
+        }
       }
     }
+    if (scrollBoxRef.current) {
+      mutationObserver.observe(scrollBoxRef.current, { childList: true });
+    }
+    handleObserve();
+
     return () => {
       resizeObserver.disconnect();
+      mutationObserver.disconnect();
     };
   }, [scrollBoxRef]);
 }

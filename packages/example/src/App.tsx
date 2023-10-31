@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GlobalScrollbar, MacScrollbar } from 'mac-scrollbar/src';
 import styled from 'styled-components';
 
@@ -100,12 +100,18 @@ const baseIntro2 = (
 );
 
 function App() {
+  const [count, setCount] = useState(0);
+
   return (
     <>
       <GlobalScrollbar />
       <Main>
         <WrapperAutoScrollbar forwardedAs="section">{baseIntro}</WrapperAutoScrollbar>
         <WrapperAutoScrollbar>
+          <button onClick={() => setCount((c) => c + 1)}>添加节点</button>
+          {Array.from(Array(count).keys()).map((index) => (
+            <div key={index}>第{index + 1}个节点</div>
+          ))}
           <NoWrap>{baseIntro}</NoWrap>
         </WrapperAutoScrollbar>
       </Main>
