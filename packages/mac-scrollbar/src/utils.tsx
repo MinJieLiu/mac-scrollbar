@@ -9,14 +9,15 @@ export function getGapSize(
   showBarX: boolean,
   showBarY: boolean,
 ): [startX: number, gapX: number, startY: number, gapY: number] {
-  if (typeof trackGap === 'function') {
-    return trackGap(showBarX, showBarY);
+  let nextTrackGap = trackGap;
+  if (typeof nextTrackGap === 'function') {
+    nextTrackGap = nextTrackGap(showBarX, showBarY);
   }
-  if (Array.isArray(trackGap)) {
-    const [startX, endX, startY, endY] = trackGap;
+  if (Array.isArray(nextTrackGap)) {
+    const [startX, endX, startY, endY] = nextTrackGap;
     return [startX, startX + endX, startY, startY + endY];
   }
-  const endGap = showBarX && showBarY ? trackGap : 0;
+  const endGap = showBarX && showBarY ? nextTrackGap : 0;
   return [0, endGap, 0, endGap];
 }
 
