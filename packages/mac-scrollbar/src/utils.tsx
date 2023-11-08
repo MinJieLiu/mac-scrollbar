@@ -1,16 +1,22 @@
+import type { TrackGap } from './types';
+
 export function isEnableScrollbar() {
   return typeof navigator !== 'undefined';
 }
 
 export function getGapSize(
-  trackGap: number | [startX: number, endX: number, startY: number, endY: number],
-  showBothBar: boolean,
+  trackGap: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap),
+  showBarX: boolean,
+  showBarY: boolean,
 ): [startX: number, gapX: number, startY: number, gapY: number] {
+  if (typeof trackGap === 'function') {
+    return trackGap(showBarX, showBarY);
+  }
   if (Array.isArray(trackGap)) {
     const [startX, endX, startY, endY] = trackGap;
     return [startX, startX + endX, startY, startY + endY];
   }
-  const endGap = showBothBar ? trackGap : 0;
+  const endGap = showBarX && showBarY ? trackGap : 0;
   return [0, endGap, 0, endGap];
 }
 

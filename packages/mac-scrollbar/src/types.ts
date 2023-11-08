@@ -30,6 +30,8 @@ export interface ActionPosition {
   startY: number;
 }
 
+export type TrackGap = [startX: number, endX: number, startY: number, endY: number];
+
 export interface GlobalScrollbarBase {
   /**
    * Adapt to the background color of the container.
@@ -68,7 +70,7 @@ export interface ScrollbarBase extends GlobalScrollbarBase, React.HtmlHTMLAttrib
    * Gap at the cross end of the scroll bar.
    * @defaultValue 16
    */
-  trackGap?: number | [startX: number, endX: number, startY: number, endY: number];
+  trackGap?: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap);
   /**
    * children
    */

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import {TrackGap} from './types'
 import { isEnableScrollbar } from './utils';
 import { useEventListener, useInitial } from './hooks';
 import type { GlobalScrollbarBase } from './types';
@@ -10,7 +11,7 @@ export interface GlobalScrollbarProps extends GlobalScrollbarBase {
    * Gap at the cross end of the scroll bar.
    * @defaultValue 16
    */
-  trackGap?: number | [startX: number, endX: number, startY: number, endY: number];
+  trackGap?: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap);
 }
 
 function GlobalScrollbarInject({ skin = 'light', ...props }: GlobalScrollbarProps) {

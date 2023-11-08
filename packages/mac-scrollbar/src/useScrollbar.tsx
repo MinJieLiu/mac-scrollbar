@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useDebounceCallback, useEventListener, useObserverListening } from './hooks';
+import type { GlobalScrollbarBase, ActionPosition, BoxSize, TrackGap } from './types';
 import {
   computeRatio,
   getGapSize,
@@ -7,8 +8,6 @@ import {
   updateScrollElementStyle,
   updateScrollPosition,
 } from './utils';
-import type { GlobalScrollbarBase } from './types';
-import type { ActionPosition, BoxSize } from './types';
 import ThumbBar from './ThumbBar';
 
 const initialSize: BoxSize = {
@@ -32,7 +31,7 @@ const initialAction: ActionPosition = {
 };
 
 export interface UseScrollbarParams extends GlobalScrollbarBase {
-  trackGap?: number | [startX: number, endX: number, startY: number, endY: number];
+  trackGap?: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap);
 }
 
 export default function useScrollbar(
@@ -58,9 +57,9 @@ export default function useScrollbar(
   const delayHideScrollbar = useDebounceCallback(hideScrollbar, { wait: 1000 });
 
   const { CW, SW, CH, SH } = boxSize;
-  const showHorizontalBar = SW - CW > 0;
-  const showVerticalBar = SH - CH > 0;
-  const [startX, gapX, startY, gapY] = getGapSize(trackGap, showHorizontalBar && showVerticalBar);
+  const showBarX = SW - CW > 0;
+  const showBarY = SH - CH > 0;
+  const [startX, gapX, startY, gapY] = getGapSize(trackGap, showBarX, showBarY);
 
   const updateLayerThrottle = useDebounceCallback(
     () => {
@@ -111,7 +110,7 @@ export default function useScrollbar(
     }
   }
 
-  const horizontalBar = showHorizontalBar && (
+  const horizontalBar = showBarX && (
     <ThumbBar
       visible={barVisible}
       isGlobal={isGlobal}
@@ -128,7 +127,7 @@ export default function useScrollbar(
     />
   );
 
-  const verticalBar = showVerticalBar && (
+  const verticalBar = showBarY && (
     <ThumbBar
       visible={barVisible}
       isGlobal={isGlobal}
