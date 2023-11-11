@@ -40,13 +40,6 @@ export function isEnableStyle(disabled?: boolean): 'hidden' | 'auto' {
   return disabled ? 'hidden' : 'auto';
 }
 
-export function updateElementStyle(element: HTMLElement, obj: Record<string, number>) {
-  // eslint-disable-next-line guard-for-in, no-restricted-syntax
-  for (const key in obj) {
-    element.style[key] = `${obj[key]}px`;
-  }
-}
-
 export function computeRatio(
   scrollSize: number,
   clientSize: number,
@@ -94,14 +87,12 @@ export function updateScrollElementStyle(
     containerElement;
 
   if (horizontalElement) {
-    updateElementStyle(horizontalElement.firstChild as HTMLDivElement, {
-      left: scrollLeft * computeRatio(scrollWidth, clientWidth, gapX, minThumbSize).ratio,
-    });
+    const offsetX = scrollLeft * computeRatio(scrollWidth, clientWidth, gapX, minThumbSize).ratio;
+    (horizontalElement.firstChild as HTMLDivElement).style.transform = `translateX(${offsetX}px)`;
   }
 
   if (verticalElement) {
-    updateElementStyle(verticalElement.firstChild as HTMLDivElement, {
-      top: scrollTop * computeRatio(scrollHeight, clientHeight, gapY, minThumbSize).ratio,
-    });
+    const offsetY = scrollTop * computeRatio(scrollHeight, clientHeight, gapY, minThumbSize).ratio;
+    (verticalElement.firstChild as HTMLDivElement).style.transform = `translateY(${offsetY}px)`;
   }
 }
