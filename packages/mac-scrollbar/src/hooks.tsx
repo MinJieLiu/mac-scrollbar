@@ -1,15 +1,6 @@
 import type { RefObject } from 'react';
 import { useRef, useEffect, useCallback } from 'react';
 
-export function useInitial<T extends (...args: any) => any>(callback: T) {
-  const { current } = useRef({ sign: false, fn: undefined as ReturnType<T> });
-  if (!current.sign) {
-    current.sign = true;
-    current.fn = callback();
-  }
-  return current.fn;
-}
-
 export function useLatest<T>(something: T) {
   const ref = useRef(something);
   ref.current = something;

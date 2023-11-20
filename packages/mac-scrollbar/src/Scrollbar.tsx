@@ -29,7 +29,7 @@ export default function ScrollBar({
   const scrollBoxRef = useRef<HTMLElement>(null);
   useImperativeHandle(innerRef, () => scrollBoxRef.current);
 
-  const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle, hideScrollbar] =
+  const [horizontalBar, verticalBar, layout, updateLayerThrottle, hideScrollbarDelay] =
     useScrollbar(scrollBoxRef, {
       trackGap,
       trackStyle,
@@ -49,14 +49,14 @@ export default function ScrollBar({
     if (onMouseEnter) {
       onMouseEnter(evt);
     }
-    updateLayerNow();
+    layout();
   }
 
   function handleMouseLeave(evt: React.MouseEvent<HTMLElement>) {
     if (onMouseLeave) {
       onMouseLeave(evt);
     }
-    hideScrollbar();
+    hideScrollbarDelay();
   }
 
   return (

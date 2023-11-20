@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import {TrackGap} from './types'
+import type { TrackGap } from './types';
 import { isEnableScrollbar } from './utils';
-import { useEventListener, useInitial } from './hooks';
+import { useEventListener } from './hooks';
 import type { GlobalScrollbarBase } from './types';
 import useScrollbar from './useScrollbar';
 
@@ -15,41 +15,35 @@ export interface GlobalScrollbarProps extends GlobalScrollbarBase {
 }
 
 function GlobalScrollbarInject({ skin = 'light', ...props }: GlobalScrollbarProps) {
-  const wrapper = useInitial(() => document.createElement('div'));
+  const { documentElement, body } = document;
+
+  const scrollRef = useRef(documentElement);
 
   useEffect(() => {
-    wrapper.classList.add('ms-track-global', `ms-theme-${skin}`);
-    wrapper.classList.remove(`ms-theme-${skin === 'light' ? 'dark' : 'light'}`);
     const wrapperCls = 'ms-container';
-    const docClassList = document.documentElement.classList;
-
+    const docClassList = documentElement.classList;
     docClassList.add(wrapperCls);
-    document.body.append(wrapper);
     return () => {
       docClassList.remove(wrapperCls);
-      document.body.removeChild(wrapper);
     };
-  }, [wrapper, skin]);
+  }, [skin]);
 
-  const [horizontalBar, verticalBar, updateLayerNow, updateLayerThrottle] = useScrollbar(
-    window,
-    props,
-  );
+  const [horizontalBar, verticalBar, layout, updateLayerThrottle] = useScrollbar(scrollRef, props);
 
   useEventListener('scroll', () => {
     if (!(horizontalBar || verticalBar)) {
-      updateLayerNow();
+      layout();
       return;
     }
     updateLayerThrottle();
   });
 
   return createPortal(
-    <>
+    <div className={`ms-track-global ms-theme-${skin}`}>
       {horizontalBar}
       {verticalBar}
-    </>,
-    wrapper,
+    </div>,
+    body,
   );
 }
 

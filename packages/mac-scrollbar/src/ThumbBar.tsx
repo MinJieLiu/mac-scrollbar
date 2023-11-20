@@ -5,28 +5,26 @@ import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
 
 export interface ThumbBarProps {
+  scrollRef: React.MutableRefObject<HTMLElement | null>;
   visible: boolean;
-  isGlobal: boolean;
   trackStyle?: (horizontal?: boolean) => CSSProperties;
   thumbStyle?: (horizontal?: boolean) => CSSProperties;
   minThumbSize?: number;
   start: number;
   gap: number;
   /**
-   * @default vertical
+   * @defaultValue 'vertical'
    */
   horizontal?: boolean;
   pin: boolean | undefined;
-
   trackRef: RefObject<HTMLDivElement>;
   boxSize: BoxSize;
-
   update: Dispatch<SetStateAction<ActionPosition>>;
 }
 
 function ThumbBar({
+  scrollRef,
   visible,
-  isGlobal,
   trackStyle,
   thumbStyle,
   minThumbSize,
@@ -44,13 +42,8 @@ function ThumbBar({
 
   const [sizeKey, offsetSize, scrollSize] = horizontal ? ['width', CW, SW] : ['height', CH, SH];
 
-  function getContainerBox() {
-    const targetNode = trackRef.current?.parentNode?.parentNode as HTMLDivElement | HTMLBodyElement;
-    return targetNode === document.body ? document.documentElement : targetNode;
-  }
-
   function handleThumbBarClick(e: MouseEvent<HTMLDivElement>) {
-    const containerBox = getContainerBox();
+    const containerBox = scrollRef.current!;
     const { scrollLeft, scrollTop } = containerBox;
     const scrollPosition = horizontal ? scrollLeft : scrollTop;
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
@@ -69,7 +62,7 @@ function ThumbBar({
 
   function handleStart(e: MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
-    const { scrollLeft, scrollTop } = getContainerBox();
+    const { scrollLeft, scrollTop } = scrollRef.current!;
     update({
       pinX: horizontal,
       pinY: !horizontal,
@@ -81,7 +74,7 @@ function ThumbBar({
   }
 
   const style: CSSProperties = {
-    ...(isGlobal
+    ...(scrollRef.current === document.documentElement
       ? { [sizeKey]: gap > 0 ? `calc(100% - ${gap}px)` : undefined }
       : {
           [sizeKey]: offsetSize - gap,
