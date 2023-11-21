@@ -1,6 +1,6 @@
 import type { CSSProperties, RefObject, MouseEvent, Dispatch, SetStateAction } from 'react';
 import React, { memo } from 'react';
-import { computeRatio, updateScrollPosition } from './utils';
+import { computeRatio, scrollTo } from './utils';
 import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
 
@@ -57,7 +57,7 @@ function ThumbBar({
         ? Math.min(scrollSize, scrollPosition + offsetSize)
         : Math.max(0, scrollPosition - offsetSize);
 
-    updateScrollPosition(containerBox, position, horizontal);
+    scrollTo(containerBox, position, horizontal);
   }
 
   function handleStart(e: MouseEvent<HTMLDivElement>) {

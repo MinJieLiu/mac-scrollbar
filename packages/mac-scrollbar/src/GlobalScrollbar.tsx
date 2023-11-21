@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import type { TrackGap } from './types';
-import { isEnableScrollbar } from './utils';
+import type { TrackGap, GlobalScrollbarBase } from './types';
+import { isEnableScrollbar, scrollTo } from './utils';
 import { useEventListener } from './hooks';
-import type { GlobalScrollbarBase } from './types';
-import useScrollbar from './useScrollbar';
+import { useScrollbar } from './useScrollbar';
 
 export interface GlobalScrollbarProps extends GlobalScrollbarBase {
   /**
@@ -28,14 +27,18 @@ function GlobalScrollbarInject({ skin = 'light', ...props }: GlobalScrollbarProp
     };
   }, [skin]);
 
-  const [horizontalBar, verticalBar, layout, updateLayerThrottle] = useScrollbar(scrollRef, props);
+  const [horizontalBar, verticalBar, layout, updateLayerThrottle] = useScrollbar(
+    scrollRef,
+    (scrollOffset, horizontal) => scrollTo(documentElement, scrollOffset, horizontal),
+    props,
+  );
 
   useEventListener('scroll', () => {
     if (!(horizontalBar || verticalBar)) {
       layout();
       return;
     }
-    updateLayerThrottle();
+    updateLayerThrottle(documentElement);
   });
 
   return createPortal(

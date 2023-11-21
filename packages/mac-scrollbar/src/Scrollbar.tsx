@@ -1,6 +1,7 @@
 import React, { useImperativeHandle, useRef } from 'react';
 import type { ScrollbarBase } from './types';
-import useScrollbar from './useScrollbar';
+import { useScrollbar } from './useScrollbar';
+import { scrollTo } from './utils';
 import './Scrollbar.less';
 
 export interface ScrollbarProps extends ScrollbarBase {
@@ -15,14 +16,14 @@ export default function ScrollBar({
   onMouseLeave,
   innerRef,
   children,
-  suppressScrollX,
-  suppressScrollY,
-  suppressAutoHide,
   skin = 'light',
   trackGap,
   trackStyle,
   thumbStyle,
   minThumbSize,
+  suppressScrollX,
+  suppressScrollY,
+  suppressAutoHide,
   Wrapper,
   ...props
 }: ScrollbarProps) {
@@ -30,19 +31,23 @@ export default function ScrollBar({
   useImperativeHandle(innerRef, () => scrollBoxRef.current);
 
   const [horizontalBar, verticalBar, layout, updateLayerThrottle, hideScrollbarDelay] =
-    useScrollbar(scrollBoxRef, {
-      trackGap,
-      trackStyle,
-      thumbStyle,
-      minThumbSize,
-      suppressAutoHide,
-    });
+    useScrollbar(
+      scrollBoxRef,
+      (scrollOffset, horizontal) => scrollTo(scrollBoxRef.current, scrollOffset, horizontal),
+      {
+        trackGap,
+        trackStyle,
+        thumbStyle,
+        minThumbSize,
+        suppressAutoHide,
+      },
+    );
 
   function handleScroll(evt: React.UIEvent<HTMLElement, UIEvent>) {
     if (onScroll) {
       onScroll(evt);
     }
-    updateLayerThrottle();
+    updateLayerThrottle(evt.target as HTMLElement);
   }
 
   function handleMouseEnter(evt: React.MouseEvent<HTMLElement>) {

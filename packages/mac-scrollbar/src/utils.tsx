@@ -1,4 +1,4 @@
-import type { TrackGap } from './types';
+import type { BoxSize, ScrollPosition, TrackGap } from './types';
 
 export function isEnableScrollbar() {
   return typeof navigator !== 'undefined';
@@ -22,8 +22,8 @@ export function getGapSize(
 }
 
 export function handleExtractSize(target: HTMLElement) {
-  const { clientWidth, scrollWidth, clientHeight, scrollHeight } = target;
   const { paddingTop, paddingRight, paddingBottom, paddingLeft } = window.getComputedStyle(target);
+  const { clientWidth, scrollWidth, clientHeight, scrollHeight } = target;
   return {
     CW: clientWidth,
     SW: scrollWidth,
@@ -57,7 +57,7 @@ export function computeRatio(
   };
 }
 
-export function updateScrollPosition(
+export function scrollTo(
   element: HTMLElement | null | undefined,
   position: number,
   horizontal?: boolean,
@@ -73,26 +73,24 @@ export function updateScrollPosition(
 }
 
 export function updateScrollElementStyle(
-  containerElement: HTMLElement | null | undefined,
+  boxSize: BoxSize,
+  position: ScrollPosition,
   horizontalElement: HTMLElement | null | undefined,
   verticalElement: HTMLElement | null | undefined,
   gapX: number,
   gapY: number,
   minThumbSize?: number,
 ) {
-  if (!containerElement) {
-    return;
-  }
-  const { scrollTop, scrollLeft, scrollWidth, scrollHeight, clientWidth, clientHeight } =
-    containerElement;
+  const { SW, SH, CW, CH } = boxSize;
+  const { scrollTop, scrollLeft } = position;
 
   if (horizontalElement) {
-    const offsetX = scrollLeft * computeRatio(scrollWidth, clientWidth, gapX, minThumbSize).ratio;
+    const offsetX = scrollLeft * computeRatio(SW, CW, gapX, minThumbSize).ratio;
     (horizontalElement.firstChild as HTMLDivElement).style.transform = `translateX(${offsetX}px)`;
   }
 
   if (verticalElement) {
-    const offsetY = scrollTop * computeRatio(scrollHeight, clientHeight, gapY, minThumbSize).ratio;
+    const offsetY = scrollTop * computeRatio(SH, CH, gapY, minThumbSize).ratio;
     (verticalElement.firstChild as HTMLDivElement).style.transform = `translateY(${offsetY}px)`;
   }
 }

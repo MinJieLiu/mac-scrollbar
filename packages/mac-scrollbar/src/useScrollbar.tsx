@@ -1,13 +1,13 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useDebounceCallback, useEventListener, useObserverListening } from './hooks';
-import type { GlobalScrollbarBase, ActionPosition, BoxSize, TrackGap } from './types';
-import {
-  computeRatio,
-  getGapSize,
-  handleExtractSize,
-  updateScrollElementStyle,
-  updateScrollPosition,
-} from './utils';
+import type {
+  ScrollPosition,
+  GlobalScrollbarBase,
+  ActionPosition,
+  BoxSize,
+  TrackGap,
+} from './types';
+import { computeRatio, getGapSize, handleExtractSize, updateScrollElementStyle } from './utils';
 import ThumbBar from './ThumbBar';
 
 const initialSize: BoxSize = {
@@ -34,8 +34,9 @@ export interface UseScrollbarParams extends GlobalScrollbarBase {
   trackGap?: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap);
 }
 
-export default function useScrollbar(
+export function useScrollbar(
   scrollRef: React.MutableRefObject<HTMLElement | null>,
+  onScroll: (scrollOffset: number, horizontal?: boolean) => void,
   { trackGap = 16, trackStyle, thumbStyle, minThumbSize, suppressAutoHide }: UseScrollbarParams,
 ) {
   const horizontalRef = useRef<HTMLDivElement>(null);
@@ -56,11 +57,12 @@ export default function useScrollbar(
   const [startX, gapX, startY, gapY] = getGapSize(trackGap, showBarX, showBarY);
 
   const updateLayerThrottle = useDebounceCallback(
-    () => {
+    (position: ScrollPosition) => {
       updateBarVisible(true);
       hideScrollbarDelay();
       updateScrollElementStyle(
-        scrollRef.current,
+        boxSize,
+        position,
         horizontalRef.current,
         verticalRef.current,
         gapX,
@@ -76,18 +78,14 @@ export default function useScrollbar(
     (evt) => {
       if (action.pinX) {
         const horizontalRatio = computeRatio(SW, CW, gapX, minThumbSize).ratio;
-        updateScrollPosition(
-          scrollRef.current,
+        onScroll(
           Math.floor((evt.clientX - action.startX) * (1 / horizontalRatio) + action.lastSL),
           true,
         );
       }
       if (action.pinY) {
         const verticalRatio = computeRatio(SH, CH, gapY, minThumbSize).ratio;
-        updateScrollPosition(
-          scrollRef.current,
-          Math.floor((evt.clientY - action.startY) * (1 / verticalRatio) + action.lastST),
-        );
+        onScroll(Math.floor((evt.clientY - action.startY) * (1 / verticalRatio) + action.lastST));
       }
     },
     { capture: true },
@@ -98,7 +96,7 @@ export default function useScrollbar(
   const layout = useCallback(() => {
     if (scrollRef.current) {
       updateBoxSize(handleExtractSize(scrollRef.current));
-      updateLayerThrottle();
+      updateLayerThrottle(scrollRef.current);
     }
   }, []);
 

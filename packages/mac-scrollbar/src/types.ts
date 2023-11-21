@@ -19,6 +19,11 @@ export interface BoxSize {
   PL: number;
 }
 
+export interface ScrollPosition {
+  scrollTop: number;
+  scrollLeft: number;
+}
+
 export interface ActionPosition {
   pinX?: boolean;
   pinY?: boolean;

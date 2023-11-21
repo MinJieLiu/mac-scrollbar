@@ -25,10 +25,9 @@
   "repository": "https://github.com/MinJieLiu/mac-scrollbar.git",
   "license": "MIT",
   "devDependencies": {
-    "@umijs/fabric": "^2.6.4",
+    "@micro-web/standard": "^1.2.1",
     "husky": "^7.0.4",
     "lint-staged": "^11.1.2",
-    "prettier": "^2.3.2",
     "typescript": "^4.5.5"
   }
 }
