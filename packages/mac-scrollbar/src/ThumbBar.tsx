@@ -1,6 +1,6 @@
 import type { CSSProperties, RefObject, MouseEvent, Dispatch, SetStateAction } from 'react';
 import React, { memo } from 'react';
-import { computeRatio, scrollTo } from './utils';
+import { computeRatio } from './utils';
 import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
 
@@ -12,14 +12,12 @@ export interface ThumbBarProps {
   minThumbSize?: number;
   start: number;
   gap: number;
-  /**
-   * @defaultValue 'vertical'
-   */
   horizontal?: boolean;
   pin: boolean | undefined;
   trackRef: RefObject<HTMLDivElement>;
   boxSize: BoxSize;
   update: Dispatch<SetStateAction<ActionPosition>>;
+  onScroll: (scrollOffset: number, horizontal?: boolean) => void;
 }
 
 function ThumbBar({
@@ -32,11 +30,10 @@ function ThumbBar({
   gap,
   horizontal,
   pin,
-
   trackRef,
   boxSize,
-
   update,
+  onScroll,
 }: ThumbBarProps) {
   const { CW, CH, PT, PR, PB, PL, SW, SH } = boxSize;
 
@@ -57,7 +54,7 @@ function ThumbBar({
         ? Math.min(scrollSize, scrollPosition + offsetSize)
         : Math.max(0, scrollPosition - offsetSize);
 
-    scrollTo(containerBox, position, horizontal);
+    onScroll(position, horizontal);
   }
 
   function handleStart(e: MouseEvent<HTMLDivElement>) {

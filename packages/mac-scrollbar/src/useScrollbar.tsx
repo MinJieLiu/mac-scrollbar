@@ -119,6 +119,7 @@ export function useScrollbar(
       trackRef={horizontalRef}
       boxSize={boxSize}
       update={updateAction}
+      onScroll={onScroll}
     />
   );
 
@@ -135,6 +136,7 @@ export function useScrollbar(
       trackRef={verticalRef}
       boxSize={boxSize}
       update={updateAction}
+      onScroll={onScroll}
     />
   );
 
