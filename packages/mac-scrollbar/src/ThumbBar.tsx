@@ -74,7 +74,7 @@ function ThumbBar({
   }
 
   const style: CSSProperties = {
-    ...(scrollRef.current === document.documentElement
+    ...(typeof document !== undefined && scrollRef.current === document.documentElement
       ? { [sizeKey]: gap > 0 ? `calc(100% - ${gap}px)` : undefined }
       : {
           [sizeKey]: offsetSize - gap,
