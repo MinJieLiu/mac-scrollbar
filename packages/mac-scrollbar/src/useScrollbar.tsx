@@ -36,7 +36,7 @@ export function useScrollbar(
     suppressAutoHide,
     suppressScrollX,
     suppressScrollY,
-  }: ScrollbarProps,
+  }: ScrollbarProps = {},
 ) {
   const horizontalRef = useRef<HTMLDivElement>(null);
   const verticalRef = useRef<HTMLDivElement>(null);
