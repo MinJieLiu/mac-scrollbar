@@ -105,45 +105,41 @@ export function useScrollbar(
 
   useObserverListening(scrollRef, layout);
 
-  const horizontalBar = showBarX && (
-    <ThumbBar
-      scrollRef={scrollRef}
-      visible={barVisible}
-      trackStyle={trackStyle}
-      thumbStyle={thumbStyle}
-      minThumbSize={minThumbSize}
-      start={startX}
-      gap={gapX}
-      horizontal
-      pin={action.pinX}
-      trackRef={horizontalRef}
-      boxSize={boxSize}
-      update={updateAction}
-      onScroll={onScroll}
-    />
-  );
-
-  const verticalBar = showBarY && (
-    <ThumbBar
-      scrollRef={scrollRef}
-      visible={barVisible}
-      trackStyle={trackStyle}
-      thumbStyle={thumbStyle}
-      minThumbSize={minThumbSize}
-      start={startY}
-      gap={gapY}
-      pin={action.pinY}
-      trackRef={verticalRef}
-      boxSize={boxSize}
-      update={updateAction}
-      onScroll={onScroll}
-    />
-  );
-
   const scrollbarNode = (
     <div className={`ms-track-box ms-theme-${skin}`}>
-      {!suppressScrollX && horizontalBar}
-      {!suppressScrollY && verticalBar}
+      {!suppressScrollX && showBarX && (
+        <ThumbBar
+          scrollRef={scrollRef}
+          visible={barVisible}
+          trackStyle={trackStyle}
+          thumbStyle={thumbStyle}
+          minThumbSize={minThumbSize}
+          start={startX}
+          gap={gapX}
+          horizontal
+          pin={action.pinX}
+          trackRef={horizontalRef}
+          boxSize={boxSize}
+          update={updateAction}
+          onScroll={onScroll}
+        />
+      )}
+      {!suppressScrollY && showBarY && (
+        <ThumbBar
+          scrollRef={scrollRef}
+          visible={barVisible}
+          trackStyle={trackStyle}
+          thumbStyle={thumbStyle}
+          minThumbSize={minThumbSize}
+          start={startY}
+          gap={gapY}
+          pin={action.pinY}
+          trackRef={verticalRef}
+          boxSize={boxSize}
+          update={updateAction}
+          onScroll={onScroll}
+        />
+      )}
     </div>
   );
 

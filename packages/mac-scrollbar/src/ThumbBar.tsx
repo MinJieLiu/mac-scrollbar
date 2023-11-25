@@ -1,5 +1,5 @@
 import type { CSSProperties, RefObject, MouseEvent, Dispatch, SetStateAction } from 'react';
-import React, { memo } from 'react';
+import React from 'react';
 import { computeRatio } from './utils';
 import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
@@ -20,7 +20,7 @@ export interface ThumbBarProps {
   onScroll: (scrollOffset: number, horizontal?: boolean) => void;
 }
 
-function ThumbBar({
+export default function ThumbBar({
   scrollRef,
   visible,
   trackStyle,
@@ -76,15 +76,8 @@ function ThumbBar({
       : {
           [sizeKey]: offsetSize - gap,
           ...(horizontal
-            ? {
-                bottom: -PB,
-                left: -PL + start,
-              }
-            : {
-                top: PT - gap + start,
-                right: -PR,
-                transform: 'translateY(-100%)',
-              }),
+            ? { bottom: -PB, left: -PL + start }
+            : { top: PT - gap + start, right: -PR, transform: 'translateY(-100%)' }),
         }),
     ...(trackStyle && trackStyle(horizontal)),
   };
@@ -100,10 +93,10 @@ function ThumbBar({
     >
       <div
         className="ms-thumb"
-        draggable="true"
+        draggable
         onDragStartCapture={(e) => {
-          e.stopPropagation();
           e.preventDefault();
+          e.stopPropagation();
         }}
         onMouseDown={handleStart}
         onClick={(e) => e.stopPropagation()}
@@ -115,5 +108,3 @@ function ThumbBar({
     </div>
   );
 }
-
-export default memo(ThumbBar);
