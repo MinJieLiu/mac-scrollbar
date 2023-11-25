@@ -1,12 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useDebounceCallback, useEventListener, useObserverListening } from './hooks';
-import type {
-  ScrollPosition,
-  GlobalScrollbarBase,
-  ActionPosition,
-  BoxSize,
-  TrackGap,
-} from './types';
+import type { ScrollPosition, ScrollbarProps, ActionPosition, BoxSize } from './types';
 import { computeRatio, getGapSize, handleExtractSize, updateScrollElementStyle } from './utils';
 import ThumbBar from './ThumbBar';
 
@@ -30,14 +24,19 @@ const initialAction: ActionPosition = {
   startY: 0,
 };
 
-export interface UseScrollbarParams extends GlobalScrollbarBase {
-  trackGap?: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap);
-}
-
 export function useScrollbar(
   scrollRef: React.MutableRefObject<HTMLElement | null>,
   onScroll: (scrollOffset: number, horizontal?: boolean) => void,
-  { trackGap = 16, trackStyle, thumbStyle, minThumbSize, suppressAutoHide }: UseScrollbarParams,
+  {
+    skin = 'light',
+    trackGap = 16,
+    trackStyle,
+    thumbStyle,
+    minThumbSize,
+    suppressAutoHide,
+    suppressScrollX,
+    suppressScrollY,
+  }: ScrollbarProps,
 ) {
   const horizontalRef = useRef<HTMLDivElement>(null);
   const verticalRef = useRef<HTMLDivElement>(null);
@@ -56,7 +55,7 @@ export function useScrollbar(
   const showBarY = SH - CH > 0;
   const [startX, gapX, startY, gapY] = getGapSize(trackGap, showBarX, showBarY);
 
-  const updateLayerThrottle = useDebounceCallback(
+  const moveTo = useDebounceCallback(
     (position: ScrollPosition) => {
       updateBarVisible(true);
       hideScrollbarDelay();
@@ -88,6 +87,7 @@ export function useScrollbar(
         onScroll(Math.floor((evt.clientY - action.startY) * (1 / verticalRatio) + action.lastST));
       }
     },
+    undefined,
     { capture: true },
   );
 
@@ -96,9 +96,12 @@ export function useScrollbar(
   const layout = useCallback(() => {
     if (scrollRef.current) {
       updateBoxSize(handleExtractSize(scrollRef.current));
-      updateLayerThrottle(scrollRef.current);
+      moveTo(scrollRef.current);
     }
   }, []);
+
+  useEventListener('mouseenter', layout, () => scrollRef.current);
+  useEventListener('mouseleave', hideScrollbarDelay, () => scrollRef.current);
 
   useObserverListening(scrollRef, layout);
 
@@ -135,5 +138,12 @@ export function useScrollbar(
     />
   );
 
-  return [horizontalBar, verticalBar, layout, updateLayerThrottle, hideScrollbarDelay] as const;
+  const scrollbarNode = (
+    <div className={`ms-track-box ms-theme-${skin}`}>
+      {!suppressScrollX && horizontalBar}
+      {!suppressScrollY && verticalBar}
+    </div>
+  );
+
+  return [scrollbarNode, moveTo, layout] as const;
 }

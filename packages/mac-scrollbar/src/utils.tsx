@@ -1,8 +1,5 @@
+/* eslint-disable no-param-reassign */
 import type { BoxSize, ScrollPosition, TrackGap } from './types';
-
-export function isEnableScrollbar() {
-  return typeof navigator !== 'undefined';
-}
 
 export function getGapSize(
   trackGap: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap),

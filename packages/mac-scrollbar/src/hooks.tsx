@@ -7,26 +7,24 @@ export function useLatest<T>(something: T) {
   return ref;
 }
 
-export function useEventListener<K extends keyof WindowEventMap>(
-  type: K | undefined,
-  fn: (evt: WindowEventMap[K]) => void,
+export function useEventListener<K extends keyof HTMLElementEventMap>(
+  type: K,
+  fn: (evt: HTMLElementEventMap[K]) => void,
+  getContainer?: () => HTMLElement | null,
   options?: AddEventListenerOptions,
 ) {
   const latest = useLatest(fn);
 
   useEffect(() => {
-    function wrapper(evt: WindowEventMap[K]) {
+    function wrapper(evt: HTMLElementEventMap[K]) {
       latest.current(evt);
     }
-    if (type) {
-      window.addEventListener(type, wrapper, options);
-    }
+    const container = getContainer ? getContainer() : (window as unknown as HTMLElement);
+    if (container) container.addEventListener(type, wrapper, options);
     return () => {
-      if (type) {
-        window.removeEventListener(type, wrapper);
-      }
+      if (container) container.removeEventListener(type, wrapper);
     };
-  }, [type]);
+  }, []);
 }
 
 export function useObserverListening(

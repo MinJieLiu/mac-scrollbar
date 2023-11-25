@@ -1,6 +1,7 @@
 @ms-z-index: var(--ms-z-index, 20);
 
-.ms-container {
+.ms-container,
+.ms-global {
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -8,19 +9,23 @@
   }
 }
 
-.ms-track-box {
-  position: sticky;
-  top: 100%;
-  left: 0;
-  z-index: @ms-z-index;
+.ms-container {
+  > .ms-track-box {
+    position: sticky;
+    top: 100%;
+    left: 0;
+    z-index: @ms-z-index;
+  }
 }
 
-.ms-track-global {
-  position: relative;
-  z-index: @ms-z-index;
+.ms-global {
+  > .ms-track-box {
+    position: relative;
+    z-index: @ms-z-index;
 
-  .ms-track {
-    position: fixed;
+    .ms-track {
+      position: fixed;
+    }
   }
 }
 

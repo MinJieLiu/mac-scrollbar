@@ -37,12 +37,17 @@ export interface ActionPosition {
 
 export type TrackGap = [startX: number, endX: number, startY: number, endY: number];
 
-export interface GlobalScrollbarBase {
+export interface ScrollbarBase {
   /**
    * Adapt to the background color of the container.
    * @defaultValue 'light'
    */
   skin?: 'light' | 'dark';
+  /**
+   * Gap at the cross end of the scroll bar.
+   * @defaultValue 16
+   */
+  trackGap?: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap);
   /**
    * Track style.
    */
@@ -62,7 +67,7 @@ export interface GlobalScrollbarBase {
   suppressAutoHide?: boolean;
 }
 
-export interface ScrollbarBase extends GlobalScrollbarBase, React.HtmlHTMLAttributes<HTMLElement> {
+export interface ScrollbarProps extends ScrollbarBase {
   /**
    * When set to true, the scrollbar in X-axis will not be available, regardless of the content width.
    */
@@ -71,13 +76,4 @@ export interface ScrollbarBase extends GlobalScrollbarBase, React.HtmlHTMLAttrib
    * When set to true, the scroll bar in Y-axis will not be available, regardless of the content height.
    */
   suppressScrollY?: boolean;
-  /**
-   * Gap at the cross end of the scroll bar.
-   * @defaultValue 16
-   */
-  trackGap?: number | TrackGap | ((showBarX: boolean, showBarY: boolean) => TrackGap);
-  /**
-   * children
-   */
-  children: React.ReactNode;
 }
