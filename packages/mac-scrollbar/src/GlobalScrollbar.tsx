@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { ScrollbarProps } from './types';
 import { scrollTo } from './utils';
@@ -6,33 +6,33 @@ import { useEventListener } from './hooks';
 import { useScrollbar } from './useScrollbar';
 
 function GlobalScrollbarInject(props: ScrollbarProps) {
-  const { documentElement, body } = document;
-
-  const scrollRef = useRef(documentElement);
-
-  useEffect(() => {
-    const wrapperCls = 'ms-global';
-    const docClassList = body.classList;
-    docClassList.add(wrapperCls);
-    return () => {
-      docClassList.remove(wrapperCls);
-    };
-  }, []);
+  const scrollRef = useRef(document.documentElement);
 
   const [scrollbarNode, moveTo] = useScrollbar(
     scrollRef,
-    (scrollOffset, horizontal) => scrollTo(documentElement, scrollOffset, horizontal),
+    (scrollOffset, horizontal) => scrollTo(scrollRef.current, scrollOffset, horizontal),
     props,
   );
+  useEventListener('scroll', () => moveTo(scrollRef.current));
 
-  useEventListener('scroll', () => moveTo(documentElement));
-
-  return createPortal(scrollbarNode, body);
+  return createPortal(scrollbarNode, document.body);
 }
 
 export function GlobalScrollbar(props: ScrollbarProps) {
-  if (typeof navigator === 'undefined') {
-    return null;
-  }
-  return <GlobalScrollbarInject {...props} />;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    const wrapperCls = 'ms-global';
+    const { classList } = document.body;
+    classList.add(wrapperCls);
+    return () => {
+      setMounted(false);
+
+      classList.remove(wrapperCls);
+    };
+  }, []);
+
+  return mounted && <GlobalScrollbarInject {...props} />;
 }
