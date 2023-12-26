@@ -34,5 +34,5 @@ export function GlobalScrollbar(props: ScrollbarProps) {
     };
   }, []);
 
-  return mounted && <GlobalScrollbarInject {...props} />;
+  return <>{mounted && <GlobalScrollbarInject {...props} />}</>;
 }

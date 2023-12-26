@@ -61,19 +61,19 @@ function App() {
 
 #### Common
 
-| Name | Type | Description |
-| :-- | :-- | :-- |
-| skin | 'light' \| 'dark' | Adapt to the background color of the container. Default 'light' |
-| trackGap | number \| TrackGap \| ((showBarX: boolean, showBarY: boolean) => TrackGap) | Gap at the cross end of the scroll bar. Default 16 |
-| trackStyle | (horizontal?: boolean) => CSSProperties |  |
-| thumbStyle | (horizontal?: boolean) => CSSProperties |  |
-| minThumbSize | number | Minimum thumb bar size. Default 20 |
-| suppressAutoHide | boolean | When set to true, the scrollbar will not be automatically hidden. |
+| Name             | Type                                                                       | Description                                                       |
+| :--------------- | :------------------------------------------------------------------------- | :---------------------------------------------------------------- |
+| skin             | 'light' \| 'dark'                                                          | Adapt to the background color of the container. Default 'light'   |
+| trackGap         | number \| TrackGap \| ((showBarX: boolean, showBarY: boolean) => TrackGap) | Gap at the cross end of the scroll bar. Default 16                |
+| trackStyle       | (horizontal?: boolean) => CSSProperties                                    |                                                                   |
+| thumbStyle       | (horizontal?: boolean) => CSSProperties                                    |                                                                   |
+| minThumbSize     | number                                                                     | Minimum thumb bar size. Default 20                                |
+| suppressAutoHide | boolean                                                                    | When set to true, the scrollbar will not be automatically hidden. |
 
 #### MacScrollbar
 
-| Name | Type | Description |
-| :-- | :-- | :-- |
-| suppressScrollX | number | When set to true, the scrollbar in X-axis will not be available, regardless of the content width. |
+| Name            | Type   | Description                                                                                         |
+| :-------------- | :----- | :-------------------------------------------------------------------------------------------------- |
+| suppressScrollX | number | When set to true, the scrollbar in X-axis will not be available, regardless of the content width.   |
 | suppressScrollY | number | When set to true, the scroll bar in Y-axis will not be available, regardless of the content height. |
-| as | string | Custom element type. Default 'div' |
+| as              | string | Custom element type. Default 'div'                                                                  |

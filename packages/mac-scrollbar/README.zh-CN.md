@@ -59,14 +59,14 @@ function App() {
 
 #### 公共
 
-| Name | Type | Description |
-| :-- | :-- | :-- |
-| skin | 'light' \| 'dark' | 适应容器的滚动条主题，默认 'light' |
-| trackGap | number \| TrackGap \| ((showBarX: boolean, showBarY: boolean) => TrackGap) | 滚动条交叉末端的间隙，默认 16 |
-| trackStyle | (horizontal?: boolean) => CSSProperties |  |
-| thumbStyle | (horizontal?: boolean) => CSSProperties |  |
-| minThumbSize | number | 最小的拇指条尺寸，默认 20 |
-| suppressAutoHide | boolean | 设置为 true 时，滚动条都不会自动隐藏 |
+| Name             | Type                                                                       | Description                          |
+| :--------------- | :------------------------------------------------------------------------- | :----------------------------------- |
+| skin             | 'light' \| 'dark'                                                          | 适应容器的滚动条主题，默认 'light'   |
+| trackGap         | number \| TrackGap \| ((showBarX: boolean, showBarY: boolean) => TrackGap) | 滚动条交叉末端的间隙，默认 16        |
+| trackStyle       | (horizontal?: boolean) => CSSProperties                                    |                                      |
+| thumbStyle       | (horizontal?: boolean) => CSSProperties                                    |                                      |
+| minThumbSize     | number                                                                     | 最小的拇指条尺寸，默认 20            |
+| suppressAutoHide | boolean                                                                    | 设置为 true 时，滚动条都不会自动隐藏 |
 
 #### MacScrollbar
 

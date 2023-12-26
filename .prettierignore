@@ -26,3 +26,4 @@ CNAME
 *.local
 stats_rollup.html
 .env
+.husky
