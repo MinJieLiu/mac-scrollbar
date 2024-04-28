@@ -43,11 +43,16 @@ export function useScrollbar(
 
   const [boxSize, updateBoxSize] = useState<BoxSize>(initialSize);
   const [action, updateAction] = useState<ActionPosition>(initialAction);
-  const [barVisible, updateBarVisible] = useState<boolean>(true);
+  const [barVisible, updateBarVisible] = useState<boolean>(false);
 
   const hideScrollbarDelay = useDebounceCallback(
     () => !suppressAutoHide && updateBarVisible(false),
     { wait: 1000 },
+  );
+
+  const hideScrollbar = useDebounceCallback(
+    () => !suppressAutoHide && updateBarVisible(false),
+    { wait: 0 },
   );
 
   const { CW, SW, CH, SH } = boxSize;
@@ -96,12 +101,11 @@ export function useScrollbar(
   const layout = useCallback(() => {
     if (scrollRef.current) {
       updateBoxSize(handleExtractSize(scrollRef.current));
-      moveTo(scrollRef.current);
     }
   }, []);
 
   useEventListener('mouseenter', layout, () => scrollRef.current);
-  useEventListener('mouseleave', hideScrollbarDelay, () => scrollRef.current);
+  useEventListener('mouseleave', hideScrollbar, () => scrollRef.current);
 
   useObserverListening(scrollRef, layout);
 
