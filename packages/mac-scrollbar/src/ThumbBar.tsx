@@ -1,5 +1,5 @@
 import type { CSSProperties, RefObject, MouseEvent, Dispatch, SetStateAction } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 import { computeRatio } from './utils';
 import type { ActionPosition, BoxSize } from './types';
 import './ThumbBar.less';
@@ -35,6 +35,7 @@ export default function ThumbBar({
   update,
   onScroll,
 }: ThumbBarProps) {
+  const [hover, setHover] = useState(false);
   const { CW, CH, PT, PR, PB, PL, SW, SH } = boxSize;
 
   const [sizeKey, offsetSize, scrollSize] = horizontal ? ['width', CW, SW] : ['height', CH, SH];
@@ -85,9 +86,17 @@ export default function ThumbBar({
   return (
     <div
       className={`ms-track${horizontal ? ' ms-x' : ' ms-y'}${
-        pin ? ' ms-active' : visible ? ' ms-track-show' : ''
+        pin ? ' ms-active' : (visible || hover) ? ' ms-track-show' : ''
       }`}
       onClick={handleThumbBarClick}
+      onMouseEnter={() => {
+        if (visible) {
+          setHover(true);
+        }
+      }}
+      onMouseLeave={() => {
+        setHover(false);
+      }}
       ref={trackRef}
       style={style}
     >
