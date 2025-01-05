@@ -25,7 +25,7 @@ export function GlobalScrollbar(props: ScrollbarProps) {
     setMounted(true);
 
     const wrapperCls = 'ms-global';
-    const { classList } = document.body;
+    const { classList } = document.documentElement;
     classList.add(wrapperCls);
     return () => {
       setMounted(false);

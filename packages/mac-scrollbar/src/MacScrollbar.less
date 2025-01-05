@@ -2,10 +2,15 @@
 
 .ms-container,
 .ms-global {
-  scrollbar-width: none;
-
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .ms-container,
+  .ms-global {
+    scrollbar-width: none;
   }
 }
 
@@ -21,14 +26,12 @@
   }
 }
 
-.ms-global {
-  > .ms-track-box {
-    position: relative;
-    z-index: @ms-z-index;
+.ms-global > body > .ms-track-box {
+  position: relative;
+  z-index: @ms-z-index;
 
-    .ms-track {
-      position: fixed;
-    }
+  .ms-track {
+    position: fixed;
   }
 }
 
